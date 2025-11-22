@@ -10,21 +10,48 @@ const Carousel = () => {
             </div>
             <div className="carousel-inner">
                 <div className="carousel-item active">
-                    <img src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner03_zpg493.jpg" className="d-block w-100" alt="New Releases" style={{ height: '400px', objectFit: 'cover' }} />
+                    <img
+                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner03_zpg493.jpg"
+                        className="d-block w-100"
+                        alt="New Releases"
+                        style={{
+                            maxHeight: '400px',
+                            height: 'auto',
+                            objectFit: 'cover'
+                        }}
+                    />
                     <div className="carousel-caption d-none d-md-block">
                         <h5></h5>
                         <p></p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770419/banner02_agve0n.jpg" className="d-block w-100" alt="Vinyl Collection" style={{ height: '400px', objectFit: 'cover' }} />
+                    <img
+                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770419/banner02_agve0n.jpg"
+                        className="d-block w-100"
+                        alt="Vinyl Collection"
+                        style={{
+                            maxHeight: '400px',
+                            height: 'auto',
+                            objectFit: 'cover'
+                        }}
+                    />
                     <div className="carousel-caption d-none d-md-block">
                         <h5></h5>
                         <p></p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner01_ibzan3.jpg" className="d-block w-100" alt="Exclusive Merch" style={{ height: '400px', objectFit: 'cover' }} />
+                    <img
+                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner01_ibzan3.jpg"
+                        className="d-block w-100"
+                        alt="Exclusive Merch"
+                        style={{
+                            maxHeight: '400px',
+                            height: 'auto',
+                            objectFit: 'cover'
+                        }}
+                    />
                     <div className="carousel-caption d-none d-md-block">
                         <h5></h5>
                         <p></p>

@@ -8,6 +8,7 @@ const BulkImport = () => {
     const [importing, setImporting] = useState(false);
     const [exporting, setExporting] = useState(false);
     const [results, setResults] = useState(null);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -86,22 +87,55 @@ const BulkImport = () => {
     };
 
     const downloadTemplate = () => {
-        // Crear una plantilla de Excel con las columnas necesarias
+        // Crear una plantilla de Excel con ejemplos de TODOS los tipos de productos
         const template = [
             {
                 tipo_producto: 'CD',
-                banda: 'Nombre de la Banda',
-                album: 'Nombre del Álbum',
-                estilo: 'Género Musical',
-                pais: 'País',
-                sello: 'Sello Discográfico',
-                precio: 5000,
-                imageUrl: 'https://ejemplo.com/imagen.jpg',
+                banda: 'Iron Maiden',
+                album: 'The Number of the Beast',
+                estilo: 'Heavy Metal',
+                pais: 'UK',
+                sello: 'EMI',
+                precio: 8000,
+                imageUrl: 'https://ejemplo.com/iron-maiden-cd.jpg',
+                active: true
+            },
+            {
+                tipo_producto: 'Tape',
+                banda: 'Metallica',
+                album: 'Master of Puppets',
+                estilo: 'Thrash Metal',
+                pais: 'USA',
+                sello: 'Elektra',
+                precio: 6000,
+                imageUrl: 'https://ejemplo.com/metallica-tape.jpg',
+                active: true
+            },
+            {
+                tipo_producto: 'Vinilo',
+                banda: 'Black Sabbath',
+                album: 'Paranoid',
+                estilo: 'Heavy Metal',
+                pais: 'UK',
+                sello: 'Vertigo',
+                precio: 25000,
+                imageUrl: 'https://ejemplo.com/sabbath-vinilo.jpg',
+                active: true
+            },
+            {
+                tipo_producto: 'Zine',
+                banda: 'Varios Artistas',
+                album: 'Fanzine Metal Underground #1',
+                estilo: 'Metal',
+                pais: 'Chile',
+                sello: 'Independiente',
+                precio: 3000,
+                imageUrl: 'https://ejemplo.com/zine.jpg',
                 active: true
             },
             {
                 tipo_producto: 'Polera',
-                titulo: 'Nombre de la Polera',
+                titulo: 'Polera Logo Banda',
                 genero: 'Unisex',
                 talla: 'M',
                 tipo_polera: 'Manga Corta',
@@ -175,90 +209,100 @@ const BulkImport = () => {
 
     return (
         <div className="card mb-4">
-            <div className="card-header bg-info text-white">
-                <h5 className="mb-0">Importación Masiva desde Excel</h5>
+            <div
+                className="card-header bg-info text-white d-flex justify-content-between align-items-center"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setIsExpanded(!isExpanded)}
+            >
+                <h5 className="mb-0">
+                    📊 Importación/Exportación Masiva {isExpanded ? '▼' : '▶'}
+                </h5>
+                <small className="text-white-50">Haz clic para {isExpanded ? 'ocultar' : 'mostrar'}</small>
             </div>
-            <div className="card-body">
-                <div className="mb-3 d-flex gap-2">
-                    <button
-                        className="btn btn-outline-primary"
-                        onClick={downloadTemplate}
-                    >
-                        📥 Descargar Plantilla Excel
-                    </button>
-                    <button
-                        className="btn btn-outline-success"
-                        onClick={exportProducts}
-                        disabled={exporting}
-                    >
-                        {exporting ? 'Exportando...' : '📊 Exportar Todos los Productos'}
-                    </button>
-                </div>
-                <small className="d-block mb-3 text-muted">
-                    Descarga la plantilla para ver el formato correcto o exporta todos los productos actuales
-                </small>
 
-                <div className="mb-3">
-                    <label className="form-label">Seleccionar archivo Excel</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        accept=".xlsx,.xls"
-                        onChange={handleFileChange}
-                        disabled={importing}
-                    />
-                </div>
-
-                <button
-                    className="btn btn-success"
-                    onClick={handleImport}
-                    disabled={!file || importing}
-                >
-                    {importing ? 'Importando...' : '📤 Importar Productos'}
-                </button>
-
-                {results && (
-                    <div className="mt-4">
-                        <div className={`alert ${results.errors === 0 ? 'alert-success' : 'alert-warning'}`}>
-                            <h6 className="alert-heading">Resultado de la Importación</h6>
-                            <p className="mb-1">Total de filas: {results.total}</p>
-                            <p className="mb-1">✅ Importados exitosamente: {results.success}</p>
-                            <p className="mb-0">❌ Errores: {results.errors}</p>
-                        </div>
-
-                        {results.errorDetails.length > 0 && (
-                            <div className="mt-3">
-                                <h6>Detalles de errores:</h6>
-                                <ul className="small">
-                                    {results.errorDetails.slice(0, 10).map((err, idx) => (
-                                        <li key={idx}>
-                                            Fila {idx + 1}: {err.error}
-                                        </li>
-                                    ))}
-                                    {results.errorDetails.length > 10 && (
-                                        <li>... y {results.errorDetails.length - 10} errores más</li>
-                                    )}
-                                </ul>
-                            </div>
-                        )}
+            <div className={`collapse ${isExpanded ? 'show' : ''}`}>
+                <div className="card-body">
+                    <div className="mb-3 d-flex gap-2">
+                        <button
+                            className="btn btn-outline-primary"
+                            onClick={downloadTemplate}
+                        >
+                            📥 Descargar Plantilla Excel
+                        </button>
+                        <button
+                            className="btn btn-outline-success"
+                            onClick={exportProducts}
+                            disabled={exporting}
+                        >
+                            {exporting ? 'Exportando...' : '📊 Exportar Todos los Productos'}
+                        </button>
                     </div>
-                )}
+                    <small className="d-block mb-3 text-muted">
+                        Descarga la plantilla para ver el formato correcto o exporta todos los productos actuales
+                    </small>
 
-                <div className="mt-4">
-                    <h6>Instrucciones:</h6>
-                    <ol className="small">
-                        <li>Descarga la plantilla Excel usando el botón de arriba</li>
-                        <li>Llena el archivo con tus productos siguiendo el formato de ejemplo</li>
-                        <li>Guarda el archivo Excel</li>
-                        <li>Selecciona el archivo usando el botón "Seleccionar archivo"</li>
-                        <li>Haz clic en "Importar Productos"</li>
-                    </ol>
-                    <div className="alert alert-info small mt-2">
-                        <strong>Columnas requeridas para Discos (CD/Tape/Vinilo/Zine):</strong>
-                        <br />tipo_producto, banda, album, estilo, pais, sello, precio, imageUrl
-                        <br /><br />
-                        <strong>Columnas requeridas para Poleras:</strong>
-                        <br />tipo_producto, titulo, genero, talla, tipo_polera, precio, imageUrl
+                    <div className="mb-3">
+                        <label className="form-label">Seleccionar archivo Excel</label>
+                        <input
+                            type="file"
+                            className="form-control"
+                            accept=".xlsx,.xls"
+                            onChange={handleFileChange}
+                            disabled={importing}
+                        />
+                    </div>
+
+                    <button
+                        className="btn btn-success"
+                        onClick={handleImport}
+                        disabled={!file || importing}
+                    >
+                        {importing ? 'Importando...' : '📤 Importar Productos'}
+                    </button>
+
+                    {results && (
+                        <div className="mt-4">
+                            <div className={`alert ${results.errors === 0 ? 'alert-success' : 'alert-warning'}`}>
+                                <h6 className="alert-heading">Resultado de la Importación</h6>
+                                <p className="mb-1">Total de filas: {results.total}</p>
+                                <p className="mb-1">✅ Importados exitosamente: {results.success}</p>
+                                <p className="mb-0">❌ Errores: {results.errors}</p>
+                            </div>
+
+                            {results.errorDetails.length > 0 && (
+                                <div className="mt-3">
+                                    <h6>Detalles de errores:</h6>
+                                    <ul className="small">
+                                        {results.errorDetails.slice(0, 10).map((err, idx) => (
+                                            <li key={idx}>
+                                                Fila {idx + 1}: {err.error}
+                                            </li>
+                                        ))}
+                                        {results.errorDetails.length > 10 && (
+                                            <li>... y {results.errorDetails.length - 10} errores más</li>
+                                        )}
+                                    </ul>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="mt-4">
+                        <h6>Instrucciones:</h6>
+                        <ol className="small">
+                            <li>Descarga la plantilla Excel usando el botón de arriba</li>
+                            <li>Llena el archivo con tus productos siguiendo el formato de ejemplo</li>
+                            <li>Guarda el archivo Excel</li>
+                            <li>Selecciona el archivo usando el botón "Seleccionar archivo"</li>
+                            <li>Haz clic en "Importar Productos"</li>
+                        </ol>
+                        <div className="alert alert-info small mt-2">
+                            <strong>Columnas requeridas para Discos (CD/Tape/Vinilo/Zine):</strong>
+                            <br />tipo_producto, banda, album, estilo, pais, sello, precio, imageUrl
+                            <br /><br />
+                            <strong>Columnas requeridas para Poleras:</strong>
+                            <br />tipo_producto, titulo, genero, talla, tipo_polera, precio, imageUrl
+                        </div>
                     </div>
                 </div>
             </div>

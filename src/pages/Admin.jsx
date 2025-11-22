@@ -37,6 +37,10 @@ const Admin = ({ searchTerm = '' }) => {
     const [sortDirection, setSortDirection] = useState('asc');
     const itemsPerPage = 30;
 
+    // Image modal state
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
+
     const { currentUser } = useAuth();
     const navigate = useNavigate();
 
@@ -57,27 +61,31 @@ const Admin = ({ searchTerm = '' }) => {
 
     const createProduct = async (e) => {
         e.preventDefault();
+
+        // Imagen por defecto si no se proporciona
+        const DEFAULT_IMAGE = 'https://res.cloudinary.com/da8xc0cap/image/upload/v1763854150/Captura_de_pantalla_2025-11-22_a_la_s_8.28.38_p.m._foyv6e.png';
+
         const productData = {
             precio: Number(newProduct.precio),
-            imageUrl: newProduct.imageUrl,
+            imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
             tipo_producto: productType,
             active: true
         };
 
         if (productType === 'Polera') {
             Object.assign(productData, {
-                titulo: newProduct.titulo,
-                genero: newProduct.genero,
-                talla: newProduct.talla,
-                tipo: newProduct.tipo,
+                titulo: newProduct.titulo || '',
+                genero: newProduct.genero || '',
+                talla: newProduct.talla || '',
+                tipo: newProduct.tipo || '',
             });
         } else {
             Object.assign(productData, {
                 album: newProduct.album,
                 banda: newProduct.banda,
-                estilo: newProduct.estilo,
-                pais: newProduct.pais,
-                sello: newProduct.sello,
+                estilo: newProduct.estilo || '',
+                pais: newProduct.pais || '',
+                sello: newProduct.sello || '',
             });
         }
 
@@ -90,27 +98,29 @@ const Admin = ({ searchTerm = '' }) => {
         e.preventDefault();
         const productDoc = doc(db, 'productos', editingId);
 
+        // Imagen por defecto si no se proporciona
+        const DEFAULT_IMAGE = 'https://res.cloudinary.com/da8xc0cap/image/upload/v1763854150/Captura_de_pantalla_2025-11-22_a_la_s_8.28.38_p.m._foyv6e.png';
+
         const productData = {
             precio: Number(newProduct.precio),
-            imageUrl: newProduct.imageUrl,
-            tipo_producto: productType,
+            imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
             active: newProduct.active
         };
 
         if (productType === 'Polera') {
             Object.assign(productData, {
-                titulo: newProduct.titulo,
-                genero: newProduct.genero,
-                talla: newProduct.talla,
-                tipo: newProduct.tipo,
+                titulo: newProduct.titulo || '',
+                genero: newProduct.genero || '',
+                talla: newProduct.talla || '',
+                tipo: newProduct.tipo || '',
             });
         } else {
             Object.assign(productData, {
                 album: newProduct.album,
                 banda: newProduct.banda,
-                estilo: newProduct.estilo,
-                pais: newProduct.pais,
-                sello: newProduct.sello,
+                estilo: newProduct.estilo || '',
+                pais: newProduct.pais || '',
+                sello: newProduct.sello || '',
             });
         }
 
@@ -312,23 +322,23 @@ const Admin = ({ searchTerm = '' }) => {
                                 </div>
                                 <div className="col-md-3">
                                     <label className="form-label">Sello</label>
-                                    <input type="text" className="form-control" placeholder="Sello" value={newProduct.sello} onChange={(e) => setNewProduct({ ...newProduct, sello: e.target.value })} required />
+                                    <input type="text" className="form-control" placeholder="Sello" value={newProduct.sello} onChange={(e) => setNewProduct({ ...newProduct, sello: e.target.value })} />
                                 </div>
                                 <div className="col-md-3">
                                     <label className="form-label">Pais</label>
-                                    <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} required />
+                                    <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} />
                                 </div>
                                 <div className="col-md-3">
                                     <label className="form-label">Estilo</label>
-                                    <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} required />
+                                    <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} />
                                 </div>
                                 <div className="col-md-2">
                                     <label className="form-label">Precio</label>
                                     <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
                                 </div>
                                 <div className="col-md-4">
-                                    <label className="form-label">Image URL</label>
-                                    <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
+                                    <label className="form-label">Image URL (opcional)</label>
+                                    <input type="url" className="form-control" placeholder="Image URL (opcional - se usará imagen por defecto)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
                                 </div>
                             </>
                         )}
@@ -454,7 +464,22 @@ const Admin = ({ searchTerm = '' }) => {
                             <tr key={product.id} className={product.active === false ? 'table-secondary' : ''}>
                                 <td>
                                     {product.imageUrl && (
-                                        <img src={product.imageUrl} alt="Product" style={{ width: '50px', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '4px' }} />
+                                        <img
+                                            src={product.imageUrl}
+                                            alt="Product"
+                                            style={{
+                                                width: '50px',
+                                                aspectRatio: '1/1',
+                                                objectFit: 'cover',
+                                                borderRadius: '4px',
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={() => {
+                                                setSelectedImage(product.imageUrl);
+                                                setShowImageModal(true);
+                                            }}
+                                            title="Click para ver imagen grande"
+                                        />
                                     )}
                                 </td>
                                 <td>{product.tipo_producto}</td>
@@ -596,6 +621,50 @@ const Admin = ({ searchTerm = '' }) => {
                                 }}
                             />
                         </small>
+                    </div>
+                </div>
+            )}
+
+            {/* Image Modal */}
+            {showImageModal && (
+                <div
+                    className="modal show d-block"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+                    onClick={() => setShowImageModal(false)}
+                >
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-content bg-dark">
+                            <div className="modal-header border-secondary">
+                                <h5 className="modal-title text-white">Vista Previa de Imagen</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close btn-close-white"
+                                    onClick={() => setShowImageModal(false)}
+                                ></button>
+                            </div>
+                            <div className="modal-body text-center p-4">
+                                <img
+                                    src={selectedImage}
+                                    alt="Product Preview"
+                                    style={{
+                                        maxWidth: '100%',
+                                        maxHeight: '70vh',
+                                        objectFit: 'contain',
+                                        borderRadius: '8px'
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            </div>
+                            <div className="modal-footer border-secondary">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowImageModal(false)}
+                                >
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
