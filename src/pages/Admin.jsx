@@ -3,8 +3,9 @@ import { db } from '../firebase_config';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import BulkImport from '../components/BulkImport';
 
-const Admin = () => {
+const Admin = ({ searchTerm = '' }) => {
     const [products, setProducts] = useState([]);
     const [productType, setProductType] = useState('CD'); // CD, Tape, Vinilo, Zine, Polera
     const [isEditing, setIsEditing] = useState(false);
@@ -27,6 +28,13 @@ const Admin = () => {
         talla: '',
         tipo: ''
     });
+
+    // Filter, Pagination, and Sorting states
+    const [typeFilter, setTypeFilter] = useState('all');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [sortField, setSortField] = useState('tipo_producto');
+    const [sortDirection, setSortDirection] = useState('asc');
+    const itemsPerPage = 30;
 
     const { currentUser } = useAuth();
     const navigate = useNavigate();
@@ -170,9 +178,106 @@ const Admin = () => {
 
     const isDiscoType = (type) => ['CD', 'Tape', 'Vinilo', 'Zine'].includes(type);
 
+    const handleSort = (field) => {
+        if (sortField === field) {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortField(field);
+            setSortDirection('asc');
+        }
+        setCurrentPage(1); // Reset to first page when sorting
+    };
+
+    const getSortIcon = (field) => {
+        if (sortField !== field) return '⇅';
+        return sortDirection === 'asc' ? '↑' : '↓';
+    };
+
+    const filterAndSortProducts = (products) => {
+        let filtered = products;
+
+        // Apply search filter
+        if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(product => {
+                const banda = product.banda?.toLowerCase() || '';
+                const album = product.album?.toLowerCase() || '';
+                const titulo = product.titulo?.toLowerCase() || '';
+                const estilo = product.estilo?.toLowerCase() || '';
+                const pais = product.pais?.toLowerCase() || '';
+                const sello = product.sello?.toLowerCase() || '';
+
+                return banda.includes(term) ||
+                    album.includes(term) ||
+                    titulo.includes(term) ||
+                    estilo.includes(term) ||
+                    pais.includes(term) ||
+                    sello.includes(term);
+            });
+        }
+
+        // Apply type filter
+        if (typeFilter !== 'all') {
+            filtered = filtered.filter(product => product.tipo_producto === typeFilter);
+        }
+
+        // Apply sorting
+        filtered.sort((a, b) => {
+            let aValue, bValue;
+
+            switch (sortField) {
+                case 'tipo_producto':
+                    aValue = a.tipo_producto || '';
+                    bValue = b.tipo_producto || '';
+                    break;
+                case 'info':
+                    aValue = isDiscoType(a.tipo_producto) ? a.banda : a.titulo;
+                    bValue = isDiscoType(b.tipo_producto) ? b.banda : b.titulo;
+                    break;
+                case 'precio':
+                    aValue = a.precio || 0;
+                    bValue = b.precio || 0;
+                    break;
+                case 'active':
+                    aValue = a.active !== false ? 1 : 0;
+                    bValue = b.active !== false ? 1 : 0;
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (typeof aValue === 'string') {
+                aValue = aValue.toLowerCase();
+                bValue = bValue.toLowerCase();
+            }
+
+            if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+            if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        return filtered;
+    };
+
+    const processedProducts = filterAndSortProducts(products);
+    const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedProducts = processedProducts.slice(startIndex, endIndex);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center mb-4">Admin Panel</h2>
+
+            <h2 className="text-center mb-4" style={{ color: 'white' }}>Admin Panel</h2>
+
+            <BulkImport />
 
             <div className="card mb-5">
                 <div className="card-header d-flex justify-content-between align-items-center bg-primary text-white">
@@ -268,25 +373,79 @@ const Admin = () => {
                 </div>
             </div>
 
+            {/* Filter and Product Count */}
+            <div className="card mb-3">
+                <div className="card-body">
+                    <div className="row align-items-center">
+                        <div className="col-md-4">
+                            <label className="form-label fw-bold">Filtrar por Tipo de Producto:</label>
+                            <select
+                                className="form-select"
+                                value={typeFilter}
+                                onChange={(e) => {
+                                    setTypeFilter(e.target.value);
+                                    setCurrentPage(1);
+                                }}
+                            >
+                                <option value="all">Todos los Productos</option>
+                                <option value="CD">CD</option>
+                                <option value="Tape">Tape</option>
+                                <option value="Vinilo">Vinilo</option>
+                                <option value="Zine">Zine</option>
+                                <option value="Polera">Polera</option>
+                            </select>
+                        </div>
+                        <div className="col-md-8 text-end">
+                            <p className="mb-0">
+                                <strong>Mostrando:</strong> {paginatedProducts.length} de {processedProducts.length} productos
+                                {typeFilter !== 'all' && ` (${typeFilter})`}
+                                {searchTerm && ` - Búsqueda: "${searchTerm}"`}
+                            </p>
+                            <small className="text-muted">Total en base de datos: {products.length}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className="table-responsive">
                 <table className="table table-striped table-hover align-middle">
                     <thead className="table-dark">
                         <tr>
                             <th>Image</th>
-                            <th>Type</th>
-                            <th>Info</th>
-                            <th>Price</th>
+                            <th
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => handleSort('tipo_producto')}
+                            >
+                                Type {getSortIcon('tipo_producto')}
+                            </th>
+                            <th
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => handleSort('info')}
+                            >
+                                Info {getSortIcon('info')}
+                            </th>
+                            <th
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => handleSort('precio')}
+                            >
+                                Price {getSortIcon('precio')}
+                            </th>
                             <th>Details</th>
-                            <th>Status</th>
+                            <th
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => handleSort('active')}
+                            >
+                                Status {getSortIcon('active')}
+                            </th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product) => (
+                        {paginatedProducts.map((product) => (
                             <tr key={product.id} className={product.active === false ? 'table-secondary' : ''}>
                                 <td>
                                     {product.imageUrl && (
-                                        <img src={product.imageUrl} alt="Product" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
+                                        <img src={product.imageUrl} alt="Product" style={{ width: '50px', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '4px' }} />
                                     )}
                                 </td>
                                 <td>{product.tipo_producto}</td>
@@ -344,6 +503,93 @@ const Admin = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+                <div className="d-flex justify-content-between align-items-center mt-4">
+                    <div>
+                        <small className="text-muted">
+                            Página {currentPage} de {totalPages}
+                        </small>
+                    </div>
+                    <nav>
+                        <ul className="pagination mb-0">
+                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                <button
+                                    className="page-link"
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                >
+                                    Anterior
+                                </button>
+                            </li>
+
+                            {/* First page */}
+                            {currentPage > 3 && (
+                                <>
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
+                                    </li>
+                                    {currentPage > 4 && <li className="page-item disabled"><span className="page-link">...</span></li>}
+                                </>
+                            )}
+
+                            {/* Pages around current */}
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(page => page >= currentPage - 2 && page <= currentPage + 2)
+                                .map(page => (
+                                    <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(page)}>
+                                            {page}
+                                        </button>
+                                    </li>
+                                ))
+                            }
+
+                            {/* Last page */}
+                            {currentPage < totalPages - 2 && (
+                                <>
+                                    {currentPage < totalPages - 3 && <li className="page-item disabled"><span className="page-link">...</span></li>}
+                                    <li className="page-item">
+                                        <button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
+                                    </li>
+                                </>
+                            )}
+
+                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                <button
+                                    className="page-link"
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Siguiente
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div>
+                        <small className="text-muted">
+                            Ir a página:
+                            <input
+                                type="number"
+                                min="1"
+                                max={totalPages}
+                                className="form-control form-control-sm d-inline-block ms-2"
+                                style={{ width: '70px' }}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        const page = parseInt(e.target.value);
+                                        if (page >= 1 && page <= totalPages) {
+                                            handlePageChange(page);
+                                            e.target.value = '';
+                                        }
+                                    }
+                                }}
+                            />
+                        </small>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

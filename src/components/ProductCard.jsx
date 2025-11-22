@@ -17,7 +17,7 @@ const ProductCard = ({ product }) => {
                         src={product.imageUrl}
                         className="card-img-top"
                         alt={isCD ? product.album : product.titulo}
-                        style={{ height: '300px', objectFit: 'cover', borderRadius: '0' }}
+                        style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '0' }}
                     />
                     <div className="card-body px-0">
                         {isCD ? (

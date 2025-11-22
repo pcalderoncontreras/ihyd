@@ -10,24 +10,24 @@ const Carousel = () => {
             </div>
             <div className="carousel-inner">
                 <div className="carousel-item active">
-                    <img src="https://placehold.co/1200x400/1a1a1a/white?text=New+Releases" className="d-block w-100" alt="New Releases" style={{ height: '400px', objectFit: 'cover' }} />
+                    <img src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner03_zpg493.jpg" className="d-block w-100" alt="New Releases" style={{ height: '400px', objectFit: 'cover' }} />
                     <div className="carousel-caption d-none d-md-block">
-                        <h5>New Arrivals</h5>
-                        <p>Check out the latest additions to our catalog.</p>
+                        <h5></h5>
+                        <p></p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src="https://placehold.co/1200x400/333333/white?text=Vinyl+Collection" className="d-block w-100" alt="Vinyl Collection" style={{ height: '400px', objectFit: 'cover' }} />
+                    <img src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770419/banner02_agve0n.jpg" className="d-block w-100" alt="Vinyl Collection" style={{ height: '400px', objectFit: 'cover' }} />
                     <div className="carousel-caption d-none d-md-block">
-                        <h5>Vinyl Collection</h5>
-                        <p>Discover rare and classic vinyl records.</p>
+                        <h5></h5>
+                        <p></p>
                     </div>
                 </div>
                 <div className="carousel-item">
-                    <img src="https://placehold.co/1200x400/555555/white?text=Exclusive+Merch" className="d-block w-100" alt="Exclusive Merch" style={{ height: '400px', objectFit: 'cover' }} />
+                    <img src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner01_ibzan3.jpg" className="d-block w-100" alt="Exclusive Merch" style={{ height: '400px', objectFit: 'cover' }} />
                     <div className="carousel-caption d-none d-md-block">
-                        <h5>Exclusive Merch</h5>
-                        <p>Get the latest band t-shirts and accessories.</p>
+                        <h5></h5>
+                        <p></p>
                     </div>
                 </div>
             </div>

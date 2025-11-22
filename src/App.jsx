@@ -11,11 +11,16 @@ import './App.css'
 
 function App() {
   const [category, setCategory] = useState('all');
+  const [adminSearchTerm, setAdminSearchTerm] = useState('');
 
   return (
     <AuthProvider>
       <Router>
-        <Navbar setCategory={setCategory} />
+        <Navbar
+          setCategory={setCategory}
+          searchTerm={adminSearchTerm}
+          setSearchTerm={setAdminSearchTerm}
+        />
         <Routes>
           <Route path="/" element={
             category === 'all' ? (
@@ -25,7 +30,7 @@ function App() {
             )
           } />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<Admin searchTerm={adminSearchTerm} />} />
         </Routes>
         <Footer />
       </Router>
