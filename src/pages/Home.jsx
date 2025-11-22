@@ -10,6 +10,8 @@ const Home = ({ setCategory }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
 
     useEffect(() => {
         if (searchTerm) {
@@ -29,6 +31,7 @@ const Home = ({ setCategory }) => {
             };
             fetchAllProducts();
         }
+        setCurrentPage(1); // Reset to first page when search changes
     }, [searchTerm]);
 
     const filterProducts = (products) => {
@@ -52,6 +55,17 @@ const Home = ({ setCategory }) => {
     };
 
     const filteredProducts = filterProducts(allProducts);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
 
     return (
         <>
@@ -63,17 +77,64 @@ const Home = ({ setCategory }) => {
             {searchTerm ? (
                 <div className="container">
                     {loading ? (
-                        <div className="text-center">Buscando productos...</div>
+                        <div className="text-center text-white">Buscando productos...</div>
                     ) : (
-                        <div className="row">
-                            {filteredProducts.length === 0 ? (
-                                <div className="col-12 text-center">No se encontraron productos.</div>
-                            ) : (
-                                filteredProducts.map((product) => (
-                                    <ProductCard key={product.id} product={product} />
-                                ))
+                        <>
+                            {filteredProducts.length > 0 && (
+                                <div className="mb-3 text-white text-end">
+                                    <small>Mostrando {paginatedProducts.length} de {filteredProducts.length} productos</small>
+                                </div>
                             )}
-                        </div>
+                            <div className="row">
+                                {paginatedProducts.length === 0 ? (
+                                    <div className="col-12 text-center text-white">No se encontraron productos.</div>
+                                ) : (
+                                    paginatedProducts.map((product) => (
+                                        <ProductCard key={product.id} product={product} />
+                                    ))
+                                )}
+                            </div>
+
+                            {/* Pagination */}
+                            {totalPages > 1 && (
+                                <div className="d-flex justify-content-center align-items-center mt-5 mb-4">
+                                    <nav>
+                                        <ul className="pagination">
+                                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                                <button
+                                                    className="page-link bg-dark text-white border-secondary"
+                                                    onClick={() => handlePageChange(currentPage - 1)}
+                                                    disabled={currentPage === 1}
+                                                >
+                                                    Anterior
+                                                </button>
+                                            </li>
+
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                                <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                                    <button
+                                                        className={`page-link ${currentPage === page ? 'bg-primary' : 'bg-dark text-white'} border-secondary`}
+                                                        onClick={() => handlePageChange(page)}
+                                                    >
+                                                        {page}
+                                                    </button>
+                                                </li>
+                                            ))}
+
+                                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                                <button
+                                                    className="page-link bg-dark text-white border-secondary"
+                                                    onClick={() => handlePageChange(currentPage + 1)}
+                                                    disabled={currentPage === totalPages}
+                                                >
+                                                    Siguiente
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             ) : (

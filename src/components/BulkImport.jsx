@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { db } from '../firebase_config';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 const BulkImport = () => {
     const [file, setFile] = useState(null);
     const [importing, setImporting] = useState(false);
+    const [exporting, setExporting] = useState(false);
     const [results, setResults] = useState(null);
 
     const handleFileChange = (e) => {
@@ -116,23 +117,86 @@ const BulkImport = () => {
         XLSX.writeFile(wb, 'plantilla_productos.xlsx');
     };
 
+    const exportProducts = async () => {
+        setExporting(true);
+        try {
+            const productsCollectionRef = collection(db, 'productos');
+            const data = await getDocs(productsCollectionRef);
+            const products = data.docs.map((doc) => {
+                const product = doc.data();
+
+                // Crear objeto base
+                const exportData = {
+                    tipo_producto: product.tipo_producto || '',
+                    precio: product.precio || 0,
+                    imageUrl: product.imageUrl || '',
+                    active: product.active !== undefined ? product.active : true,
+                };
+
+                // Agregar campos específicos según el tipo
+                if (['CD', 'Tape', 'Vinilo', 'Zine'].includes(product.tipo_producto)) {
+                    exportData.banda = product.banda || '';
+                    exportData.album = product.album || '';
+                    exportData.estilo = product.estilo || '';
+                    exportData.pais = product.pais || '';
+                    exportData.sello = product.sello || '';
+                } else if (product.tipo_producto === 'Polera') {
+                    exportData.titulo = product.titulo || '';
+                    exportData.genero = product.genero || '';
+                    exportData.talla = product.talla || '';
+                    exportData.tipo_polera = product.tipo || '';
+                }
+
+                return exportData;
+            });
+
+            if (products.length === 0) {
+                alert('No hay productos para exportar');
+                return;
+            }
+
+            // Crear archivo Excel
+            const ws = XLSX.utils.json_to_sheet(products);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Productos');
+
+            // Descargar archivo con fecha actual
+            const fecha = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `productos_${fecha}.xlsx`);
+
+            alert(`Se exportaron ${products.length} productos exitosamente`);
+        } catch (error) {
+            console.error('Error exporting products:', error);
+            alert('Error al exportar productos: ' + error.message);
+        } finally {
+            setExporting(false);
+        }
+    };
+
     return (
         <div className="card mb-4">
             <div className="card-header bg-info text-white">
                 <h5 className="mb-0">Importación Masiva desde Excel</h5>
             </div>
             <div className="card-body">
-                <div className="mb-3">
+                <div className="mb-3 d-flex gap-2">
                     <button
                         className="btn btn-outline-primary"
                         onClick={downloadTemplate}
                     >
                         📥 Descargar Plantilla Excel
                     </button>
-                    <small className="d-block mt-2 text-muted">
-                        Descarga la plantilla para ver el formato correcto de las columnas
-                    </small>
+                    <button
+                        className="btn btn-outline-success"
+                        onClick={exportProducts}
+                        disabled={exporting}
+                    >
+                        {exporting ? 'Exportando...' : '📊 Exportar Todos los Productos'}
+                    </button>
                 </div>
+                <small className="d-block mb-3 text-muted">
+                    Descarga la plantilla para ver el formato correcto o exporta todos los productos actuales
+                </small>
 
                 <div className="mb-3">
                     <label className="form-label">Seleccionar archivo Excel</label>

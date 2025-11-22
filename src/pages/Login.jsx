@@ -1,22 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase_config';
 import { useNavigate } from 'react-router-dom';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [captchaValue, setCaptchaValue] = useState(null);
+    const recaptchaRef = useRef(null);
     const navigate = useNavigate();
+
+    // IMPORTANTE: Reemplaza esta clave con tu Site Key de Google reCAPTCHA
+    // Obtén tu clave en: https://www.google.com/recaptcha/admin
+    const RECAPTCHA_SITE_KEY = '6LfBnRQsAAAAAF0d7uZXJ2AbW72N_uN4zZdLi40-'; // Esta es una clave de prueba
+
+    const handleCaptchaChange = (value) => {
+        setCaptchaValue(value);
+        setError(''); // Limpiar error cuando se completa el captcha
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
+
+        // Validar que el captcha esté completado
+        if (!captchaValue) {
+            setError('Por favor completa la verificación reCAPTCHA');
+            return;
+        }
+
         try {
             await signInWithEmailAndPassword(auth, email, password);
             navigate('/admin');
         } catch (err) {
-            setError('Failed to login. Please check your credentials.');
+            setError('Error al iniciar sesión. Verifica tus credenciales.');
             console.error(err);
+            // Reset captcha en caso de error
+            if (recaptchaRef.current) {
+                recaptchaRef.current.reset();
+                setCaptchaValue(null);
+            }
         }
     };
 
@@ -49,8 +73,31 @@ const Login = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100">Login</button>
+
+                                {/* Google reCAPTCHA */}
+                                <div className="mb-3 d-flex justify-content-center">
+                                    <ReCAPTCHA
+                                        ref={recaptchaRef}
+                                        sitekey={RECAPTCHA_SITE_KEY}
+                                        onChange={handleCaptchaChange}
+                                        theme="light"
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary w-100"
+                                    disabled={!captchaValue}
+                                >
+                                    Login
+                                </button>
                             </form>
+
+                            <div className="mt-3 text-center">
+                                <small className="text-muted">
+                                    Protegido por Google reCAPTCHA
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>

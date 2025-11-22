@@ -68,6 +68,9 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm }) => {
                             <li className="nav-item">
                                 <button className="nav-link btn btn-link" style={{ color: 'white' }} onClick={() => setCategory('Polera')}>Poleras</button>
                             </li>
+                            <li className="nav-item">
+                                <button className="nav-link btn btn-link" style={{ color: 'white' }} onClick={() => window.open('https://docs.google.com/spreadsheets/d/1FN8jdlpdQsz4ioP0geF9oylUQTyn5-Yk/edit?usp=sharing&ouid=115226895934415359333&rtpof=true&sd=true', '_blank')}>Descarga Catalogo</button>
+                            </li>
                         </ul>
                     )}
                 </div>

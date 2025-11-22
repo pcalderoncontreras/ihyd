@@ -296,38 +296,36 @@ const Admin = ({ searchTerm = '' }) => {
                 </div>
                 <div className="card-body">
                     <form onSubmit={isEditing ? updateProduct : createProduct} className="row g-3">
-                        {/* Common Fields */}
-                        <div className="col-md-2">
-                            <label className="form-label">Price</label>
-                            <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
-                        </div>
-                        <div className="col-md-4">
-                            <label className="form-label">Image URL</label>
-                            <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
-                        </div>
-
                         {/* Disco-like Specific Fields */}
                         {isDiscoType(productType) && (
                             <>
-                                <div className="col-md-3">
-                                    <label className="form-label">Album</label>
-                                    <input type="text" className="form-control" placeholder="Album" value={newProduct.album} onChange={(e) => setNewProduct({ ...newProduct, album: e.target.value })} required />
-                                </div>
                                 <div className="col-md-3">
                                     <label className="form-label">Banda</label>
                                     <input type="text" className="form-control" placeholder="Banda" value={newProduct.banda} onChange={(e) => setNewProduct({ ...newProduct, banda: e.target.value })} required />
                                 </div>
                                 <div className="col-md-3">
-                                    <label className="form-label">Estilo</label>
-                                    <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} required />
+                                    <label className="form-label">Album</label>
+                                    <input type="text" className="form-control" placeholder="Album" value={newProduct.album} onChange={(e) => setNewProduct({ ...newProduct, album: e.target.value })} required />
+                                </div>
+                                <div className="col-md-3">
+                                    <label className="form-label">Sello</label>
+                                    <input type="text" className="form-control" placeholder="Sello" value={newProduct.sello} onChange={(e) => setNewProduct({ ...newProduct, sello: e.target.value })} required />
                                 </div>
                                 <div className="col-md-3">
                                     <label className="form-label">Pais</label>
                                     <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} required />
                                 </div>
                                 <div className="col-md-3">
-                                    <label className="form-label">Sello</label>
-                                    <input type="text" className="form-control" placeholder="Sello" value={newProduct.sello} onChange={(e) => setNewProduct({ ...newProduct, sello: e.target.value })} required />
+                                    <label className="form-label">Estilo</label>
+                                    <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} required />
+                                </div>
+                                <div className="col-md-2">
+                                    <label className="form-label">Precio</label>
+                                    <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
+                                </div>
+                                <div className="col-md-4">
+                                    <label className="form-label">Image URL</label>
+                                    <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
                                 </div>
                             </>
                         )}
@@ -342,7 +340,7 @@ const Admin = ({ searchTerm = '' }) => {
                                 <div className="col-md-2">
                                     <label className="form-label">Genero</label>
                                     <select className="form-select" value={newProduct.genero} onChange={(e) => setNewProduct({ ...newProduct, genero: e.target.value })} required>
-                                        <option value="">Select</option>
+                                        <option value="">Seleccionar...</option>
                                         <option value="Hombre">Hombre</option>
                                         <option value="Mujer">Mujer</option>
                                         <option value="Unisex">Unisex</option>
@@ -355,6 +353,14 @@ const Admin = ({ searchTerm = '' }) => {
                                 <div className="col-md-2">
                                     <label className="form-label">Tipo</label>
                                     <input type="text" className="form-control" placeholder="Tipo" value={newProduct.tipo} onChange={(e) => setNewProduct({ ...newProduct, tipo: e.target.value })} required />
+                                </div>
+                                <div className="col-md-2">
+                                    <label className="form-label">Precio</label>
+                                    <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
+                                </div>
+                                <div className="col-md-4">
+                                    <label className="form-label">Image URL</label>
+                                    <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
                                 </div>
                             </>
                         )}
@@ -569,7 +575,7 @@ const Admin = ({ searchTerm = '' }) => {
                     </nav>
                     <div>
                         <small className="text-muted">
-                            Ir a página:
+                            <span style={{ color: 'white' }}>Ir a página:</span>
                             <input
                                 type="number"
                                 min="1"
