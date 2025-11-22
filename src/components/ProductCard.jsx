@@ -3,7 +3,10 @@ import ProductModal from './ProductModal';
 
 const ProductCard = ({ product }) => {
     const [showModal, setShowModal] = useState(false);
-    const isCD = product.tipo_producto === 'CD';
+
+    // Detectar si es un tipo de disco (CD, Tape, Vinilo, Zine) - case insensitive
+    const isDiscoType = product.tipo_producto &&
+        ['cd', 'tape', 'vinilo', 'zine'].includes(product.tipo_producto.toLowerCase());
 
     return (
         <>
@@ -16,11 +19,11 @@ const ProductCard = ({ product }) => {
                     <img
                         src={product.imageUrl}
                         className="card-img-top"
-                        alt={isCD ? product.album : product.titulo}
+                        alt={isDiscoType ? product.album : product.titulo}
                         style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '0' }}
                     />
                     <div className="card-body px-0">
-                        {isCD ? (
+                        {isDiscoType ? (
                             <>
                                 <h6 className="card-title fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
                                     {product.banda} - {product.album}

@@ -17,18 +17,21 @@ const ProductList = ({ category }) => {
         const getProducts = async () => {
             setLoading(true);
             try {
-                let q = productsCollectionRef;
+                // Obtener todos los productos
+                const data = await getDocs(productsCollectionRef);
+                const allProducts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+                // Filtrar por categoría (case-insensitive) y activos
+                let filtered = allProducts.filter(p => p.active !== false);
 
                 if (category && category !== 'all') {
-                    // Filter by tipo_producto for all categories (CD, Tape, Vinilo, Zine, Polera)
-                    q = query(productsCollectionRef, where('tipo_producto', '==', category));
+                    filtered = filtered.filter(p =>
+                        p.tipo_producto &&
+                        p.tipo_producto.toLowerCase() === category.toLowerCase()
+                    );
                 }
 
-                const data = await getDocs(q);
-                // Filter client-side to handle missing 'active' field (treat as true)
-                const allProducts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-                const activeProducts = allProducts.filter(p => p.active !== false);
-                setProducts(activeProducts);
+                setProducts(filtered);
                 setError(null);
             } catch (err) {
                 console.error("Error fetching products:", err);

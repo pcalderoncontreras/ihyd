@@ -4,6 +4,7 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BulkImport from '../components/BulkImport';
+import DatabaseCleaner from '../components/DatabaseCleaner';
 
 const Admin = ({ searchTerm = '' }) => {
     const [products, setProducts] = useState([]);
@@ -278,6 +279,8 @@ const Admin = ({ searchTerm = '' }) => {
             <h2 className="text-center mb-4" style={{ color: 'white' }}>Admin Panel</h2>
 
             <BulkImport />
+
+            <DatabaseCleaner />
 
             <div className="card mb-5">
                 <div className="card-header d-flex justify-content-between align-items-center bg-primary text-white">
