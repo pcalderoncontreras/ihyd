@@ -16,13 +16,18 @@ const Admin = ({ searchTerm = '' }) => {
         precio: '',
         imageUrl: '',
         active: true,
-        // Disco-like (CD, Tape, Vinilo, Zine)
+        // Disco-like (CD, Tape, Vinilo)
         album: '',
         banda: '',
         estilo: '',
         pais: '',
         sello: '',
         tipo_producto: 'CD',
+        // Zine specific
+        nombre_revista: '',
+        numero: '',
+        año: '',
+        detalles: '',
         // Polera specific
         titulo: '',
         genero: '',
@@ -79,7 +84,16 @@ const Admin = ({ searchTerm = '' }) => {
                 talla: newProduct.talla || '',
                 tipo: newProduct.tipo || '',
             });
+        } else if (productType === 'Zine') {
+            Object.assign(productData, {
+                nombre_revista: newProduct.nombre_revista,
+                numero: newProduct.numero,
+                año: newProduct.año || '',
+                pais: newProduct.pais || '',
+                detalles: newProduct.detalles || '',
+            });
         } else {
+            // CD, Tape, Vinilo
             Object.assign(productData, {
                 album: newProduct.album,
                 banda: newProduct.banda,
@@ -114,7 +128,16 @@ const Admin = ({ searchTerm = '' }) => {
                 talla: newProduct.talla || '',
                 tipo: newProduct.tipo || '',
             });
+        } else if (productType === 'Zine') {
+            Object.assign(productData, {
+                nombre_revista: newProduct.nombre_revista,
+                numero: newProduct.numero,
+                año: newProduct.año || '',
+                pais: newProduct.pais || '',
+                detalles: newProduct.detalles || '',
+            });
         } else {
+            // CD, Tape, Vinilo
             Object.assign(productData, {
                 album: newProduct.album,
                 banda: newProduct.banda,
@@ -140,6 +163,10 @@ const Admin = ({ searchTerm = '' }) => {
             pais: '',
             sello: '',
             tipo_producto: 'CD',
+            nombre_revista: '',
+            numero: '',
+            año: '',
+            detalles: '',
             titulo: '',
             genero: '',
             talla: '',
@@ -164,6 +191,10 @@ const Admin = ({ searchTerm = '' }) => {
             pais: product.pais || '',
             sello: product.sello || '',
             tipo_producto: product.tipo_producto,
+            nombre_revista: product.nombre_revista || '',
+            numero: product.numero || '',
+            año: product.año || '',
+            detalles: product.detalles || '',
             titulo: product.titulo || '',
             genero: product.genero || '',
             talla: product.talla || '',
@@ -187,7 +218,7 @@ const Admin = ({ searchTerm = '' }) => {
         }
     };
 
-    const isDiscoType = (type) => ['CD', 'Tape', 'Vinilo', 'Zine'].includes(type);
+    const isDiscoType = (type) => ['CD', 'Tape', 'Vinilo'].includes(type);
 
     const handleSort = (field) => {
         if (sortField === field) {
@@ -331,6 +362,44 @@ const Admin = ({ searchTerm = '' }) => {
                                 <div className="col-md-3">
                                     <label className="form-label">Estilo</label>
                                     <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} />
+                                </div>
+                                <div className="col-md-3">
+                                    <label className="form-label">Detalles</label>
+                                    <input type="text" className="form-control" placeholder="Detalles" value={newProduct.detalles} onChange={(e) => setNewProduct({ ...newProduct, detalles: e.target.value })} />
+                                </div>
+                                <div className="col-md-2">
+                                    <label className="form-label">Precio</label>
+                                    <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
+                                </div>
+                                <div className="col-md-4">
+                                    <label className="form-label">Image URL (opcional)</label>
+                                    <input type="url" className="form-control" placeholder="Image URL (opcional - se usará imagen por defecto)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
+                                </div>
+                            </>
+                        )}
+
+                        {/* Zine Specific Fields */}
+                        {productType === 'Zine' && (
+                            <>
+                                <div className="col-md-3">
+                                    <label className="form-label">Nombre Revista</label>
+                                    <input type="text" className="form-control" placeholder="Nombre Revista" value={newProduct.nombre_revista} onChange={(e) => setNewProduct({ ...newProduct, nombre_revista: e.target.value })} required />
+                                </div>
+                                <div className="col-md-2">
+                                    <label className="form-label">Numero (#)</label>
+                                    <input type="text" className="form-control" placeholder="#" value={newProduct.numero} onChange={(e) => setNewProduct({ ...newProduct, numero: e.target.value })} required />
+                                </div>
+                                <div className="col-md-2">
+                                    <label className="form-label">Año</label>
+                                    <input type="text" className="form-control" placeholder="Año" value={newProduct.año} onChange={(e) => setNewProduct({ ...newProduct, año: e.target.value })} />
+                                </div>
+                                <div className="col-md-2">
+                                    <label className="form-label">Pais</label>
+                                    <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} />
+                                </div>
+                                <div className="col-md-3">
+                                    <label className="form-label">Detalles</label>
+                                    <input type="text" className="form-control" placeholder="Detalles" value={newProduct.detalles} onChange={(e) => setNewProduct({ ...newProduct, detalles: e.target.value })} />
                                 </div>
                                 <div className="col-md-2">
                                     <label className="form-label">Precio</label>

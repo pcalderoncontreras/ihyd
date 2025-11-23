@@ -4,9 +4,13 @@ import ProductModal from './ProductModal';
 const ProductCard = ({ product }) => {
     const [showModal, setShowModal] = useState(false);
 
-    // Detectar si es un tipo de disco (CD, Tape, Vinilo, Zine) - case insensitive
+    // Detectar si es un tipo de disco (CD, Tape, Vinilo) - case insensitive
     const isDiscoType = product.tipo_producto &&
-        ['cd', 'tape', 'vinilo', 'zine'].includes(product.tipo_producto.toLowerCase());
+        ['cd', 'tape', 'vinilo'].includes(product.tipo_producto.toLowerCase());
+
+    // Detectar si es un Zine
+    const isZine = product.tipo_producto &&
+        product.tipo_producto.toLowerCase() === 'zine';
 
     return (
         <>
@@ -19,7 +23,7 @@ const ProductCard = ({ product }) => {
                     <img
                         src={product.imageUrl}
                         className="card-img-top"
-                        alt={isDiscoType ? product.album : product.titulo}
+                        alt={isDiscoType ? product.album : (isZine ? product.nombre_revista : product.titulo)}
                         style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '0' }}
                     />
                     <div className="card-body px-0">
@@ -30,6 +34,15 @@ const ProductCard = ({ product }) => {
                                 </h6>
                                 <p className="card-text small text-secondary mb-2" style={{ fontSize: '0.8rem' }}>
                                     {product.sello}
+                                </p>
+                            </>
+                        ) : isZine ? (
+                            <>
+                                <h6 className="card-title fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
+                                    {product.nombre_revista} #{product.numero}
+                                </h6>
+                                <p className="card-text small text-secondary mb-2" style={{ fontSize: '0.8rem' }}>
+                                    {product.año} - {product.pais}
                                 </p>
                             </>
                         ) : (

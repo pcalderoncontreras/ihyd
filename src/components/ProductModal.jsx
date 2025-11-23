@@ -3,7 +3,15 @@ import React from 'react';
 const ProductModal = ({ product, show, onClose }) => {
     if (!product) return null;
 
-    const isDiscoType = ['CD', 'Tape', 'Vinilo', 'Zine'].includes(product.tipo_producto);
+    const isDiscoType = ['CD', 'Tape', 'Vinilo'].includes(product.tipo_producto);
+    const isZine = product.tipo_producto === 'Zine';
+
+    // Determinar el título para WhatsApp
+    const getWhatsAppTitle = () => {
+        if (isDiscoType) return `${product.banda} - ${product.album}`;
+        if (isZine) return `${product.nombre_revista} #${product.numero}`;
+        return product.titulo;
+    };
 
     return (
         <>
@@ -13,7 +21,9 @@ const ProductModal = ({ product, show, onClose }) => {
                     <div className="modal-content bg-dark text-white">
                         <div className="modal-header border-secondary">
                             <h5 className="modal-title fw-bold">
-                                {isDiscoType ? `${product.banda} - ${product.album}` : product.titulo}
+                                {isDiscoType ? `${product.banda} - ${product.album}` :
+                                    isZine ? `${product.nombre_revista} #${product.numero}` :
+                                        product.titulo}
                             </h5>
                             <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                         </div>
@@ -23,7 +33,7 @@ const ProductModal = ({ product, show, onClose }) => {
                                 <div className="col-md-6 mb-3">
                                     <img
                                         src={product.imageUrl}
-                                        alt={isDiscoType ? product.album : product.titulo}
+                                        alt={isDiscoType ? product.album : isZine ? product.nombre_revista : product.titulo}
                                         className="img-fluid rounded"
                                         style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover' }}
                                     />
@@ -47,18 +57,63 @@ const ProductModal = ({ product, show, onClose }) => {
                                                 <h6 className="text-secondary mb-1">ÁLBUM</h6>
                                                 <p className="mb-0">{product.album}</p>
                                             </div>
+                                            {product.estilo && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">ESTILO</h6>
+                                                    <p className="mb-0">{product.estilo}</p>
+                                                </div>
+                                            )}
+                                            {product.pais && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">PAÍS</h6>
+                                                    <p className="mb-0">{product.pais}</p>
+                                                </div>
+                                            )}
+                                            {product.sello && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">SELLO</h6>
+                                                    <p className="mb-0">{product.sello}</p>
+                                                </div>
+                                            )}
+                                            {product.detalles && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">DETALLES</h6>
+                                                    <p className="mb-0">{product.detalles}</p>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : isZine ? (
+                                        <>
                                             <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">ESTILO</h6>
-                                                <p className="mb-0">{product.estilo}</p>
+                                                <h6 className="text-secondary mb-1">TIPO</h6>
+                                                <p className="mb-0">{product.tipo_producto}</p>
                                             </div>
                                             <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">PAÍS</h6>
-                                                <p className="mb-0">{product.pais}</p>
+                                                <h6 className="text-secondary mb-1">NOMBRE REVISTA</h6>
+                                                <p className="mb-0">{product.nombre_revista}</p>
                                             </div>
                                             <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">SELLO</h6>
-                                                <p className="mb-0">{product.sello}</p>
+                                                <h6 className="text-secondary mb-1">NÚMERO</h6>
+                                                <p className="mb-0">#{product.numero}</p>
                                             </div>
+                                            {product.año && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">AÑO</h6>
+                                                    <p className="mb-0">{product.año}</p>
+                                                </div>
+                                            )}
+                                            {product.pais && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">PAÍS</h6>
+                                                    <p className="mb-0">{product.pais}</p>
+                                                </div>
+                                            )}
+                                            {product.detalles && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">DETALLES</h6>
+                                                    <p className="mb-0">{product.detalles}</p>
+                                                </div>
+                                            )}
                                         </>
                                     ) : (
                                         <>
@@ -70,18 +125,24 @@ const ProductModal = ({ product, show, onClose }) => {
                                                 <h6 className="text-secondary mb-1">TÍTULO</h6>
                                                 <p className="mb-0">{product.titulo}</p>
                                             </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">GÉNERO</h6>
-                                                <p className="mb-0">{product.genero}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">TALLA</h6>
-                                                <p className="mb-0">{product.talla}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">TIPO</h6>
-                                                <p className="mb-0">{product.tipo}</p>
-                                            </div>
+                                            {product.genero && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">GÉNERO</h6>
+                                                    <p className="mb-0">{product.genero}</p>
+                                                </div>
+                                            )}
+                                            {product.talla && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">TALLA</h6>
+                                                    <p className="mb-0">{product.talla}</p>
+                                                </div>
+                                            )}
+                                            {product.tipo && (
+                                                <div className="mb-3">
+                                                    <h6 className="text-secondary mb-1">TIPO</h6>
+                                                    <p className="mb-0">{product.tipo}</p>
+                                                </div>
+                                            )}
                                         </>
                                     )}
                                 </div>
@@ -90,7 +151,7 @@ const ProductModal = ({ product, show, onClose }) => {
                         <div className="modal-footer border-secondary">
                             <button type="button" className="btn btn-secondary" onClick={onClose}>Cerrar</button>
                             <a
-                                href={`https://wa.me/56998347436?text=Hola, estoy interesado en: ${isDiscoType ? `${product.banda} - ${product.album}` : product.titulo}`}
+                                href={`https://wa.me/56998347436?text=Hola, estoy interesado en: ${getWhatsAppTitle()}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-success"
