@@ -100,6 +100,7 @@ const Admin = ({ searchTerm = '' }) => {
                 estilo: newProduct.estilo || '',
                 pais: newProduct.pais || '',
                 sello: newProduct.sello || '',
+                detalles: newProduct.detalles || '',
             });
         }
 
@@ -144,6 +145,7 @@ const Admin = ({ searchTerm = '' }) => {
                 estilo: newProduct.estilo || '',
                 pais: newProduct.pais || '',
                 sello: newProduct.sello || '',
+                detalles: newProduct.detalles || '',
             });
         }
 
