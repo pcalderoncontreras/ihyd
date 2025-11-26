@@ -69,7 +69,9 @@ const Home = ({ setCategory }) => {
 
     return (
         <>
-            <Carousel />
+            <div className="container mt-4">
+                <Carousel />
+            </div>
             <div className="container mt-4">
                 <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             </div>

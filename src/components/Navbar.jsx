@@ -24,7 +24,7 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm }) => {
             <div className="container">
                 <Link className="navbar-brand d-flex align-items-center" to="/" onClick={() => setCategory && setCategory('all')}>
                     <img
-                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770772/ihyd_logo_negro2_hxray8.png"
+                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1764116670/LogoOficialHome_sxwfae.png"
                         alt="IHYD :: Distro"
                         style={{ height: '80px', width: 'auto' }}
                         className="me-2"

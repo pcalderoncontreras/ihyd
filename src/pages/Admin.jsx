@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BulkImport from '../components/BulkImport';
 import DatabaseCleaner from '../components/DatabaseCleaner';
+import CarouselManager from '../components/CarouselManager';
 
 const Admin = ({ searchTerm = '' }) => {
     const [products, setProducts] = useState([]);
@@ -324,6 +325,8 @@ const Admin = ({ searchTerm = '' }) => {
             <BulkImport />
 
             <DatabaseCleaner />
+
+            <CarouselManager />
 
             <div className="card mb-5">
                 <div className="card-header d-flex justify-content-between align-items-center bg-primary text-white">

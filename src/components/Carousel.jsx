@@ -1,62 +1,85 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase_config';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Carousel = () => {
+    const [carouselImages, setCarouselImages] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getCarouselImages();
+    }, []);
+
+    const getCarouselImages = async () => {
+        try {
+            const carouselCollectionRef = collection(db, 'carousel');
+            const data = await getDocs(carouselCollectionRef);
+            const images = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+            // Filtrar solo imágenes activas y ordenar
+            const activeImages = images
+                .filter(img => img.active !== false)
+                .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+            setCarouselImages(activeImages);
+        } catch (error) {
+            console.error('Error fetching carousel images:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="text-center py-5">
+                <div className="spinner-border text-light" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (carouselImages.length === 0) {
+        return null; // No mostrar el carrusel si no hay imágenes
+    }
+
     return (
         <div id="carouselExampleCaptions" className="carousel slide mb-5" data-bs-ride="carousel">
             <div className="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                {carouselImages.map((image, index) => (
+                    <button
+                        key={image.id}
+                        type="button"
+                        data-bs-target="#carouselExampleCaptions"
+                        data-bs-slide-to={index}
+                        className={index === 0 ? 'active' : ''}
+                        aria-current={index === 0 ? 'true' : 'false'}
+                        aria-label={`Slide ${index + 1}`}
+                    ></button>
+                ))}
             </div>
             <div className="carousel-inner">
-                <div className="carousel-item active">
-                    <img
-                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner03_zpg493.jpg"
-                        className="d-block w-100"
-                        alt="New Releases"
-                        style={{
-                            maxHeight: '400px',
-                            height: 'auto',
-                            objectFit: 'cover'
-                        }}
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                        <h5></h5>
-                        <p></p>
+                {carouselImages.map((image, index) => (
+                    <div key={image.id} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                        <img
+                            src={image.imageUrl}
+                            className="d-block w-100"
+                            alt={image.title || 'Carousel'}
+                            style={{
+                                maxHeight: '400px',
+                                width: '100%',
+                                objectFit: 'contain',
+                                backgroundColor: '#000'
+                            }}
+                        />
+                        {(image.title || image.description) && (
+                            <div className="carousel-caption d-none d-md-block">
+                                {image.title && <h5>{image.title}</h5>}
+                                {image.description && <p>{image.description}</p>}
+                            </div>
+                        )}
                     </div>
-                </div>
-                <div className="carousel-item">
-                    <img
-                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770419/banner02_agve0n.jpg"
-                        className="d-block w-100"
-                        alt="Vinyl Collection"
-                        style={{
-                            maxHeight: '400px',
-                            height: 'auto',
-                            objectFit: 'cover'
-                        }}
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                        <h5></h5>
-                        <p></p>
-                    </div>
-                </div>
-                <div className="carousel-item">
-                    <img
-                        src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770420/banner01_ibzan3.jpg"
-                        className="d-block w-100"
-                        alt="Exclusive Merch"
-                        style={{
-                            maxHeight: '400px',
-                            height: 'auto',
-                            objectFit: 'cover'
-                        }}
-                    />
-                    <div className="carousel-caption d-none d-md-block">
-                        <h5></h5>
-                        <p></p>
-                    </div>
-                </div>
+                ))}
             </div>
             <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
