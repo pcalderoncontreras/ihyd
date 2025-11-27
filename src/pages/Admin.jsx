@@ -7,7 +7,7 @@ import BulkImport from '../components/BulkImport';
 import DatabaseCleaner from '../components/DatabaseCleaner';
 import CarouselManager from '../components/CarouselManager';
 
-const Admin = ({ searchTerm = '' }) => {
+const Admin = () => {
     const [products, setProducts] = useState([]);
     const [productType, setProductType] = useState('CD'); // CD, Tape, Vinilo, Zine, Polera
     const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +37,7 @@ const Admin = ({ searchTerm = '' }) => {
     });
 
     // Filter, Pagination, and Sorting states
+    const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
     const [sortField, setSortField] = useState('tipo_producto');
@@ -59,6 +60,11 @@ const Admin = ({ searchTerm = '' }) => {
         }
         getProducts();
     }, [currentUser, navigate]);
+
+    // Reset to page 1 when search or filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, typeFilter]);
 
     const getProducts = async () => {
         const data = await getDocs(productsCollectionRef);
@@ -245,19 +251,32 @@ const Admin = ({ searchTerm = '' }) => {
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
             filtered = filtered.filter(product => {
+                // Disco fields (CD, Tape, Vinilo)
                 const banda = product.banda?.toLowerCase() || '';
                 const album = product.album?.toLowerCase() || '';
+                const sello = product.sello?.toLowerCase() || '';
+
+                // Zine fields
+                const nombre_revista = product.nombre_revista?.toLowerCase() || '';
+                const numero = product.numero?.toLowerCase() || '';
+
+                // Polera fields
                 const titulo = product.titulo?.toLowerCase() || '';
+
+                // Common fields
                 const estilo = product.estilo?.toLowerCase() || '';
                 const pais = product.pais?.toLowerCase() || '';
-                const sello = product.sello?.toLowerCase() || '';
+                const detalles = product.detalles?.toLowerCase() || '';
 
                 return banda.includes(term) ||
                     album.includes(term) ||
+                    sello.includes(term) ||
+                    nombre_revista.includes(term) ||
+                    numero.includes(term) ||
                     titulo.includes(term) ||
                     estilo.includes(term) ||
                     pais.includes(term) ||
-                    sello.includes(term);
+                    detalles.includes(term);
             });
         }
 
@@ -469,7 +488,7 @@ const Admin = ({ searchTerm = '' }) => {
             {/* Filter and Product Count */}
             <div className="card mb-3">
                 <div className="card-body">
-                    <div className="row align-items-center">
+                    <div className="row align-items-center mb-3">
                         <div className="col-md-4">
                             <label className="form-label fw-bold">Filtrar por Tipo de Producto:</label>
                             <select
@@ -477,7 +496,6 @@ const Admin = ({ searchTerm = '' }) => {
                                 value={typeFilter}
                                 onChange={(e) => {
                                     setTypeFilter(e.target.value);
-                                    setCurrentPage(1);
                                 }}
                             >
                                 <option value="all">Todos los Productos</option>
@@ -488,7 +506,19 @@ const Admin = ({ searchTerm = '' }) => {
                                 <option value="Polera">Polera</option>
                             </select>
                         </div>
-                        <div className="col-md-8 text-end">
+                        <div className="col-md-8">
+                            <label className="form-label fw-bold">Buscar Producto:</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Buscar por banda, álbum, título, estilo, país o sello..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 text-end">
                             <p className="mb-0">
                                 <strong>Mostrando:</strong> {paginatedProducts.length} de {processedProducts.length} productos
                                 {typeFilter !== 'all' && ` (${typeFilter})`}

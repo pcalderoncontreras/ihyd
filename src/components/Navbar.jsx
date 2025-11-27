@@ -35,16 +35,7 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm }) => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     {isAdminPage ? (
-                        <div className="ms-auto d-flex align-items-center gap-3 w-100 justify-content-end">
-                            <div className="flex-grow-1" style={{ maxWidth: '400px' }}>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Buscar productos..."
-                                    value={searchTerm || ''}
-                                    onChange={(e) => setSearchTerm && setSearchTerm(e.target.value)}
-                                />
-                            </div>
+                        <div className="ms-auto d-flex align-items-center gap-3">
                             {currentUser && (
                                 <button className="btn btn-outline-light" onClick={handleLogout}>
                                     Cerrar Sesión
