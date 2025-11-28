@@ -251,22 +251,29 @@ const Admin = () => {
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
             filtered = filtered.filter(product => {
+                // Helper function to safely convert to lowercase string
+                const toLowerString = (value) => {
+                    if (value === null || value === undefined) return '';
+                    return String(value).toLowerCase();
+                };
+
                 // Disco fields (CD, Tape, Vinilo)
-                const banda = product.banda?.toLowerCase() || '';
-                const album = product.album?.toLowerCase() || '';
-                const sello = product.sello?.toLowerCase() || '';
+                const banda = toLowerString(product.banda);
+                const album = toLowerString(product.album);
+                const sello = toLowerString(product.sello);
 
                 // Zine fields
-                const nombre_revista = product.nombre_revista?.toLowerCase() || '';
-                const numero = product.numero?.toLowerCase() || '';
+                const nombre_revista = toLowerString(product.nombre_revista);
+                const numero = toLowerString(product.numero);
 
                 // Polera fields
-                const titulo = product.titulo?.toLowerCase() || '';
+                const titulo = toLowerString(product.titulo);
 
                 // Common fields
-                const estilo = product.estilo?.toLowerCase() || '';
-                const pais = product.pais?.toLowerCase() || '';
-                const detalles = product.detalles?.toLowerCase() || '';
+                const estilo = toLowerString(product.estilo);
+                const pais = toLowerString(product.pais);
+                const detalles = toLowerString(product.detalles);
+                const precio = toLowerString(product.precio);
 
                 return banda.includes(term) ||
                     album.includes(term) ||
@@ -276,7 +283,8 @@ const Admin = () => {
                     titulo.includes(term) ||
                     estilo.includes(term) ||
                     pais.includes(term) ||
-                    detalles.includes(term);
+                    detalles.includes(term) ||
+                    precio.includes(term);
             });
         }
 
