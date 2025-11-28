@@ -35,7 +35,7 @@ const ProductModal = ({ product, show, onClose }) => {
                                         src={product.imageUrl}
                                         alt={isDiscoType ? product.album : isZine ? product.nombre_revista : product.titulo}
                                         className="img-fluid rounded"
-                                        style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover' }}
+                                        style={{ width: '100%', objectFit: 'contain', maxHeight: '500px' }}
                                     />
                                 </div>
 
