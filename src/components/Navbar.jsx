@@ -37,9 +37,14 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm }) => {
                     {isAdminPage ? (
                         <div className="ms-auto d-flex align-items-center gap-3">
                             {currentUser && (
-                                <button className="btn btn-outline-light" onClick={handleLogout}>
-                                    Cerrar Sesión
-                                </button>
+                                <>
+                                    <span className="text-white">
+                                        Bienvenido: <strong>{currentUser.email}</strong>
+                                    </span>
+                                    <button className="btn btn-outline-light" onClick={handleLogout}>
+                                        Cerrar Sesión
+                                    </button>
+                                </>
                             )}
                         </div>
                     ) : (
