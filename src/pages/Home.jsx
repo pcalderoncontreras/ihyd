@@ -5,6 +5,7 @@ import Carousel from '../components/Carousel';
 import CategorySection from '../components/CategorySection';
 import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
+import SocialMediaSection from '../components/SocialMediaSection';
 
 const Home = ({ setCategory }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +14,26 @@ const Home = ({ setCategory }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState('default'); // default, alpha-asc, alpha-desc, price-asc, price-desc, date-desc, date-asc
     const itemsPerPage = 20;
+
+    // Load Instagram embed script
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://www.instagram.com/embed.js';
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = () => {
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+            }
+        };
+
+        return () => {
+            if (document.body.contains(script)) {
+                document.body.removeChild(script);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         if (searchTerm) {
@@ -199,11 +220,16 @@ const Home = ({ setCategory }) => {
                     )}
                 </div>
             ) : (
-                <div className="py-4">
-                    <CategorySection category="CD" title="CD's" setCategory={setCategory} />
-                    <CategorySection category="Tape" title="TAPES" setCategory={setCategory} />
-                    <CategorySection category="Vinilo" title="VINILOS" setCategory={setCategory} />
-                </div>
+                <>
+                    <div className="py-4">
+                        <CategorySection category="CD" title="CD's" setCategory={setCategory} />
+                        <CategorySection category="Tape" title="TAPES" setCategory={setCategory} />
+                        <CategorySection category="Vinilo" title="VINILOS" setCategory={setCategory} />
+                    </div>
+
+                    {/* Social Media Section */}
+                    <SocialMediaSection />
+                </>
             )}
         </>
     );
