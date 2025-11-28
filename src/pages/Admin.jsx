@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase_config';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BulkImport from '../components/BulkImport';
@@ -81,7 +81,8 @@ const Admin = () => {
             precio: Number(newProduct.precio),
             imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
             tipo_producto: productType,
-            active: true
+            active: true,
+            createdAt: Timestamp.now()
         };
 
         if (productType === 'Polera') {

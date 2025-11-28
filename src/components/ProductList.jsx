@@ -10,6 +10,7 @@ const ProductList = ({ category }) => {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [sortOrder, setSortOrder] = useState('default'); // default, alpha-asc, alpha-desc, price-asc, price-desc, date-desc, date-asc
     const itemsPerPage = 20;
     const productsCollectionRef = collection(db, 'productos');
 
@@ -46,8 +47,8 @@ const ProductList = ({ category }) => {
     }, [category]);
 
     useEffect(() => {
-        setCurrentPage(1); // Reset to first page when search changes
-    }, [searchTerm]);
+        setCurrentPage(1); // Reset to first page when search or sort changes
+    }, [searchTerm, sortOrder]);
 
     const filterProducts = (products) => {
         if (!searchTerm) return products;
@@ -69,11 +70,49 @@ const ProductList = ({ category }) => {
         });
     };
 
+    const sortProducts = (products) => {
+        const sorted = [...products];
+
+        switch (sortOrder) {
+            case 'alpha-asc':
+                return sorted.sort((a, b) => {
+                    const nameA = (a.banda || a.titulo || '').toLowerCase();
+                    const nameB = (b.banda || b.titulo || '').toLowerCase();
+                    return nameA.localeCompare(nameB);
+                });
+            case 'alpha-desc':
+                return sorted.sort((a, b) => {
+                    const nameA = (a.banda || a.titulo || '').toLowerCase();
+                    const nameB = (b.banda || b.titulo || '').toLowerCase();
+                    return nameB.localeCompare(nameA);
+                });
+            case 'price-asc':
+                return sorted.sort((a, b) => (a.precio || 0) - (b.precio || 0));
+            case 'price-desc':
+                return sorted.sort((a, b) => (b.precio || 0) - (a.precio || 0));
+            case 'date-desc': // Más nuevo primero
+                return sorted.sort((a, b) => {
+                    const timeA = a.createdAt?.toMillis() || 0;
+                    const timeB = b.createdAt?.toMillis() || 0;
+                    return timeB - timeA;
+                });
+            case 'date-asc': // Más antiguo primero
+                return sorted.sort((a, b) => {
+                    const timeA = a.createdAt?.toMillis() || 0;
+                    const timeB = b.createdAt?.toMillis() || 0;
+                    return timeA - timeB;
+                });
+            default:
+                return sorted;
+        }
+    };
+
     const filteredProducts = filterProducts(products);
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    const sortedProducts = sortProducts(filteredProducts);
+    const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+    const paginatedProducts = sortedProducts.slice(startIndex, endIndex);
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -106,9 +145,29 @@ const ProductList = ({ category }) => {
 
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
+            {/* Sort and Product Count */}
             {filteredProducts.length > 0 && (
-                <div className="mb-3 text-white text-end">
-                    <small>Mostrando {paginatedProducts.length} de {filteredProducts.length} productos</small>
+                <div className="mb-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <label className="text-white me-2">Ordenar por:</label>
+                        <select
+                            className="form-select form-select-sm d-inline-block"
+                            style={{ width: 'auto' }}
+                            value={sortOrder}
+                            onChange={(e) => setSortOrder(e.target.value)}
+                        >
+                            <option value="default">Por defecto</option>
+                            <option value="alpha-asc">Alfabético (A-Z)</option>
+                            <option value="alpha-desc">Alfabético (Z-A)</option>
+                            <option value="price-asc">Precio (menor a mayor)</option>
+                            <option value="price-desc">Precio (mayor a menor)</option>
+                            <option value="date-desc">Más nuevos primero</option>
+                            <option value="date-asc">Más antiguos primero</option>
+                        </select>
+                    </div>
+                    <div className="text-white">
+                        <small>Mostrando {paginatedProducts.length} de {sortedProducts.length} productos</small>
+                    </div>
                 </div>
             )}
 
