@@ -6,11 +6,11 @@ const ProductCard = ({ product }) => {
 
     // Detectar si es un tipo de disco (CD, Tape, Vinilo) - case insensitive
     const isDiscoType = product.tipo_producto &&
-        ['cd', 'tape', 'vinilo'].includes(product.tipo_producto.toLowerCase());
+        ['cd', 'tape', 'vinilo'].includes(String(product.tipo_producto).toLowerCase());
 
     // Detectar si es un Zine
     const isZine = product.tipo_producto &&
-        product.tipo_producto.toLowerCase() === 'zine';
+        String(product.tipo_producto).toLowerCase() === 'zine';
 
     return (
         <>

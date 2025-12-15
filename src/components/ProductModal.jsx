@@ -3,8 +3,8 @@ import React from 'react';
 const ProductModal = ({ product, show, onClose }) => {
     if (!product) return null;
 
-    const isDiscoType = ['CD', 'Tape', 'Vinilo'].includes(product.tipo_producto);
-    const isZine = product.tipo_producto === 'Zine';
+    const isDiscoType = ['cd', 'tape', 'vinilo'].includes(String(product.tipo_producto || '').toLowerCase());
+    const isZine = String(product.tipo_producto || '').toLowerCase() === 'zine';
 
     // Determinar el título para WhatsApp
     const getWhatsAppTitle = () => {

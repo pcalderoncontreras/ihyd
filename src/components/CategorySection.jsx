@@ -18,7 +18,7 @@ const CategorySection = ({ category, title, setCategory }) => {
                 const filtered = allProducts.filter(p =>
                     p.active !== false &&
                     p.tipo_producto &&
-                    p.tipo_producto.toLowerCase() === category.toLowerCase()
+                    String(p.tipo_producto).toLowerCase() === category.toLowerCase()
                 );
 
                 // Take first 4 products
