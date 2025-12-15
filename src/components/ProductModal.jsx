@@ -13,6 +13,74 @@ const ProductModal = ({ product, show, onClose }) => {
         return product.titulo;
     };
 
+    // Helper para renderizar el player de medios
+    const renderMediaPlayer = () => {
+        if (!product.mediaUrl) return null;
+
+        const url = product.mediaUrl;
+
+        // YouTube
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            let embedUrl = url;
+            if (url.includes('watch?v=')) {
+                embedUrl = url.replace('watch?v=', 'embed/');
+                // Remove additional params if any
+                if (embedUrl.includes('&')) embedUrl = embedUrl.split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                embedUrl = url.replace('youtu.be/', 'www.youtube.com/embed/');
+            }
+
+            return (
+                <div className="ratio ratio-16x9 mb-3">
+                    <iframe
+                        src={embedUrl}
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    ></iframe>
+                </div>
+            );
+        }
+
+        // SoundCloud
+        if (url.includes('soundcloud.com')) {
+            return (
+                <div className="mb-3">
+                    <iframe
+                        width="100%"
+                        height="166"
+                        scrolling="no"
+                        frameBorder="no"
+                        allow="autoplay"
+                        src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`}
+                    ></iframe>
+                </div>
+            );
+        }
+
+        // Bandcamp
+        if (url.includes('bandcamp.com')) {
+            // Bandcamp es más complejo ya que el embed requiere un ID que no está obvio en la URL pública.
+            // Por ahora mostramos un botón bonito.
+            return (
+                <div className="mb-3 text-center">
+                    <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-info w-100">
+                        <i className="bi bi-music-note-list me-2"></i> Escuchar en Bandcamp
+                    </a>
+                </div>
+            );
+        }
+
+        // Generic Link
+        return (
+            <div className="mb-3 text-center">
+                <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-outline-light w-100">
+                    <i className="bi bi-link-45deg me-2"></i> Ver enlace multimedia
+                </a>
+            </div>
+        );
+    };
+
     return (
         <>
             {/* Bootstrap Modal */}
@@ -145,6 +213,7 @@ const ProductModal = ({ product, show, onClose }) => {
                                             )}
                                         </>
                                     )}
+                                    {renderMediaPlayer()}
                                 </div>
                             </div>
                         </div>

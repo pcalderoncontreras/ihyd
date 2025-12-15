@@ -24,6 +24,7 @@ const Admin = () => {
         pais: '',
         sello: '',
         tipo_producto: 'CD',
+        mediaUrl: '',
         // Zine specific
         nombre_revista: '',
         numero: '',
@@ -81,6 +82,8 @@ const Admin = () => {
             precio: Number(newProduct.precio),
             imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
             tipo_producto: productType,
+            tipo_producto: productType,
+            mediaUrl: newProduct.mediaUrl || '',
             active: true,
             createdAt: Timestamp.now()
         };
@@ -127,6 +130,7 @@ const Admin = () => {
         const productData = {
             precio: Number(newProduct.precio),
             imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
+            mediaUrl: newProduct.mediaUrl || '',
             active: newProduct.active
         };
 
@@ -173,6 +177,7 @@ const Admin = () => {
             pais: '',
             sello: '',
             tipo_producto: 'CD',
+            mediaUrl: '',
             nombre_revista: '',
             numero: '',
             año: '',
@@ -201,6 +206,7 @@ const Admin = () => {
             pais: product.pais || '',
             sello: product.sello || '',
             tipo_producto: product.tipo_producto,
+            mediaUrl: product.mediaUrl || '',
             nombre_revista: product.nombre_revista || '',
             numero: product.numero || '',
             año: product.año || '',
@@ -408,6 +414,10 @@ const Admin = () => {
                                     <label className="form-label">Image URL (opcional)</label>
                                     <input type="url" className="form-control" placeholder="Image URL (opcional - se usará imagen por defecto)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
                                 </div>
+                                <div className="col-md-12">
+                                    <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) - Opcional</label>
+                                    <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
+                                </div>
                             </>
                         )}
 
@@ -441,6 +451,10 @@ const Admin = () => {
                                 <div className="col-md-4">
                                     <label className="form-label">Image URL (opcional)</label>
                                     <input type="url" className="form-control" placeholder="Image URL (opcional - se usará imagen por defecto)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
+                                </div>
+                                <div className="col-md-12">
+                                    <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) - Opcional</label>
+                                    <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
                                 </div>
                             </>
                         )}
@@ -476,6 +490,10 @@ const Admin = () => {
                                 <div className="col-md-4">
                                     <label className="form-label">Image URL</label>
                                     <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
+                                </div>
+                                <div className="col-md-12">
+                                    <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) - Opcional</label>
+                                    <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
                                 </div>
                             </>
                         )}
