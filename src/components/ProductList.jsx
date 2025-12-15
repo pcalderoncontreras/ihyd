@@ -54,12 +54,12 @@ const ProductList = ({ category }) => {
         if (!searchTerm) return products;
         const term = searchTerm.toLowerCase();
         return products.filter(product => {
-            const banda = product.banda?.toLowerCase() || '';
-            const album = product.album?.toLowerCase() || '';
-            const titulo = product.titulo?.toLowerCase() || '';
-            const estilo = product.estilo?.toLowerCase() || '';
-            const pais = product.pais?.toLowerCase() || '';
-            const sello = product.sello?.toLowerCase() || '';
+            const banda = String(product.banda || '').toLowerCase();
+            const album = String(product.album || '').toLowerCase();
+            const titulo = String(product.titulo || '').toLowerCase();
+            const estilo = String(product.estilo || '').toLowerCase();
+            const pais = String(product.pais || '').toLowerCase();
+            const sello = String(product.sello || '').toLowerCase();
 
             return banda.includes(term) ||
                 album.includes(term) ||
@@ -76,14 +76,14 @@ const ProductList = ({ category }) => {
         switch (sortOrder) {
             case 'alpha-asc':
                 return sorted.sort((a, b) => {
-                    const nameA = (a.banda || a.titulo || '').toLowerCase();
-                    const nameB = (b.banda || b.titulo || '').toLowerCase();
+                    const nameA = String(a.banda || a.titulo || '').toLowerCase();
+                    const nameB = String(b.banda || b.titulo || '').toLowerCase();
                     return nameA.localeCompare(nameB);
                 });
             case 'alpha-desc':
                 return sorted.sort((a, b) => {
-                    const nameA = (a.banda || a.titulo || '').toLowerCase();
-                    const nameB = (b.banda || b.titulo || '').toLowerCase();
+                    const nameA = String(a.banda || a.titulo || '').toLowerCase();
+                    const nameB = String(b.banda || b.titulo || '').toLowerCase();
                     return nameB.localeCompare(nameA);
                 });
             case 'price-asc':
