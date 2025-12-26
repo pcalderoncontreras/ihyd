@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase_config';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, Timestamp, writeBatch } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BulkImport from '../components/BulkImport';
@@ -45,6 +45,9 @@ const Admin = () => {
     const [sortDirection, setSortDirection] = useState('asc');
     const itemsPerPage = 30;
 
+    // Bulk Actions State
+    const [selectedProducts, setSelectedProducts] = useState([]);
+
     // Image modal state
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
@@ -65,7 +68,13 @@ const Admin = () => {
     // Reset to page 1 when search or filter changes
     useEffect(() => {
         setCurrentPage(1);
+        setSelectedProducts([]); // Clear selection on filter change
     }, [searchTerm, typeFilter]);
+
+    // Clear selection on page change
+    useEffect(() => {
+        setSelectedProducts([]);
+    }, [currentPage]);
 
     const getProducts = async () => {
         const data = await getDocs(productsCollectionRef);
@@ -130,6 +139,7 @@ const Admin = () => {
         const productData = {
             precio: Number(newProduct.precio),
             imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
+            tipo_producto: productType,
             mediaUrl: newProduct.mediaUrl || '',
             active: newProduct.active
         };
@@ -249,6 +259,61 @@ const Admin = () => {
     const getSortIcon = (field) => {
         if (sortField !== field) return '⇅';
         return sortDirection === 'asc' ? '↑' : '↓';
+    };
+
+    // Bulk Actions Handlers
+    const handleSelectProduct = (id) => {
+        setSelectedProducts(prev => {
+            if (prev.includes(id)) {
+                return prev.filter(pId => pId !== id);
+            } else {
+                return [...prev, id];
+            }
+        });
+    };
+
+    const handleSelectAll = () => {
+        if (selectedProducts.length === paginatedProducts.length) {
+            setSelectedProducts([]);
+        } else {
+            setSelectedProducts(paginatedProducts.map(p => p.id));
+        }
+    };
+
+    const bulkActivate = async () => {
+        if (!window.confirm(`¿Activar ${selectedProducts.length} productos seleccionados?`)) return;
+        const batch = writeBatch(db);
+        selectedProducts.forEach(id => {
+            const ref = doc(db, 'productos', id);
+            batch.update(ref, { active: true });
+        });
+        await batch.commit();
+        setSelectedProducts([]);
+        getProducts();
+    };
+
+    const bulkDeactivate = async () => {
+        if (!window.confirm(`¿Desactivar ${selectedProducts.length} productos seleccionados?`)) return;
+        const batch = writeBatch(db);
+        selectedProducts.forEach(id => {
+            const ref = doc(db, 'productos', id);
+            batch.update(ref, { active: false });
+        });
+        await batch.commit();
+        setSelectedProducts([]);
+        getProducts();
+    };
+
+    const bulkDelete = async () => {
+        if (!window.confirm(`¿ELIMINAR PERMANENTEMENTE ${selectedProducts.length} productos seleccionados?`)) return;
+        const batch = writeBatch(db);
+        selectedProducts.forEach(id => {
+            const ref = doc(db, 'productos', id);
+            batch.delete(ref);
+        });
+        await batch.commit();
+        setSelectedProducts([]);
+        getProducts();
     };
 
     const filterAndSortProducts = (products) => {
@@ -557,10 +622,35 @@ const Admin = () => {
                 </div>
             </div>
 
+            {/* Bulk Actions Toolbar */}
+            {
+                selectedProducts.length > 0 && (
+                    <div className="alert alert-info d-flex justify-content-between align-items-center sticky-top shadow-sm" style={{ top: '20px', zIndex: 100 }}>
+                        <div>
+                            <span className="fw-bold fs-5 me-3">{selectedProducts.length} seleccionados</span>
+                            <button className="btn btn-sm btn-outline-dark me-2" onClick={() => setSelectedProducts([])}>Cancelar Selección</button>
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn btn-success" onClick={bulkActivate}>Activar Seleccionados</button>
+                            <button className="btn btn-secondary" onClick={bulkDeactivate}>Desactivar Seleccionados</button>
+                            <button className="btn btn-danger" onClick={bulkDelete}>Eliminar Seleccionados</button>
+                        </div>
+                    </div>
+                )
+            }
+
             <div className="table-responsive">
                 <table className="table table-striped table-hover align-middle">
                     <thead className="table-dark">
                         <tr>
+                            <th style={{ width: '40px' }}>
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    checked={paginatedProducts.length > 0 && selectedProducts.length === paginatedProducts.length}
+                                    onChange={handleSelectAll}
+                                />
+                            </th>
                             <th>Image</th>
                             <th
                                 style={{ cursor: 'pointer' }}
@@ -593,6 +683,14 @@ const Admin = () => {
                     <tbody>
                         {paginatedProducts.map((product) => (
                             <tr key={product.id} className={product.active === false ? 'table-secondary' : ''}>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        className="form-check-input"
+                                        checked={selectedProducts.includes(product.id)}
+                                        onChange={() => handleSelectProduct(product.id)}
+                                    />
+                                </td>
                                 <td>
                                     {product.imageUrl && (
                                         <img
@@ -670,136 +768,140 @@ const Admin = () => {
             </div>
 
             {/* Pagination */}
-            {totalPages > 1 && (
-                <div className="d-flex justify-content-between align-items-center mt-4">
-                    <div>
-                        <small className="text-muted">
-                            Página {currentPage} de {totalPages}
-                        </small>
-                    </div>
-                    <nav>
-                        <ul className="pagination mb-0">
-                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                <button
-                                    className="page-link"
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    Anterior
-                                </button>
-                            </li>
+            {
+                totalPages > 1 && (
+                    <div className="d-flex justify-content-between align-items-center mt-4">
+                        <div>
+                            <small className="text-muted">
+                                Página {currentPage} de {totalPages}
+                            </small>
+                        </div>
+                        <nav>
+                            <ul className="pagination mb-0">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button
+                                        className="page-link"
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Anterior
+                                    </button>
+                                </li>
 
-                            {/* First page */}
-                            {currentPage > 3 && (
-                                <>
-                                    <li className="page-item">
-                                        <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
-                                    </li>
-                                    {currentPage > 4 && <li className="page-item disabled"><span className="page-link">...</span></li>}
-                                </>
-                            )}
+                                {/* First page */}
+                                {currentPage > 3 && (
+                                    <>
+                                        <li className="page-item">
+                                            <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
+                                        </li>
+                                        {currentPage > 4 && <li className="page-item disabled"><span className="page-link">...</span></li>}
+                                    </>
+                                )}
 
-                            {/* Pages around current */}
-                            {Array.from({ length: totalPages }, (_, i) => i + 1)
-                                .filter(page => page >= currentPage - 2 && page <= currentPage + 2)
-                                .map(page => (
-                                    <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-                                        <button className="page-link" onClick={() => handlePageChange(page)}>
-                                            {page}
-                                        </button>
-                                    </li>
-                                ))
-                            }
+                                {/* Pages around current */}
+                                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                    .filter(page => page >= currentPage - 2 && page <= currentPage + 2)
+                                    .map(page => (
+                                        <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                            <button className="page-link" onClick={() => handlePageChange(page)}>
+                                                {page}
+                                            </button>
+                                        </li>
+                                    ))
+                                }
 
-                            {/* Last page */}
-                            {currentPage < totalPages - 2 && (
-                                <>
-                                    {currentPage < totalPages - 3 && <li className="page-item disabled"><span className="page-link">...</span></li>}
-                                    <li className="page-item">
-                                        <button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
-                                    </li>
-                                </>
-                            )}
+                                {/* Last page */}
+                                {currentPage < totalPages - 2 && (
+                                    <>
+                                        {currentPage < totalPages - 3 && <li className="page-item disabled"><span className="page-link">...</span></li>}
+                                        <li className="page-item">
+                                            <button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
+                                        </li>
+                                    </>
+                                )}
 
-                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                <button
-                                    className="page-link"
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    Siguiente
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div>
-                        <small className="text-muted">
-                            <span style={{ color: 'white' }}>Ir a página:</span>
-                            <input
-                                type="number"
-                                min="1"
-                                max={totalPages}
-                                className="form-control form-control-sm d-inline-block ms-2"
-                                style={{ width: '70px' }}
-                                onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        const page = parseInt(e.target.value);
-                                        if (page >= 1 && page <= totalPages) {
-                                            handlePageChange(page);
-                                            e.target.value = '';
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button
+                                        className="page-link"
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Siguiente
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div>
+                            <small className="text-muted">
+                                <span style={{ color: 'white' }}>Ir a página:</span>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max={totalPages}
+                                    className="form-control form-control-sm d-inline-block ms-2"
+                                    style={{ width: '70px' }}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            const page = parseInt(e.target.value);
+                                            if (page >= 1 && page <= totalPages) {
+                                                handlePageChange(page);
+                                                e.target.value = '';
+                                            }
                                         }
-                                    }
-                                }}
-                            />
-                        </small>
+                                    }}
+                                />
+                            </small>
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* Image Modal */}
-            {showImageModal && (
-                <div
-                    className="modal show d-block"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
-                    onClick={() => setShowImageModal(false)}
-                >
-                    <div className="modal-dialog modal-dialog-centered modal-lg">
-                        <div className="modal-content bg-dark">
-                            <div className="modal-header border-secondary">
-                                <h5 className="modal-title text-white">Vista Previa de Imagen</h5>
-                                <button
-                                    type="button"
-                                    className="btn-close btn-close-white"
-                                    onClick={() => setShowImageModal(false)}
-                                ></button>
-                            </div>
-                            <div className="modal-body text-center p-4">
-                                <img
-                                    src={selectedImage}
-                                    alt="Product Preview"
-                                    style={{
-                                        maxWidth: '100%',
-                                        maxHeight: '70vh',
-                                        objectFit: 'contain',
-                                        borderRadius: '8px'
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                />
-                            </div>
-                            <div className="modal-footer border-secondary">
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={() => setShowImageModal(false)}
-                                >
-                                    Cerrar
-                                </button>
+            {
+                showImageModal && (
+                    <div
+                        className="modal show d-block"
+                        style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+                        onClick={() => setShowImageModal(false)}
+                    >
+                        <div className="modal-dialog modal-dialog-centered modal-lg">
+                            <div className="modal-content bg-dark">
+                                <div className="modal-header border-secondary">
+                                    <h5 className="modal-title text-white">Vista Previa de Imagen</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close btn-close-white"
+                                        onClick={() => setShowImageModal(false)}
+                                    ></button>
+                                </div>
+                                <div className="modal-body text-center p-4">
+                                    <img
+                                        src={selectedImage}
+                                        alt="Product Preview"
+                                        style={{
+                                            maxWidth: '100%',
+                                            maxHeight: '70vh',
+                                            objectFit: 'contain',
+                                            borderRadius: '8px'
+                                        }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    />
+                                </div>
+                                <div className="modal-footer border-secondary">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={() => setShowImageModal(false)}
+                                    >
+                                        Cerrar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
