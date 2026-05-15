@@ -139,7 +139,7 @@ const ProductList = ({ category }) => {
     return (
         <div className="container">
             {/* Category Title */}
-            <h1 className="text-white text-uppercase fw-bold mb-4" style={{ borderBottom: '2px solid #444', paddingBottom: '15px' }}>
+            <h1 className="text-white fw-bold mb-4" style={{ borderBottom: '2px solid #444', paddingBottom: '15px' }}>
                 {getCategoryTitle()}
             </h1>
 
