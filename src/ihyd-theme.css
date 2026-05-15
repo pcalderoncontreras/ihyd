@@ -49,6 +49,7 @@
 
 .ihyd-card-overlay {
   position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
   display: flex;
@@ -138,7 +139,7 @@
   content: '';
   position: absolute;
   inset: -10%;
-  background-image: var(--modal-bg-image);
+  background-image: var(--modal-bg-image, none);
   background-size: cover;
   background-position: center;
   filter: blur(25px) brightness(0.25);
@@ -418,7 +419,8 @@
 }
 
 .ihyd-admin .table tbody tr:hover {
-  background: var(--ihyd-surface-2) !important;
+  --bs-table-hover-bg: var(--ihyd-surface-2);
+  background-color: var(--ihyd-surface-2);
 }
 
 .ihyd-admin .table thead th {
