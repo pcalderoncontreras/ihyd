@@ -51,6 +51,7 @@ const Admin = () => {
     // Image modal state
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    const [activeTab, setActiveTab] = useState('productos');
 
     const { currentUser } = useAuth();
     const navigate = useNavigate();
@@ -417,180 +418,73 @@ const Admin = () => {
     };
 
     return (
-        <div className="container mt-5">
+        <div className="ihyd-admin">
+            <h2 className="ihyd-admin-title">Admin Panel</h2>
 
-            <h2 className="text-center mb-4" style={{ color: 'white' }}>Admin Panel</h2>
-
-            <BulkImport />
-
-            <DatabaseCleaner />
-
-            <CarouselManager />
-
-            <div className="card mb-5">
-                <div className="card-header d-flex justify-content-between align-items-center bg-primary text-white">
-                    <span className="fw-bold">{isEditing ? 'Edit Product' : 'Add New Product'}</span>
-                    <select
-                        className="form-select w-auto"
-                        value={productType}
-                        onChange={(e) => setProductType(e.target.value)}
-                    >
-                        <option value="CD">CD</option>
-                        <option value="Tape">Tape</option>
-                        <option value="Vinilo">Vinilo</option>
-                        <option value="Zine">Zine</option>
-                        <option value="Polera">Polera</option>
-                    </select>
-                </div>
-                <div className="card-body">
-                    <form onSubmit={isEditing ? updateProduct : createProduct} className="row g-3">
-                        {/* Disco-like Specific Fields */}
-                        {isDiscoType(productType) && (
-                            <>
-                                <div className="col-md-3">
-                                    <label className="form-label">Banda</label>
-                                    <input type="text" className="form-control" placeholder="Banda" value={newProduct.banda} onChange={(e) => setNewProduct({ ...newProduct, banda: e.target.value })} required />
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label">Album</label>
-                                    <input type="text" className="form-control" placeholder="Album" value={newProduct.album} onChange={(e) => setNewProduct({ ...newProduct, album: e.target.value })} required />
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label">Sello</label>
-                                    <input type="text" className="form-control" placeholder="Sello" value={newProduct.sello} onChange={(e) => setNewProduct({ ...newProduct, sello: e.target.value })} />
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label">Pais</label>
-                                    <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} />
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label">Estilo</label>
-                                    <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} />
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label">Detalles</label>
-                                    <input type="text" className="form-control" placeholder="Detalles" value={newProduct.detalles} onChange={(e) => setNewProduct({ ...newProduct, detalles: e.target.value })} />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Precio</label>
-                                    <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
-                                </div>
-                                <div className="col-md-4">
-                                    <label className="form-label">Image URL (opcional)</label>
-                                    <input type="url" className="form-control" placeholder="Image URL (opcional - se usará imagen por defecto)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
-                                </div>
-                                <div className="col-md-12">
-                                    <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) - Opcional</label>
-                                    <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
-                                </div>
-                            </>
-                        )}
-
-                        {/* Zine Specific Fields */}
-                        {productType === 'Zine' && (
-                            <>
-                                <div className="col-md-3">
-                                    <label className="form-label">Nombre Revista</label>
-                                    <input type="text" className="form-control" placeholder="Nombre Revista" value={newProduct.nombre_revista} onChange={(e) => setNewProduct({ ...newProduct, nombre_revista: e.target.value })} required />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Numero (#)</label>
-                                    <input type="text" className="form-control" placeholder="#" value={newProduct.numero} onChange={(e) => setNewProduct({ ...newProduct, numero: e.target.value })} required />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Año</label>
-                                    <input type="text" className="form-control" placeholder="Año" value={newProduct.año} onChange={(e) => setNewProduct({ ...newProduct, año: e.target.value })} />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Pais</label>
-                                    <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} />
-                                </div>
-                                <div className="col-md-3">
-                                    <label className="form-label">Detalles</label>
-                                    <input type="text" className="form-control" placeholder="Detalles" value={newProduct.detalles} onChange={(e) => setNewProduct({ ...newProduct, detalles: e.target.value })} />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Precio</label>
-                                    <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
-                                </div>
-                                <div className="col-md-4">
-                                    <label className="form-label">Image URL (opcional)</label>
-                                    <input type="url" className="form-control" placeholder="Image URL (opcional - se usará imagen por defecto)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
-                                </div>
-                                <div className="col-md-12">
-                                    <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) - Opcional</label>
-                                    <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
-                                </div>
-                            </>
-                        )}
-
-                        {/* Polera Specific Fields */}
-                        {productType === 'Polera' && (
-                            <>
-                                <div className="col-md-4">
-                                    <label className="form-label">Titulo</label>
-                                    <input type="text" className="form-control" placeholder="Titulo" value={newProduct.titulo} onChange={(e) => setNewProduct({ ...newProduct, titulo: e.target.value })} required />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Genero</label>
-                                    <select className="form-select" value={newProduct.genero} onChange={(e) => setNewProduct({ ...newProduct, genero: e.target.value })} required>
-                                        <option value="">Seleccionar...</option>
-                                        <option value="Hombre">Hombre</option>
-                                        <option value="Mujer">Mujer</option>
-                                        <option value="Unisex">Unisex</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Talla</label>
-                                    <input type="text" className="form-control" placeholder="Talla" value={newProduct.talla} onChange={(e) => setNewProduct({ ...newProduct, talla: e.target.value })} required />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Tipo</label>
-                                    <input type="text" className="form-control" placeholder="Tipo" value={newProduct.tipo} onChange={(e) => setNewProduct({ ...newProduct, tipo: e.target.value })} required />
-                                </div>
-                                <div className="col-md-2">
-                                    <label className="form-label">Precio</label>
-                                    <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
-                                </div>
-                                <div className="col-md-4">
-                                    <label className="form-label">Image URL</label>
-                                    <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
-                                </div>
-                                <div className="col-md-12">
-                                    <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) - Opcional</label>
-                                    <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
-                                </div>
-                            </>
-                        )}
-
-                        <div className="col-12 d-flex gap-2">
-                            <button type="submit" className={`btn ${isEditing ? 'btn-warning' : 'btn-success'} flex-grow-1`}>
-                                {isEditing ? 'Update Product' : 'Add Product'}
-                            </button>
-                            {isEditing && (
-                                <button type="button" className="btn btn-secondary" onClick={resetForm}>
-                                    Cancel
-                                </button>
-                            )}
-                        </div>
-                    </form>
-                </div>
+            {/* Tabs de navegación */}
+            <div className="ihyd-tabs">
+                <button
+                    className={`ihyd-tab ${activeTab === 'productos' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('productos')}
+                >
+                    Productos
+                </button>
+                <button
+                    className={`ihyd-tab ${activeTab === 'importar' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('importar')}
+                >
+                    Importar
+                </button>
+                <button
+                    className={`ihyd-tab ${activeTab === 'database' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('database')}
+                >
+                    Base de Datos
+                </button>
+                <button
+                    className={`ihyd-tab ${activeTab === 'carrusel' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('carrusel')}
+                >
+                    Carrusel
+                </button>
             </div>
 
-            {/* Filter and Product Count */}
-            <div className="card mb-3">
-                <div className="card-body">
-                    <div className="row align-items-center mb-3">
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Filtrar por Tipo de Producto:</label>
+            {/* Tab: Importar */}
+            {activeTab === 'importar' && (
+                <div className="ihyd-admin-card">
+                    <div className="ihyd-admin-card-header">Importación Masiva</div>
+                    <BulkImport />
+                </div>
+            )}
+
+            {/* Tab: Base de Datos */}
+            {activeTab === 'database' && (
+                <div className="ihyd-admin-card">
+                    <div className="ihyd-admin-card-header">Limpieza de Base de Datos</div>
+                    <DatabaseCleaner />
+                </div>
+            )}
+
+            {/* Tab: Carrusel */}
+            {activeTab === 'carrusel' && (
+                <div className="ihyd-admin-card">
+                    <div className="ihyd-admin-card-header">Gestión de Carrusel</div>
+                    <CarouselManager />
+                </div>
+            )}
+
+            {/* Tab: Productos */}
+            {activeTab === 'productos' && (
+                <>
+                    {/* Formulario agregar/editar */}
+                    <div className="ihyd-admin-card mb-4">
+                        <div className="ihyd-admin-card-header">
+                            <span>{isEditing ? 'Editar Producto' : 'Agregar Producto'}</span>
                             <select
-                                className="form-select"
-                                value={typeFilter}
-                                onChange={(e) => {
-                                    setTypeFilter(e.target.value);
-                                }}
+                                className="form-select w-auto"
+                                value={productType}
+                                onChange={(e) => setProductType(e.target.value)}
                             >
-                                <option value="all">Todos los Productos</option>
                                 <option value="CD">CD</option>
                                 <option value="Tape">Tape</option>
                                 <option value="Vinilo">Vinilo</option>
@@ -598,248 +492,336 @@ const Admin = () => {
                                 <option value="Polera">Polera</option>
                             </select>
                         </div>
-                        <div className="col-md-8">
-                            <label className="form-label fw-bold">Buscar Producto:</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Buscar por banda, álbum, título, estilo, país o sello..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-12 text-end">
-                            <p className="mb-0">
-                                <strong>Mostrando:</strong> {paginatedProducts.length} de {processedProducts.length} productos
-                                {typeFilter !== 'all' && ` (${typeFilter})`}
-                                {searchTerm && ` - Búsqueda: "${searchTerm}"`}
-                            </p>
-                            <small className="text-muted">Total en base de datos: {products.length}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            {/* Bulk Actions Toolbar */}
-            {
-                selectedProducts.length > 0 && (
-                    <div className="alert alert-info d-flex justify-content-between align-items-center sticky-top shadow-sm" style={{ top: '20px', zIndex: 100 }}>
-                        <div>
-                            <span className="fw-bold fs-5 me-3">{selectedProducts.length} seleccionados</span>
-                            <button className="btn btn-sm btn-outline-dark me-2" onClick={() => setSelectedProducts([])}>Cancelar Selección</button>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn btn-success" onClick={bulkActivate}>Activar Seleccionados</button>
-                            <button className="btn btn-secondary" onClick={bulkDeactivate}>Desactivar Seleccionados</button>
-                            <button className="btn btn-danger" onClick={bulkDelete}>Eliminar Seleccionados</button>
-                        </div>
-                    </div>
-                )
-            }
-
-            <div className="table-responsive">
-                <table className="table table-striped table-hover align-middle">
-                    <thead className="table-dark">
-                        <tr>
-                            <th style={{ width: '40px' }}>
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    checked={paginatedProducts.length > 0 && selectedProducts.length === paginatedProducts.length}
-                                    onChange={handleSelectAll}
-                                />
-                            </th>
-                            <th>Image</th>
-                            <th
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('tipo_producto')}
-                            >
-                                Type {getSortIcon('tipo_producto')}
-                            </th>
-                            <th
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('info')}
-                            >
-                                Info {getSortIcon('info')}
-                            </th>
-                            <th
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('precio')}
-                            >
-                                Price {getSortIcon('precio')}
-                            </th>
-                            <th>Details</th>
-                            <th
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('active')}
-                            >
-                                Status {getSortIcon('active')}
-                            </th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {paginatedProducts.map((product) => (
-                            <tr key={product.id} className={product.active === false ? 'table-secondary' : ''}>
-                                <td>
-                                    <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        checked={selectedProducts.includes(product.id)}
-                                        onChange={() => handleSelectProduct(product.id)}
-                                    />
-                                </td>
-                                <td>
-                                    {product.imageUrl && (
-                                        <img
-                                            src={product.imageUrl}
-                                            alt="Product"
-                                            style={{
-                                                width: '50px',
-                                                aspectRatio: '1/1',
-                                                objectFit: 'cover',
-                                                borderRadius: '4px',
-                                                cursor: 'pointer'
-                                            }}
-                                            onClick={() => {
-                                                setSelectedImage(product.imageUrl);
-                                                setShowImageModal(true);
-                                            }}
-                                            title="Click para ver imagen grande"
-                                        />
-                                    )}
-                                </td>
-                                <td>{product.tipo_producto}</td>
-                                <td>
-                                    {isDiscoType(product.tipo_producto) ? (
-                                        <>
-                                            <strong>{product.banda}</strong><br />
-                                            {product.album}
-                                        </>
-                                    ) : (
-                                        <strong>{product.titulo}</strong>
-                                    )}
-                                </td>
-                                <td>${product.precio}</td>
-                                <td>
-                                    {isDiscoType(product.tipo_producto) ? (
-                                        <small className="text-muted">
-                                            {product.estilo} / {product.pais} / {product.sello}
-                                        </small>
-                                    ) : (
-                                        <small className="text-muted">
-                                            {product.genero} / {product.talla} / {product.tipo}
-                                        </small>
-                                    )}
-                                </td>
-                                <td>
-                                    <span className={`badge ${product.active !== false ? 'bg-success' : 'bg-secondary'}`}>
-                                        {product.active !== false ? 'Active' : 'Inactive'}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div className="btn-group" role="group">
-                                        <button
-                                            className="btn btn-sm btn-outline-primary"
-                                            onClick={() => startEditing(product)}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            className={`btn btn-sm ${product.active !== false ? 'btn-outline-warning' : 'btn-outline-success'}`}
-                                            onClick={() => toggleActive(product)}
-                                        >
-                                            {product.active !== false ? 'Deactivate' : 'Activate'}
-                                        </button>
-                                        <button
-                                            className="btn btn-sm btn-outline-danger"
-                                            onClick={() => deleteProduct(product.id)}
-                                        >
-                                            Delete
-                                        </button>
+                        <form onSubmit={isEditing ? updateProduct : createProduct} className="row g-3">
+                            {isDiscoType(productType) && (
+                                <>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Banda</label>
+                                        <input type="text" className="form-control" placeholder="Banda" value={newProduct.banda} onChange={(e) => setNewProduct({ ...newProduct, banda: e.target.value })} required />
                                     </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Album</label>
+                                        <input type="text" className="form-control" placeholder="Album" value={newProduct.album} onChange={(e) => setNewProduct({ ...newProduct, album: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Sello</label>
+                                        <input type="text" className="form-control" placeholder="Sello" value={newProduct.sello} onChange={(e) => setNewProduct({ ...newProduct, sello: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Pais</label>
+                                        <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Estilo</label>
+                                        <input type="text" className="form-control" placeholder="Estilo" value={newProduct.estilo} onChange={(e) => setNewProduct({ ...newProduct, estilo: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Detalles</label>
+                                        <input type="text" className="form-control" placeholder="Detalles" value={newProduct.detalles} onChange={(e) => setNewProduct({ ...newProduct, detalles: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Precio</label>
+                                        <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label">Image URL (opcional)</label>
+                                        <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-12">
+                                        <label className="form-label">URL de Música/Video (YouTube, SoundCloud, Bandcamp) — Opcional</label>
+                                        <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
+                                    </div>
+                                </>
+                            )}
 
-            {/* Pagination */}
-            {
-                totalPages > 1 && (
-                    <div className="d-flex justify-content-between align-items-center mt-4">
-                        <div>
-                            <small className="text-muted">
-                                Página {currentPage} de {totalPages}
+                            {productType === 'Zine' && (
+                                <>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Nombre Revista</label>
+                                        <input type="text" className="form-control" placeholder="Nombre Revista" value={newProduct.nombre_revista} onChange={(e) => setNewProduct({ ...newProduct, nombre_revista: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Numero (#)</label>
+                                        <input type="text" className="form-control" placeholder="#" value={newProduct.numero} onChange={(e) => setNewProduct({ ...newProduct, numero: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Año</label>
+                                        <input type="text" className="form-control" placeholder="Año" value={newProduct.año} onChange={(e) => setNewProduct({ ...newProduct, año: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Pais</label>
+                                        <input type="text" className="form-control" placeholder="Pais" value={newProduct.pais} onChange={(e) => setNewProduct({ ...newProduct, pais: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-3">
+                                        <label className="form-label">Detalles</label>
+                                        <input type="text" className="form-control" placeholder="Detalles" value={newProduct.detalles} onChange={(e) => setNewProduct({ ...newProduct, detalles: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Precio</label>
+                                        <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label">Image URL (opcional)</label>
+                                        <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} />
+                                    </div>
+                                    <div className="col-md-12">
+                                        <label className="form-label">URL de Música/Video — Opcional</label>
+                                        <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
+                                    </div>
+                                </>
+                            )}
+
+                            {productType === 'Polera' && (
+                                <>
+                                    <div className="col-md-4">
+                                        <label className="form-label">Titulo</label>
+                                        <input type="text" className="form-control" placeholder="Titulo" value={newProduct.titulo} onChange={(e) => setNewProduct({ ...newProduct, titulo: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Genero</label>
+                                        <select className="form-select" value={newProduct.genero} onChange={(e) => setNewProduct({ ...newProduct, genero: e.target.value })} required>
+                                            <option value="">Seleccionar...</option>
+                                            <option value="Hombre">Hombre</option>
+                                            <option value="Mujer">Mujer</option>
+                                            <option value="Unisex">Unisex</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Talla</label>
+                                        <input type="text" className="form-control" placeholder="Talla" value={newProduct.talla} onChange={(e) => setNewProduct({ ...newProduct, talla: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Tipo</label>
+                                        <input type="text" className="form-control" placeholder="Tipo" value={newProduct.tipo} onChange={(e) => setNewProduct({ ...newProduct, tipo: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-2">
+                                        <label className="form-label">Precio</label>
+                                        <input type="number" className="form-control" placeholder="Precio" value={newProduct.precio} onChange={(e) => setNewProduct({ ...newProduct, precio: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <label className="form-label">Image URL</label>
+                                        <input type="url" className="form-control" placeholder="Image URL" value={newProduct.imageUrl} onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })} required />
+                                    </div>
+                                    <div className="col-md-12">
+                                        <label className="form-label">URL de Música/Video — Opcional</label>
+                                        <input type="url" className="form-control" placeholder="https://..." value={newProduct.mediaUrl} onChange={(e) => setNewProduct({ ...newProduct, mediaUrl: e.target.value })} />
+                                    </div>
+                                </>
+                            )}
+
+                            <div className="col-12 d-flex gap-2">
+                                <button type="submit" className="ihyd-btn-primary flex-grow-1 justify-content-center">
+                                    {isEditing ? 'ACTUALIZAR PRODUCTO' : 'AGREGAR PRODUCTO'}
+                                </button>
+                                {isEditing && (
+                                    <button type="button" className="ihyd-btn-ghost" onClick={resetForm}>
+                                        CANCELAR
+                                    </button>
+                                )}
+                            </div>
+                        </form>
+                    </div>
+
+                    {/* Filtros */}
+                    <div className="ihyd-admin-card mb-3">
+                        <div className="row align-items-end g-3">
+                            <div className="col-md-4">
+                                <label className="form-label">Filtrar por Tipo</label>
+                                <select
+                                    className="form-select"
+                                    value={typeFilter}
+                                    onChange={(e) => setTypeFilter(e.target.value)}
+                                >
+                                    <option value="all">Todos los Productos</option>
+                                    <option value="CD">CD</option>
+                                    <option value="Tape">Tape</option>
+                                    <option value="Vinilo">Vinilo</option>
+                                    <option value="Zine">Zine</option>
+                                    <option value="Polera">Polera</option>
+                                </select>
+                            </div>
+                            <div className="col-md-8">
+                                <label className="form-label">Buscar</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Banda, álbum, título, estilo, país, sello..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="mt-2 text-end">
+                            <small style={{ color: '#666', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Mostrando {paginatedProducts.length} de {processedProducts.length}
+                                {typeFilter !== 'all' && ` · ${typeFilter}`}
+                                {searchTerm && ` · "${searchTerm}"`}
+                                {' · '} Total DB: {products.length}
                             </small>
                         </div>
-                        <nav>
-                            <ul className="pagination mb-0">
-                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => handlePageChange(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                    >
-                                        Anterior
-                                    </button>
-                                </li>
+                    </div>
 
-                                {/* First page */}
-                                {currentPage > 3 && (
-                                    <>
-                                        <li className="page-item">
-                                            <button className="page-link" onClick={() => handlePageChange(1)}>1</button>
-                                        </li>
-                                        {currentPage > 4 && <li className="page-item disabled"><span className="page-link">...</span></li>}
-                                    </>
-                                )}
+                    {/* Bulk toolbar */}
+                    {selectedProducts.length > 0 && (
+                        <div className="ihyd-bulk-toolbar">
+                            <div className="d-flex align-items-center gap-3">
+                                <span className="ihyd-bulk-toolbar-count">{selectedProducts.length} seleccionados</span>
+                                <button className="ihyd-action-btn" onClick={() => setSelectedProducts([])}>Cancelar</button>
+                            </div>
+                            <div className="ihyd-bulk-toolbar-actions">
+                                <button className="ihyd-btn-ghost" style={{ fontSize: '0.72rem', padding: '6px 14px' }} onClick={bulkActivate}>Activar</button>
+                                <button className="ihyd-btn-ghost" style={{ fontSize: '0.72rem', padding: '6px 14px' }} onClick={bulkDeactivate}>Desactivar</button>
+                                <button className="ihyd-btn-ghost" style={{ fontSize: '0.72rem', padding: '6px 14px', borderColor: '#ff4444', color: '#ff4444' }} onClick={bulkDelete}>Eliminar</button>
+                            </div>
+                        </div>
+                    )}
 
-                                {/* Pages around current */}
-                                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                                    .filter(page => page >= currentPage - 2 && page <= currentPage + 2)
-                                    .map(page => (
-                                        <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-                                            <button className="page-link" onClick={() => handlePageChange(page)}>
-                                                {page}
+                    {/* Tabla */}
+                    <div className="table-responsive">
+                        <table className="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th style={{ width: '40px' }}>
+                                        <input
+                                            type="checkbox"
+                                            className="form-check-input"
+                                            checked={paginatedProducts.length > 0 && selectedProducts.length === paginatedProducts.length}
+                                            onChange={handleSelectAll}
+                                        />
+                                    </th>
+                                    <th>Img</th>
+                                    <th style={{ cursor: 'pointer' }} onClick={() => handleSort('tipo_producto')}>
+                                        Tipo {getSortIcon('tipo_producto')}
+                                    </th>
+                                    <th style={{ cursor: 'pointer' }} onClick={() => handleSort('info')}>
+                                        Info {getSortIcon('info')}
+                                    </th>
+                                    <th style={{ cursor: 'pointer' }} onClick={() => handleSort('precio')}>
+                                        Precio {getSortIcon('precio')}
+                                    </th>
+                                    <th>Detalles</th>
+                                    <th style={{ cursor: 'pointer' }} onClick={() => handleSort('active')}>
+                                        Estado {getSortIcon('active')}
+                                    </th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {paginatedProducts.map((product) => (
+                                    <tr key={product.id}>
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                checked={selectedProducts.includes(product.id)}
+                                                onChange={() => handleSelectProduct(product.id)}
+                                            />
+                                        </td>
+                                        <td>
+                                            {product.imageUrl && (
+                                                <img
+                                                    src={product.imageUrl}
+                                                    alt="Product"
+                                                    style={{ width: '44px', aspectRatio: '1/1', objectFit: 'cover', cursor: 'pointer' }}
+                                                    onClick={() => { setSelectedImage(product.imageUrl); setShowImageModal(true); }}
+                                                />
+                                            )}
+                                        </td>
+                                        <td style={{ fontSize: '0.75rem', color: '#888', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            {product.tipo_producto}
+                                        </td>
+                                        <td>
+                                            {isDiscoType(product.tipo_producto) ? (
+                                                <>
+                                                    <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>{product.banda}</span>
+                                                    <br />
+                                                    <span style={{ color: '#888', fontSize: '0.8rem' }}>{product.album}</span>
+                                                </>
+                                            ) : (
+                                                <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>{product.titulo || product.nombre_revista}</span>
+                                            )}
+                                        </td>
+                                        <td style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                                            ${product.precio}
+                                        </td>
+                                        <td>
+                                            <small style={{ color: '#666', fontSize: '0.75rem' }}>
+                                                {isDiscoType(product.tipo_producto)
+                                                    ? [product.estilo, product.pais, product.sello].filter(Boolean).join(' / ')
+                                                    : [product.genero, product.talla, product.tipo].filter(Boolean).join(' / ')
+                                                }
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <span className={product.active !== false ? 'ihyd-badge-active' : 'ihyd-badge-inactive'}>
+                                                {product.active !== false ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button className="ihyd-action-btn" onClick={() => startEditing(product)}>Edit</button>
+                                            <button
+                                                className="ihyd-action-btn"
+                                                onClick={() => toggleActive(product)}
+                                            >
+                                                {product.active !== false ? 'Off' : 'On'}
                                             </button>
-                                        </li>
-                                    ))
-                                }
+                                            <button className="ihyd-action-btn danger" onClick={() => deleteProduct(product.id)}>Del</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
-                                {/* Last page */}
-                                {currentPage < totalPages - 2 && (
-                                    <>
-                                        {currentPage < totalPages - 3 && <li className="page-item disabled"><span className="page-link">...</span></li>}
-                                        <li className="page-item">
-                                            <button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button>
-                                        </li>
-                                    </>
-                                )}
-
-                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                    <button
-                                        className="page-link"
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                        disabled={currentPage === totalPages}
-                                    >
-                                        Siguiente
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
-                        <div>
-                            <small className="text-muted">
-                                <span style={{ color: 'white' }}>Ir a página:</span>
+                    {/* Paginación */}
+                    {totalPages > 1 && (
+                        <div className="d-flex justify-content-between align-items-center mt-4">
+                            <small style={{ color: '#666', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                Página {currentPage} de {totalPages}
+                            </small>
+                            <nav>
+                                <ul className="pagination mb-0">
+                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                                            ←
+                                        </button>
+                                    </li>
+                                    {currentPage > 3 && (
+                                        <>
+                                            <li className="page-item"><button className="page-link" onClick={() => handlePageChange(1)}>1</button></li>
+                                            {currentPage > 4 && <li className="page-item disabled"><span className="page-link">…</span></li>}
+                                        </>
+                                    )}
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                        .filter(page => page >= currentPage - 2 && page <= currentPage + 2)
+                                        .map(page => (
+                                            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                                <button className="page-link" onClick={() => handlePageChange(page)}>{page}</button>
+                                            </li>
+                                        ))
+                                    }
+                                    {currentPage < totalPages - 2 && (
+                                        <>
+                                            {currentPage < totalPages - 3 && <li className="page-item disabled"><span className="page-link">…</span></li>}
+                                            <li className="page-item"><button className="page-link" onClick={() => handlePageChange(totalPages)}>{totalPages}</button></li>
+                                        </>
+                                    )}
+                                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                                            →
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <small style={{ color: '#666' }}>
+                                Ir a:
                                 <input
                                     type="number"
                                     min="1"
                                     max={totalPages}
                                     className="form-control form-control-sm d-inline-block ms-2"
-                                    style={{ width: '70px' }}
+                                    style={{ width: '64px' }}
                                     onKeyPress={(e) => {
                                         if (e.key === 'Enter') {
                                             const page = parseInt(e.target.value);
@@ -852,56 +834,36 @@ const Admin = () => {
                                 />
                             </small>
                         </div>
-                    </div>
-                )
-            }
+                    )}
+                </>
+            )}
 
-            {/* Image Modal */}
-            {
-                showImageModal && (
-                    <div
-                        className="modal show d-block"
-                        style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
-                        onClick={() => setShowImageModal(false)}
-                    >
-                        <div className="modal-dialog modal-dialog-centered modal-lg">
-                            <div className="modal-content bg-dark">
-                                <div className="modal-header border-secondary">
-                                    <h5 className="modal-title text-white">Vista Previa de Imagen</h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close btn-close-white"
-                                        onClick={() => setShowImageModal(false)}
-                                    ></button>
-                                </div>
-                                <div className="modal-body text-center p-4">
-                                    <img
-                                        src={selectedImage}
-                                        alt="Product Preview"
-                                        style={{
-                                            maxWidth: '100%',
-                                            maxHeight: '70vh',
-                                            objectFit: 'contain',
-                                            borderRadius: '8px'
-                                        }}
-                                        onClick={(e) => e.stopPropagation()}
-                                    />
-                                </div>
-                                <div className="modal-footer border-secondary">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        onClick={() => setShowImageModal(false)}
-                                    >
-                                        Cerrar
-                                    </button>
-                                </div>
+            {/* Modal imagen */}
+            {showImageModal && (
+                <div
+                    className="modal show d-block"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
+                    onClick={() => setShowImageModal(false)}
+                >
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-content" style={{ background: '#111', border: '1px solid #222', borderRadius: 0 }}>
+                            <div className="modal-header" style={{ borderColor: '#222' }}>
+                                <h5 className="modal-title" style={{ color: '#888', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Vista Previa</h5>
+                                <button type="button" className="btn-close btn-close-white" onClick={() => setShowImageModal(false)}></button>
+                            </div>
+                            <div className="modal-body text-center p-4">
+                                <img
+                                    src={selectedImage}
+                                    alt="Product Preview"
+                                    style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
                             </div>
                         </div>
                     </div>
-                )
-            }
-        </div >
+                </div>
+            )}
+        </div>
     );
 };
 
