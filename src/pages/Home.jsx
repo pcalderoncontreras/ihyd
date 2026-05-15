@@ -138,8 +138,8 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                                     <div>
                                         <label className="text-white me-2">Ordenar por:</label>
                                         <select
-                                            className="form-select form-select-sm d-inline-block"
-                                            style={{ width: 'auto' }}
+                                            className="form-select form-select-sm d-inline-block custom-select-bar rounded-pill"
+                                            style={{ width: 'auto', padding: '0.4rem 2rem 0.4rem 1rem' }}
                                             value={sortOrder}
                                             onChange={(e) => setSortOrder(e.target.value)}
                                         >
@@ -213,8 +213,8 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                 <>
                     <div className="py-4">
                         <CategorySection category="CD" title="CD's" setCategory={setCategory} />
-                        <CategorySection category="Tape" title="TAPES" setCategory={setCategory} />
-                        <CategorySection category="Vinilo" title="VINILOS" setCategory={setCategory} />
+                        <CategorySection category="Tape" title="Tapes" setCategory={setCategory} />
+                        <CategorySection category="Vinilo" title="Vinilos" setCategory={setCategory} />
                     </div>
 
                     {/* Social Media Section */}
