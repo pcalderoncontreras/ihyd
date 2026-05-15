@@ -6,32 +6,33 @@ const ProductModal = ({ product, show, onClose }) => {
     const isDiscoType = ['cd', 'tape', 'vinilo'].includes(String(product.tipo_producto || '').toLowerCase());
     const isZine = String(product.tipo_producto || '').toLowerCase() === 'zine';
 
-    // Determinar el título para WhatsApp
     const getWhatsAppTitle = () => {
         if (isDiscoType) return `${product.banda} - ${product.album}`;
         if (isZine) return `${product.nombre_revista} #${product.numero}`;
         return product.titulo;
     };
 
-    // Helper para renderizar el player de medios
+    const getTitle = () => {
+        if (isDiscoType) return `${product.banda} — ${product.album}`;
+        if (isZine) return `${product.nombre_revista} #${product.numero}`;
+        return product.titulo;
+    };
+
     const renderMediaPlayer = () => {
         if (!product.mediaUrl) return null;
 
         const url = product.mediaUrl;
 
-        // YouTube
         if (url.includes('youtube.com') || url.includes('youtu.be')) {
             let embedUrl = url;
             if (url.includes('watch?v=')) {
                 embedUrl = url.replace('watch?v=', 'embed/');
-                // Remove additional params if any
                 if (embedUrl.includes('&')) embedUrl = embedUrl.split('&')[0];
             } else if (url.includes('youtu.be/')) {
                 embedUrl = url.replace('youtu.be/', 'www.youtube.com/embed/');
             }
-
             return (
-                <div className="ratio ratio-16x9 mb-3">
+                <div className="ratio ratio-16x9 mt-3">
                     <iframe
                         src={embedUrl}
                         title="YouTube video player"
@@ -42,10 +43,9 @@ const ProductModal = ({ product, show, onClose }) => {
             );
         }
 
-        // SoundCloud
         if (url.includes('soundcloud.com')) {
             return (
-                <div className="mb-3">
+                <div className="mt-3">
                     <iframe
                         width="100%"
                         height="166"
@@ -58,181 +58,112 @@ const ProductModal = ({ product, show, onClose }) => {
             );
         }
 
-        // Bandcamp
         if (url.includes('bandcamp.com')) {
-            // Bandcamp es más complejo ya que el embed requiere un ID que no está obvio en la URL pública.
-            // Por ahora mostramos un botón bonito.
             return (
-                <div className="mb-3 text-center">
-                    <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-info w-100">
+                <div className="mt-3 text-center">
+                    <a href={url} target="_blank" rel="noopener noreferrer" className="ihyd-btn-ghost w-100 d-block">
                         <i className="bi bi-music-note-list me-2"></i> Escuchar en Bandcamp
                     </a>
                 </div>
             );
         }
 
-        // Generic Link
         return (
-            <div className="mb-3 text-center">
-                <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-outline-light w-100">
+            <div className="mt-3 text-center">
+                <a href={url} target="_blank" rel="noopener noreferrer" className="ihyd-btn-ghost w-100 d-block">
                     <i className="bi bi-link-45deg me-2"></i> Ver enlace multimedia
                 </a>
             </div>
         );
     };
 
+    const discoMeta = [
+        ['TIPO', product.tipo_producto],
+        ['BANDA', product.banda],
+        ['ÁLBUM', product.album],
+        product.estilo ? ['ESTILO', product.estilo] : null,
+        product.pais ? ['PAÍS', product.pais] : null,
+        product.sello ? ['SELLO', product.sello] : null,
+        product.detalles ? ['DETALLES', product.detalles] : null,
+    ].filter(Boolean);
+
+    const zineMeta = [
+        ['TIPO', product.tipo_producto],
+        ['REVISTA', product.nombre_revista],
+        ['NÚMERO', `#${product.numero}`],
+        product.año ? ['AÑO', product.año] : null,
+        product.pais ? ['PAÍS', product.pais] : null,
+        product.detalles ? ['DETALLES', product.detalles] : null,
+    ].filter(Boolean);
+
+    const poleraMeta = [
+        ['TIPO', product.tipo_producto],
+        ['TÍTULO', product.titulo],
+        product.genero ? ['GÉNERO', product.genero] : null,
+        product.talla ? ['TALLA', product.talla] : null,
+        product.tipo ? ['SUBTIPO', product.tipo] : null,
+    ].filter(Boolean);
+
+    const metaFields = isDiscoType ? discoMeta : isZine ? zineMeta : poleraMeta;
+
     return (
         <>
-            {/* Bootstrap Modal */}
-            <div className={`modal fade ${show ? 'show' : ''}`} style={{ display: show ? 'block' : 'none' }} tabIndex="-1">
+            <div
+                className={`modal fade ${show ? 'show' : ''}`}
+                style={{ display: show ? 'block' : 'none' }}
+                tabIndex="-1"
+            >
                 <div className="modal-dialog modal-lg modal-dialog-centered">
-                    <div className="modal-content bg-dark text-white">
-                        <div className="modal-header border-secondary">
-                            <h5 className="modal-title fw-bold">
-                                {isDiscoType ? `${product.banda} - ${product.album}` :
-                                    isZine ? `${product.nombre_revista} #${product.numero}` :
-                                        product.titulo}
-                            </h5>
-                            <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
-                        </div>
-                        <div className="modal-body">
+                    <div
+                        className="modal-content ihyd-modal-content"
+                        style={{ '--modal-bg-image': `url(${product.imageUrl})` }}
+                    >
+                        <button className="ihyd-modal-close" onClick={onClose}>×</button>
+
+                        <p className="ihyd-modal-title">{getTitle()}</p>
+
+                        <div className="ihyd-modal-body">
                             <div className="row">
-                                {/* Product Image */}
                                 <div className="col-md-6 mb-3">
                                     <img
                                         src={product.imageUrl}
-                                        alt={isDiscoType ? product.album : isZine ? product.nombre_revista : product.titulo}
-                                        className="img-fluid rounded"
-                                        style={{ width: '100%', objectFit: 'contain', maxHeight: '500px' }}
+                                        alt={getTitle()}
+                                        className="ihyd-modal-img"
                                     />
                                 </div>
 
-                                {/* Product Details */}
                                 <div className="col-md-6">
-                                    <h3 className="text-warning mb-4">${product.precio} CLP</h3>
+                                    <p className="ihyd-modal-price">
+                                        {product.precio != null ? `$${product.precio} CLP` : '—'}
+                                    </p>
 
-                                    {isDiscoType ? (
-                                        <>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">TIPO</h6>
-                                                <p className="mb-0">{product.tipo_producto}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">BANDA</h6>
-                                                <p className="mb-0">{product.banda}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">ÁLBUM</h6>
-                                                <p className="mb-0">{product.album}</p>
-                                            </div>
-                                            {product.estilo && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">ESTILO</h6>
-                                                    <p className="mb-0">{product.estilo}</p>
-                                                </div>
-                                            )}
-                                            {product.pais && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">PAÍS</h6>
-                                                    <p className="mb-0">{product.pais}</p>
-                                                </div>
-                                            )}
-                                            {product.sello && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">SELLO</h6>
-                                                    <p className="mb-0">{product.sello}</p>
-                                                </div>
-                                            )}
-                                            {product.detalles && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">DETALLES</h6>
-                                                    <p className="mb-0">{product.detalles}</p>
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : isZine ? (
-                                        <>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">TIPO</h6>
-                                                <p className="mb-0">{product.tipo_producto}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">NOMBRE REVISTA</h6>
-                                                <p className="mb-0">{product.nombre_revista}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">NÚMERO</h6>
-                                                <p className="mb-0">#{product.numero}</p>
-                                            </div>
-                                            {product.año && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">AÑO</h6>
-                                                    <p className="mb-0">{product.año}</p>
-                                                </div>
-                                            )}
-                                            {product.pais && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">PAÍS</h6>
-                                                    <p className="mb-0">{product.pais}</p>
-                                                </div>
-                                            )}
-                                            {product.detalles && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">DETALLES</h6>
-                                                    <p className="mb-0">{product.detalles}</p>
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">TIPO</h6>
-                                                <p className="mb-0">{product.tipo_producto}</p>
-                                            </div>
-                                            <div className="mb-3">
-                                                <h6 className="text-secondary mb-1">TÍTULO</h6>
-                                                <p className="mb-0">{product.titulo}</p>
-                                            </div>
-                                            {product.genero && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">GÉNERO</h6>
-                                                    <p className="mb-0">{product.genero}</p>
-                                                </div>
-                                            )}
-                                            {product.talla && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">TALLA</h6>
-                                                    <p className="mb-0">{product.talla}</p>
-                                                </div>
-                                            )}
-                                            {product.tipo && (
-                                                <div className="mb-3">
-                                                    <h6 className="text-secondary mb-1">TIPO</h6>
-                                                    <p className="mb-0">{product.tipo}</p>
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
+                                    {metaFields.map(([label, value]) => (
+                                        <div key={label} className="ihyd-modal-meta">
+                                            <p className="ihyd-modal-meta-label">{label}</p>
+                                            <p className="ihyd-modal-meta-value">{value}</p>
+                                        </div>
+                                    ))}
+
                                     {renderMediaPlayer()}
                                 </div>
                             </div>
                         </div>
-                        <div className="modal-footer border-secondary">
-                            <button type="button" className="btn btn-secondary" onClick={onClose}>Cerrar</button>
+
+                        <div className="ihyd-modal-footer">
+                            <button className="ihyd-btn-ghost" onClick={onClose}>CERRAR</button>
                             <a
                                 href={`https://wa.me/56998347436?text=Hola, estoy interesado en: ${getWhatsAppTitle()}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="btn btn-success"
+                                className="ihyd-btn-primary"
                             >
-                                <i className="bi bi-whatsapp me-2"></i>Consultar por WhatsApp
+                                <i className="bi bi-whatsapp"></i> CONSULTAR
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Backdrop */}
             {show && <div className="modal-backdrop fade show"></div>}
         </>
     );
