@@ -26,7 +26,7 @@ const ProductCard = ({ product }) => {
                             alt={getTitle()}
                         />
                         <div className="ihyd-card-overlay">
-                            <span className="ihyd-card-overlay-price">${product.precio} CLP</span>
+                            <span className="ihyd-card-overlay-price">{product.precio != null ? `$${product.precio} CLP` : '—'}</span>
                             <button className="ihyd-card-overlay-cta">VER DETALLE</button>
                         </div>
                     </div>
@@ -40,7 +40,7 @@ const ProductCard = ({ product }) => {
                         ) : isZine ? (
                             <>
                                 <p className="ihyd-card-band mb-0">{product.nombre_revista} #{product.numero}</p>
-                                <p className="ihyd-card-meta mb-1">{product.año}{product.pais ? ` — ${product.pais}` : ''}</p>
+                                <p className="ihyd-card-meta mb-1">{product.año || ''}{product.pais ? ` — ${product.pais}` : ''}</p>
                             </>
                         ) : (
                             <>
@@ -48,7 +48,7 @@ const ProductCard = ({ product }) => {
                                 <p className="ihyd-card-meta mb-1">{product.tipo}</p>
                             </>
                         )}
-                        <p className="ihyd-card-price mt-1">${product.precio} CLP</p>
+                        <p className="ihyd-card-price mt-1">{product.precio != null ? `$${product.precio} CLP` : '—'}</p>
                     </div>
                 </div>
             </div>
