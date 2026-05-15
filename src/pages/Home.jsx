@@ -138,8 +138,8 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                                     <div>
                                         <label className="text-white me-2">Ordenar por:</label>
                                         <select
-                                            className="form-select form-select-sm d-inline-block"
-                                            style={{ width: 'auto' }}
+                                            className="form-select form-select-sm d-inline-block custom-select-bar rounded-pill"
+                                            style={{ width: 'auto', padding: '0.4rem 2rem 0.4rem 1rem' }}
                                             value={sortOrder}
                                             onChange={(e) => setSortOrder(e.target.value)}
                                         >

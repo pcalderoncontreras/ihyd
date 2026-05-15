@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase_config';
 import SearchBar from './SearchBar';
-import { FaUser, FaShoppingCart, FaSun, FaMoon } from 'react-icons/fa';
+import { FaUser, FaShoppingCart } from 'react-icons/fa';
 
 const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) => {
     const location = useLocation();
@@ -23,15 +23,18 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
 
     return (
         <header className="bg-black sticky-top" style={{ zIndex: 1000, paddingBottom: '1rem' }}>
-            {/* Top right: Theme Toggle */}
-            <div className="container-fluid pe-4 pt-3 position-absolute top-0 end-0 d-flex justify-content-end">
-                <button onClick={toggleTheme} className="btn btn-sm btn-outline-secondary d-flex align-items-center" style={{ borderRadius: '20px' }}>
-                    {theme === 'dark' ? (
-                        <><FaSun className="me-2" /> </>
-                    ) : (
-                        <><FaMoon className="me-2" /> </>
-                    )}
-                </button>
+            <div className="container-fluid pe-4 pt-3 position-absolute top-0 end-0 d-flex justify-content-end align-items-center theme-switch-wrapper">
+                <span className="fs-4 me-2" style={{ color: theme === 'light' ? '#1a1a1a' : '#666', transition: 'color 0.3s' }}>↯</span>
+                <label className="theme-switch mb-0" htmlFor="themeCheckbox">
+                    <input 
+                        type="checkbox" 
+                        id="themeCheckbox" 
+                        checked={theme === 'dark'} 
+                        onChange={toggleTheme}
+                    />
+                    <div className="slider round"></div>
+                </label>
+                <span className="fs-4 ms-2" style={{ color: theme === 'dark' ? '#fff' : '#aaa', transition: 'color 0.3s' }}>⛧</span>
             </div>
 
             <div className="container d-flex flex-column align-items-center pt-4">
