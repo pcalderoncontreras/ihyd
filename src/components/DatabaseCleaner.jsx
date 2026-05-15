@@ -9,21 +9,20 @@ const DatabaseCleaner = () => {
 
     const handleToggle = () => {
         if (!isExpanded) {
-            // Mostrar advertencia al intentar abrir
             const confirmed = window.confirm(
-                '⚠️ ADVERTENCIA: Estás a punto de acceder a la zona de eliminación de datos.\n\n' +
+                'ADVERTENCIA: Estás a punto de acceder a la zona de eliminación de datos.\n\n' +
                 'Esta sección contiene herramientas que pueden BORRAR DATOS IMPORTANTES de forma IRREVERSIBLE.\n\n' +
                 '¿Estás seguro de que deseas continuar?'
             );
             if (!confirmed) {
-                return; // No abrir si el usuario cancela
+                return;
             }
         }
         setIsExpanded(!isExpanded);
     };
 
     const deleteVinilos = async () => {
-        if (!window.confirm('⚠️ ¿Estás seguro de que quieres eliminar TODOS los vinilos? Esta acción no se puede deshacer.')) {
+        if (!window.confirm('¿Estás seguro de que quieres eliminar TODOS los vinilos? Esta acción no se puede deshacer.')) {
             return;
         }
 
@@ -32,8 +31,6 @@ const DatabaseCleaner = () => {
 
         try {
             const productsCollectionRef = collection(db, 'productos');
-
-            // Buscar tanto "Vinilo" como "VINILO" (y otras variaciones)
             const allDocs = await getDocs(productsCollectionRef);
             const vinilosDocs = allDocs.docs.filter(doc => {
                 const tipo = doc.data().tipo_producto;
@@ -53,12 +50,7 @@ const DatabaseCleaner = () => {
                 }
             }
 
-            setResults({
-                total: vinilosDocs.length,
-                deleted: deletedCount,
-                errors: errors.length,
-                errorDetails: errors
-            });
+            setResults({ total: vinilosDocs.length, deleted: deletedCount, errors: errors.length, errorDetails: errors });
 
         } catch (error) {
             console.error('Error fetching vinilos:', error);
@@ -69,11 +61,10 @@ const DatabaseCleaner = () => {
     };
 
     const deleteAllProducts = async () => {
-        if (!window.confirm('🚨 PELIGRO: ¿Estás seguro de que quieres eliminar TODOS los productos de la base de datos? Esta acción no se puede deshacer.')) {
+        if (!window.confirm('PELIGRO: ¿Estás seguro de que quieres eliminar TODOS los productos de la base de datos? Esta acción no se puede deshacer.')) {
             return;
         }
-
-        if (!window.confirm('🚨 ÚLTIMA ADVERTENCIA: Esto eliminará TODOS los productos (CDs, Tapes, Vinilos, Zines, Poleras). ¿Continuar?')) {
+        if (!window.confirm('ÚLTIMA ADVERTENCIA: Esto eliminará TODOS los productos (CDs, Tapes, Vinilos, Zines, Poleras). ¿Continuar?')) {
             return;
         }
 
@@ -97,12 +88,7 @@ const DatabaseCleaner = () => {
                 }
             }
 
-            setResults({
-                total: querySnapshot.size,
-                deleted: deletedCount,
-                errors: errors.length,
-                errorDetails: errors
-            });
+            setResults({ total: querySnapshot.size, deleted: deletedCount, errors: errors.length, errorDetails: errors });
 
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -113,7 +99,7 @@ const DatabaseCleaner = () => {
     };
 
     const deleteByType = async (tipo) => {
-        if (!window.confirm(`⚠️ ¿Estás seguro de que quieres eliminar TODOS los productos de tipo "${tipo}"? Esta acción no se puede deshacer.`)) {
+        if (!window.confirm(`¿Estás seguro de que quieres eliminar TODOS los productos de tipo "${tipo}"? Esta acción no se puede deshacer.`)) {
             return;
         }
 
@@ -141,12 +127,7 @@ const DatabaseCleaner = () => {
                 }
             }
 
-            setResults({
-                total: filteredDocs.length,
-                deleted: deletedCount,
-                errors: errors.length,
-                errorDetails: errors
-            });
+            setResults({ total: filteredDocs.length, deleted: deletedCount, errors: errors.length, errorDetails: errors });
 
         } catch (error) {
             console.error('Error fetching products:', error);
@@ -157,98 +138,65 @@ const DatabaseCleaner = () => {
     };
 
     return (
-        <div className="card mb-4 border-danger">
+        <div className="ihyd-admin-card mb-4">
             <div
-                className="card-header bg-danger text-white d-flex justify-content-between align-items-center"
+                className="ihyd-admin-card-header"
                 style={{ cursor: 'pointer' }}
                 onClick={handleToggle}
             >
-                <h5 className="mb-0">
-                    🗑️ Limpieza de Base de Datos {isExpanded ? '▼' : '▶'}
-                </h5>
-                <small className="text-white-50">Haz clic para {isExpanded ? 'ocultar' : 'mostrar'}</small>
+                <span>Limpieza de Base de Datos</span>
+                <span className="ihyd-expand-hint">{isExpanded ? '▼' : '▶'}</span>
             </div>
 
             <div className={`collapse ${isExpanded ? 'show' : ''}`}>
-                <div className="card-body">
-                    <div className="alert alert-warning">
-                        <strong>⚠️ ADVERTENCIA:</strong> Estas acciones son irreversibles. Asegúrate de hacer un backup exportando los productos antes de eliminar.
+                <div style={{ paddingTop: '20px' }}>
+                    <div className="ihyd-alert ihyd-alert-warning mb-4">
+                        <strong>ADVERTENCIA:</strong> Estas acciones son irreversibles. Asegúrate de exportar los productos antes de eliminar.
                     </div>
 
-                    <div className="mb-3">
-                        <h6>Eliminar por Tipo de Producto:</h6>
+                    <div className="mb-4">
+                        <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#888', marginBottom: '12px' }}>
+                            Eliminar por tipo de producto:
+                        </p>
                         <div className="d-flex gap-2 flex-wrap">
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => deleteByType('CD')}
-                                disabled={deleting}
-                            >
-                                Eliminar CDs
-                            </button>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => deleteByType('Tape')}
-                                disabled={deleting}
-                            >
-                                Eliminar Tapes
-                            </button>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={deleteVinilos}
-                                disabled={deleting}
-                            >
+                            {['CD', 'Tape', 'Zine', 'Polera'].map(tipo => (
+                                <button key={tipo} className="ihyd-btn-danger" onClick={() => deleteByType(tipo)} disabled={deleting}>
+                                    Eliminar {tipo}s
+                                </button>
+                            ))}
+                            <button className="ihyd-btn-danger" onClick={deleteVinilos} disabled={deleting}>
                                 {deleting ? 'Eliminando...' : 'Eliminar Vinilos'}
-                            </button>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => deleteByType('Zine')}
-                                disabled={deleting}
-                            >
-                                Eliminar Zines
-                            </button>
-                            <button
-                                className="btn btn-outline-danger"
-                                onClick={() => deleteByType('Polera')}
-                                disabled={deleting}
-                            >
-                                Eliminar Poleras
                             </button>
                         </div>
                     </div>
 
                     <hr />
 
-                    <div className="mb-3">
-                        <h6 className="text-danger">Zona de Peligro:</h6>
-                        <button
-                            className="btn btn-danger"
-                            onClick={deleteAllProducts}
-                            disabled={deleting}
-                        >
-                            {deleting ? 'Eliminando...' : '🚨 Eliminar TODOS los Productos'}
+                    <div className="mb-4">
+                        <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#cc3333', marginBottom: '12px' }}>
+                            Zona de peligro:
+                        </p>
+                        <button className="ihyd-btn-danger" onClick={deleteAllProducts} disabled={deleting}>
+                            {deleting ? 'Eliminando...' : 'Eliminar TODOS los Productos'}
                         </button>
-                        <small className="d-block mt-2 text-muted">
-                            Esto eliminará TODOS los productos de la base de datos
-                        </small>
+                        <small className="d-block mt-2">Esto eliminará TODOS los productos de la base de datos</small>
                     </div>
 
                     {results && (
                         <div className="mt-4">
-                            <div className={`alert ${results.errors === 0 ? 'alert-success' : 'alert-warning'}`}>
-                                <h6 className="alert-heading">Resultado de la Eliminación</h6>
-                                <p className="mb-1">Total encontrados: {results.total}</p>
-                                <p className="mb-1">✅ Eliminados exitosamente: {results.deleted}</p>
-                                <p className="mb-0">❌ Errores: {results.errors}</p>
+                            <div className={`ihyd-alert ${results.errors === 0 ? 'ihyd-alert-success' : 'ihyd-alert-warning'}`}>
+                                <strong>Resultado de la Eliminación</strong>
+                                <p className="mb-1 mt-2">Total encontrados: {results.total}</p>
+                                <p className="mb-1">Eliminados exitosamente: {results.deleted}</p>
+                                <p className="mb-0">Errores: {results.errors}</p>
                             </div>
 
                             {results.errorDetails.length > 0 && (
                                 <div className="mt-3">
-                                    <h6>Detalles de errores:</h6>
+                                    <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#888' }}>Detalles de errores:</p>
                                     <ul className="small">
                                         {results.errorDetails.slice(0, 10).map((err, idx) => (
-                                            <li key={idx}>
-                                                ID: {err.id} - {err.error}
-                                            </li>
+                                            <li key={idx}>ID: {err.id} — {err.error}</li>
                                         ))}
                                         {results.errorDetails.length > 10 && (
                                             <li>... y {results.errorDetails.length - 10} errores más</li>
@@ -260,9 +208,9 @@ const DatabaseCleaner = () => {
                     )}
 
                     <div className="mt-4">
-                        <h6>Recomendaciones:</h6>
+                        <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#888', marginBottom: '8px' }}>Recomendaciones:</p>
                         <ol className="small">
-                            <li>Exporta todos los productos antes de eliminar (usa el botón "Exportar Todos los Productos")</li>
+                            <li>Exporta todos los productos antes de eliminar (usa la sección de Importar)</li>
                             <li>Verifica que realmente quieres eliminar los productos</li>
                             <li>Después de eliminar, puedes volver a importar el Excel corregido</li>
                         </ol>

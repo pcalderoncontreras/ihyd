@@ -27,7 +27,6 @@ const CarouselManager = () => {
         try {
             const data = await getDocs(carouselCollectionRef);
             const images = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-            // Ordenar por el campo 'order'
             images.sort((a, b) => (a.order || 0) - (b.order || 0));
             setCarouselImages(images);
         } catch (error) {
@@ -110,38 +109,30 @@ const CarouselManager = () => {
     };
 
     const resetForm = () => {
-        setNewImage({
-            imageUrl: '',
-            title: '',
-            description: '',
-            order: 0,
-            active: true
-        });
+        setNewImage({ imageUrl: '', title: '', description: '', order: 0, active: true });
         setIsEditing(false);
         setEditingId(null);
     };
 
     return (
-        <div className="card mb-4">
+        <div className="ihyd-admin-card mb-4">
             <div
-                className="card-header bg-warning text-dark d-flex justify-content-between align-items-center"
+                className="ihyd-admin-card-header"
                 style={{ cursor: 'pointer' }}
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <h5 className="mb-0">
-                    🎠 Administrador de Carrusel {isExpanded ? '▼' : '▶'}
-                </h5>
-                <small className="text-dark-50">Haz clic para {isExpanded ? 'ocultar' : 'mostrar'}</small>
+                <span>Administrador de Carrusel</span>
+                <span className="ihyd-expand-hint">{isExpanded ? '▼' : '▶'}</span>
             </div>
 
             <div className={`collapse ${isExpanded ? 'show' : ''}`}>
-                <div className="card-body">
-                    {/* Formulario para agregar/editar imagen */}
-                    <div className="card mb-4">
-                        <div className="card-header bg-secondary text-white">
-                            <h6 className="mb-0">{isEditing ? 'Editar Imagen' : 'Agregar Nueva Imagen'}</h6>
+                <div style={{ paddingTop: '20px' }}>
+                    {/* Form: add / edit */}
+                    <div className="ihyd-sub-card mb-4">
+                        <div className="ihyd-sub-card-header">
+                            {isEditing ? 'Editar Imagen' : 'Agregar Nueva Imagen'}
                         </div>
-                        <div className="card-body">
+                        <div className="ihyd-sub-card-body">
                             <form onSubmit={isEditing ? updateImage : createImage} className="row g-3">
                                 <div className="col-md-6">
                                     <label className="form-label">URL de la Imagen *</label>
@@ -195,12 +186,12 @@ const CarouselManager = () => {
                                         onChange={(e) => setNewImage({ ...newImage, description: e.target.value })}
                                     />
                                 </div>
-                                <div className="col-12">
-                                    <button type="submit" className="btn btn-primary me-2">
+                                <div className="col-12 d-flex gap-2">
+                                    <button type="submit" className="ihyd-btn-primary">
                                         {isEditing ? 'Actualizar Imagen' : 'Agregar Imagen'}
                                     </button>
                                     {isEditing && (
-                                        <button type="button" className="btn btn-secondary" onClick={resetForm}>
+                                        <button type="button" className="ihyd-btn-ghost" onClick={resetForm}>
                                             Cancelar
                                         </button>
                                     )}
@@ -209,14 +200,14 @@ const CarouselManager = () => {
                         </div>
                     </div>
 
-                    {/* Listado de imágenes */}
-                    <div className="card">
-                        <div className="card-header bg-info text-white">
-                            <h6 className="mb-0">Imágenes del Carrusel ({carouselImages.length})</h6>
+                    {/* Image list */}
+                    <div className="ihyd-sub-card">
+                        <div className="ihyd-sub-card-header">
+                            Imágenes del Carrusel ({carouselImages.length})
                         </div>
-                        <div className="card-body">
+                        <div className="ihyd-sub-card-body">
                             {carouselImages.length === 0 ? (
-                                <p className="text-muted">No hay imágenes en el carrusel. Agrega la primera imagen arriba.</p>
+                                <p className="small">No hay imágenes en el carrusel. Agrega la primera imagen arriba.</p>
                             ) : (
                                 <div className="table-responsive">
                                     <table className="table table-hover">
@@ -231,56 +222,37 @@ const CarouselManager = () => {
                                         </thead>
                                         <tbody>
                                             {carouselImages.map((image) => (
-                                                <tr key={image.id} className={image.active === false ? 'table-secondary' : ''}>
+                                                <tr key={image.id}>
                                                     <td>
                                                         <img
                                                             src={image.imageUrl}
                                                             alt={image.title || 'Carousel'}
-                                                            style={{
-                                                                width: '80px',
-                                                                height: '50px',
-                                                                objectFit: 'cover',
-                                                                borderRadius: '4px',
-                                                                cursor: 'pointer'
-                                                            }}
-                                                            onClick={() => {
-                                                                setSelectedImage(image.imageUrl);
-                                                                setShowImageModal(true);
-                                                            }}
+                                                            style={{ width: '80px', height: '50px', objectFit: 'cover', cursor: 'pointer' }}
+                                                            onClick={() => { setSelectedImage(image.imageUrl); setShowImageModal(true); }}
                                                             title="Click para ver imagen grande"
                                                         />
                                                     </td>
                                                     <td>
                                                         <strong>{image.title || 'Sin título'}</strong>
                                                         {image.description && (
-                                                            <><br /><small className="text-muted">{image.description}</small></>
+                                                            <><br /><small>{image.description}</small></>
                                                         )}
                                                     </td>
                                                     <td>{image.order || 0}</td>
                                                     <td>
-                                                        <span className={`badge ${image.active !== false ? 'bg-success' : 'bg-secondary'}`}>
+                                                        <span className={image.active !== false ? 'ihyd-badge-active' : 'ihyd-badge-inactive'}>
                                                             {image.active !== false ? 'Activo' : 'Inactivo'}
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        <button
-                                                            className="btn btn-sm btn-outline-primary me-2"
-                                                            onClick={() => startEditing(image)}
-                                                        >
-                                                            <i className="bi bi-pencil"></i> Editar
+                                                        <button className="ihyd-action-btn" onClick={() => startEditing(image)}>
+                                                            Editar
                                                         </button>
-                                                        <button
-                                                            className={`btn btn-sm ${image.active !== false ? 'btn-outline-warning' : 'btn-outline-success'} me-2`}
-                                                            onClick={() => toggleActive(image)}
-                                                        >
-                                                            <i className={`bi ${image.active !== false ? 'bi-eye-slash' : 'bi-eye'}`}></i>
-                                                            {image.active !== false ? ' Desactivar' : ' Activar'}
+                                                        <button className="ihyd-action-btn" onClick={() => toggleActive(image)}>
+                                                            {image.active !== false ? 'Desactivar' : 'Activar'}
                                                         </button>
-                                                        <button
-                                                            className="btn btn-sm btn-outline-danger"
-                                                            onClick={() => deleteImage(image.id)}
-                                                        >
-                                                            <i className="bi bi-trash"></i> Eliminar
+                                                        <button className="ihyd-action-btn danger" onClick={() => deleteImage(image.id)}>
+                                                            Eliminar
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -294,17 +266,19 @@ const CarouselManager = () => {
                 </div>
             </div>
 
-            {/* Modal de previsualización de imagen */}
+            {/* Image preview modal */}
             {showImageModal && (
                 <div
                     className="modal show d-block"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.8)' }}
+                    style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}
                     onClick={() => setShowImageModal(false)}
                 >
                     <div className="modal-dialog modal-dialog-centered modal-xl">
-                        <div className="modal-content bg-dark">
-                            <div className="modal-header border-secondary">
-                                <h5 className="modal-title text-white">Vista Previa de Imagen del Carrusel</h5>
+                        <div className="modal-content" style={{ background: '#111', border: '1px solid #222', borderRadius: 0 }}>
+                            <div className="modal-header" style={{ borderBottom: '1px solid #222' }}>
+                                <h5 className="modal-title" style={{ color: '#fff', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                                    Vista Previa
+                                </h5>
                                 <button
                                     type="button"
                                     className="btn-close btn-close-white"
@@ -315,21 +289,12 @@ const CarouselManager = () => {
                                 <img
                                     src={selectedImage}
                                     alt="Carousel Preview"
-                                    style={{
-                                        maxWidth: '100%',
-                                        maxHeight: '70vh',
-                                        objectFit: 'contain',
-                                        borderRadius: '8px'
-                                    }}
+                                    style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
                                     onClick={(e) => e.stopPropagation()}
                                 />
                             </div>
-                            <div className="modal-footer border-secondary">
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={() => setShowImageModal(false)}
-                                >
+                            <div className="modal-footer" style={{ borderTop: '1px solid #222' }}>
+                                <button type="button" className="ihyd-btn-ghost" onClick={() => setShowImageModal(false)}>
                                     Cerrar
                                 </button>
                             </div>

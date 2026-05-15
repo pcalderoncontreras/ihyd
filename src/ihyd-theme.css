@@ -549,3 +549,102 @@
     font-size: 0.68rem;
   }
 }
+
+/* ==================
+   ADMIN SUB-PANELS
+   (nested cards inside BulkImport, DatabaseCleaner, CarouselManager)
+   ================== */
+
+.ihyd-sub-card {
+  background: var(--ihyd-surface-2);
+  border: 1px solid var(--ihyd-border-2);
+  margin-bottom: 20px;
+}
+
+.ihyd-sub-card-header {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #666;
+  border-bottom: 1px solid var(--ihyd-border-2);
+  padding: 10px 16px;
+}
+
+.ihyd-sub-card-body {
+  padding: 16px;
+}
+
+/* Expand/collapse hint */
+.ihyd-expand-hint {
+  font-size: 0.65rem;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Danger button */
+.ihyd-btn-danger {
+  background: transparent;
+  color: #cc3333;
+  border: 1px solid #cc3333;
+  padding: 8px 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
+}
+
+.ihyd-btn-danger:hover:not(:disabled) {
+  background: #cc3333;
+  color: #fff;
+}
+
+.ihyd-btn-danger:disabled,
+.ihyd-btn-ghost:disabled,
+.ihyd-btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Dark alerts */
+.ihyd-alert {
+  border: 1px solid var(--ihyd-border-2);
+  background: var(--ihyd-surface-2);
+  color: #ccc;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.ihyd-alert-warning {
+  border-color: #3a3010;
+  background: #1a1505;
+  color: #ccc;
+}
+
+.ihyd-alert-success {
+  border-color: #1a2e1a;
+  background: #0a140a;
+  color: #ccc;
+}
+
+.ihyd-alert-info {
+  border-color: var(--ihyd-border-2);
+  background: var(--ihyd-surface-2);
+  color: #aaa;
+}
+
+/* Muted text inside admin */
+.ihyd-admin small,
+.ihyd-admin .text-muted {
+  color: #555 !important;
+}
+
+.ihyd-admin hr {
+  border-color: var(--ihyd-border);
+  opacity: 1;
+}

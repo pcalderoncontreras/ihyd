@@ -37,7 +37,6 @@ const BulkImport = () => {
 
             for (const row of jsonData) {
                 try {
-                    // Mapear las columnas del Excel a los campos de Firebase
                     const productData = {
                         precio: Number(row.precio || row.Precio || 0),
                         imageUrl: row.imageUrl || row.imagen || row.Imagen || '',
@@ -45,7 +44,6 @@ const BulkImport = () => {
                         active: row.active !== undefined ? Boolean(row.active) : true,
                     };
 
-                    // Campos para discos (CD, Tape, Vinilo, Zine)
                     if (['CD', 'Tape', 'Vinilo', 'Zine'].includes(productData.tipo_producto)) {
                         productData.album = row.album || row.Album || '';
                         productData.banda = row.banda || row.Banda || '';
@@ -54,7 +52,6 @@ const BulkImport = () => {
                         productData.sello = row.sello || row.Sello || '';
                     }
 
-                    // Campos para poleras
                     if (productData.tipo_producto === 'Polera') {
                         productData.titulo = row.titulo || row.Titulo || row.Título || '';
                         productData.genero = row.genero || row.Genero || row.Género || '';
@@ -87,62 +84,12 @@ const BulkImport = () => {
     };
 
     const downloadTemplate = () => {
-        // Crear una plantilla de Excel con ejemplos de TODOS los tipos de productos
         const template = [
-            {
-                tipo_producto: 'CD',
-                banda: 'Iron Maiden',
-                album: 'The Number of the Beast',
-                estilo: 'Heavy Metal',
-                pais: 'UK',
-                sello: 'EMI',
-                precio: 8000,
-                imageUrl: 'https://ejemplo.com/iron-maiden-cd.jpg',
-                active: true
-            },
-            {
-                tipo_producto: 'Tape',
-                banda: 'Metallica',
-                album: 'Master of Puppets',
-                estilo: 'Thrash Metal',
-                pais: 'USA',
-                sello: 'Elektra',
-                precio: 6000,
-                imageUrl: 'https://ejemplo.com/metallica-tape.jpg',
-                active: true
-            },
-            {
-                tipo_producto: 'Vinilo',
-                banda: 'Black Sabbath',
-                album: 'Paranoid',
-                estilo: 'Heavy Metal',
-                pais: 'UK',
-                sello: 'Vertigo',
-                precio: 25000,
-                imageUrl: 'https://ejemplo.com/sabbath-vinilo.jpg',
-                active: true
-            },
-            {
-                tipo_producto: 'Zine',
-                banda: 'Varios Artistas',
-                album: 'Fanzine Metal Underground #1',
-                estilo: 'Metal',
-                pais: 'Chile',
-                sello: 'Independiente',
-                precio: 3000,
-                imageUrl: 'https://ejemplo.com/zine.jpg',
-                active: true
-            },
-            {
-                tipo_producto: 'Polera',
-                titulo: 'Polera Logo Banda',
-                genero: 'Unisex',
-                talla: 'M',
-                tipo_polera: 'Manga Corta',
-                precio: 15000,
-                imageUrl: 'https://ejemplo.com/polera.jpg',
-                active: true
-            }
+            { tipo_producto: 'CD', banda: 'Iron Maiden', album: 'The Number of the Beast', estilo: 'Heavy Metal', pais: 'UK', sello: 'EMI', precio: 8000, imageUrl: 'https://ejemplo.com/iron-maiden-cd.jpg', active: true },
+            { tipo_producto: 'Tape', banda: 'Metallica', album: 'Master of Puppets', estilo: 'Thrash Metal', pais: 'USA', sello: 'Elektra', precio: 6000, imageUrl: 'https://ejemplo.com/metallica-tape.jpg', active: true },
+            { tipo_producto: 'Vinilo', banda: 'Black Sabbath', album: 'Paranoid', estilo: 'Heavy Metal', pais: 'UK', sello: 'Vertigo', precio: 25000, imageUrl: 'https://ejemplo.com/sabbath-vinilo.jpg', active: true },
+            { tipo_producto: 'Zine', banda: 'Varios Artistas', album: 'Fanzine Metal Underground #1', estilo: 'Metal', pais: 'Chile', sello: 'Independiente', precio: 3000, imageUrl: 'https://ejemplo.com/zine.jpg', active: true },
+            { tipo_producto: 'Polera', titulo: 'Polera Logo Banda', genero: 'Unisex', talla: 'M', tipo_polera: 'Manga Corta', precio: 15000, imageUrl: 'https://ejemplo.com/polera.jpg', active: true }
         ];
 
         const ws = XLSX.utils.json_to_sheet(template);
@@ -158,8 +105,6 @@ const BulkImport = () => {
             const data = await getDocs(productsCollectionRef);
             const products = data.docs.map((doc) => {
                 const product = doc.data();
-
-                // Crear objeto base
                 const exportData = {
                     tipo_producto: product.tipo_producto || '',
                     precio: product.precio || 0,
@@ -167,7 +112,6 @@ const BulkImport = () => {
                     active: product.active !== undefined ? product.active : true,
                 };
 
-                // Agregar campos específicos según el tipo
                 if (['CD', 'Tape', 'Vinilo', 'Zine'].includes(product.tipo_producto)) {
                     exportData.banda = product.banda || '';
                     exportData.album = product.album || '';
@@ -189,12 +133,10 @@ const BulkImport = () => {
                 return;
             }
 
-            // Crear archivo Excel
             const ws = XLSX.utils.json_to_sheet(products);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Productos');
 
-            // Descargar archivo con fecha actual
             const fecha = new Date().toISOString().split('T')[0];
             XLSX.writeFile(wb, `productos_${fecha}.xlsx`);
 
@@ -208,36 +150,27 @@ const BulkImport = () => {
     };
 
     return (
-        <div className="card mb-4">
+        <div className="ihyd-admin-card mb-4">
             <div
-                className="card-header bg-info text-white d-flex justify-content-between align-items-center"
+                className="ihyd-admin-card-header"
                 style={{ cursor: 'pointer' }}
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <h5 className="mb-0">
-                    📊 Importación/Exportación Masiva {isExpanded ? '▼' : '▶'}
-                </h5>
-                <small className="text-white-50">Haz clic para {isExpanded ? 'ocultar' : 'mostrar'}</small>
+                <span>Importación / Exportación Masiva</span>
+                <span className="ihyd-expand-hint">{isExpanded ? '▼' : '▶'}</span>
             </div>
 
             <div className={`collapse ${isExpanded ? 'show' : ''}`}>
-                <div className="card-body">
-                    <div className="mb-3 d-flex gap-2">
-                        <button
-                            className="btn btn-outline-primary"
-                            onClick={downloadTemplate}
-                        >
-                            📥 Descargar Plantilla Excel
+                <div style={{ paddingTop: '20px' }}>
+                    <div className="mb-3 d-flex gap-2 flex-wrap">
+                        <button className="ihyd-btn-ghost" onClick={downloadTemplate}>
+                            Descargar Plantilla Excel
                         </button>
-                        <button
-                            className="btn btn-outline-success"
-                            onClick={exportProducts}
-                            disabled={exporting}
-                        >
-                            {exporting ? 'Exportando...' : '📊 Exportar Todos los Productos'}
+                        <button className="ihyd-btn-ghost" onClick={exportProducts} disabled={exporting}>
+                            {exporting ? 'Exportando...' : 'Exportar Todos los Productos'}
                         </button>
                     </div>
-                    <small className="d-block mb-3 text-muted">
+                    <small className="d-block mb-3">
                         Descarga la plantilla para ver el formato correcto o exporta todos los productos actuales
                     </small>
 
@@ -253,30 +186,28 @@ const BulkImport = () => {
                     </div>
 
                     <button
-                        className="btn btn-success"
+                        className="ihyd-btn-primary"
                         onClick={handleImport}
                         disabled={!file || importing}
                     >
-                        {importing ? 'Importando...' : '📤 Importar Productos'}
+                        {importing ? 'Importando...' : 'Importar Productos'}
                     </button>
 
                     {results && (
                         <div className="mt-4">
-                            <div className={`alert ${results.errors === 0 ? 'alert-success' : 'alert-warning'}`}>
-                                <h6 className="alert-heading">Resultado de la Importación</h6>
-                                <p className="mb-1">Total de filas: {results.total}</p>
-                                <p className="mb-1">✅ Importados exitosamente: {results.success}</p>
-                                <p className="mb-0">❌ Errores: {results.errors}</p>
+                            <div className={`ihyd-alert ${results.errors === 0 ? 'ihyd-alert-success' : 'ihyd-alert-warning'}`}>
+                                <strong>Resultado de la Importación</strong>
+                                <p className="mb-1 mt-2">Total de filas: {results.total}</p>
+                                <p className="mb-1">Importados exitosamente: {results.success}</p>
+                                <p className="mb-0">Errores: {results.errors}</p>
                             </div>
 
                             {results.errorDetails.length > 0 && (
                                 <div className="mt-3">
-                                    <h6>Detalles de errores:</h6>
+                                    <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#888' }}>Detalles de errores:</p>
                                     <ul className="small">
                                         {results.errorDetails.slice(0, 10).map((err, idx) => (
-                                            <li key={idx}>
-                                                Fila {idx + 1}: {err.error}
-                                            </li>
+                                            <li key={idx}>Fila {idx + 1}: {err.error}</li>
                                         ))}
                                         {results.errorDetails.length > 10 && (
                                             <li>... y {results.errorDetails.length - 10} errores más</li>
@@ -288,7 +219,7 @@ const BulkImport = () => {
                     )}
 
                     <div className="mt-4">
-                        <h6>Instrucciones:</h6>
+                        <p style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#888', marginBottom: '8px' }}>Instrucciones:</p>
                         <ol className="small">
                             <li>Descarga la plantilla Excel usando el botón de arriba</li>
                             <li>Llena el archivo con tus productos siguiendo el formato de ejemplo</li>
@@ -296,7 +227,7 @@ const BulkImport = () => {
                             <li>Selecciona el archivo usando el botón "Seleccionar archivo"</li>
                             <li>Haz clic en "Importar Productos"</li>
                         </ol>
-                        <div className="alert alert-info small mt-2">
+                        <div className="ihyd-alert ihyd-alert-info mt-2">
                             <strong>Columnas requeridas para Discos (CD/Tape/Vinilo/Zine):</strong>
                             <br />tipo_producto, banda, album, estilo, pais, sello, precio, imageUrl
                             <br /><br />
