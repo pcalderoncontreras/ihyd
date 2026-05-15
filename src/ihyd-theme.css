@@ -49,7 +49,10 @@
 
 .ihyd-card-overlay {
   position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
   display: flex;
@@ -147,7 +150,7 @@
 }
 
 /* Todo el contenido encima del fondo */
-.ihyd-modal-content > * {
+.ihyd-modal-content>* {
   position: relative;
   z-index: 1;
 }
@@ -287,8 +290,8 @@
 
 .ihyd-admin-title {
   font-weight: 900;
-  font-size: 1.3rem;
-  text-transform: uppercase;
+  font-size: 2.3rem;
+  text-transform: none;
   letter-spacing: 0.1em;
   color: #fff;
   margin-bottom: 24px;
@@ -485,7 +488,7 @@
   color: #ff4444;
 }
 
-.ihyd-action-btn + .ihyd-action-btn {
+.ihyd-action-btn+.ihyd-action-btn {
   border-left: 1px solid #333;
 }
 

@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BulkImport from '../components/BulkImport';
 import DatabaseCleaner from '../components/DatabaseCleaner';
-import CarouselManager from '../components/CarouselManager';
+
 
 const Admin = () => {
     const [products, setProducts] = useState([]);
@@ -418,7 +418,7 @@ const Admin = () => {
 
     return (
         <div className="ihyd-admin">
-            <h2 className="ihyd-admin-title">Admin Panel</h2>
+            <h1 className="ihyd-admin-title">Admin Panel</h1>
 
             {/* Tabs de navegación */}
             <div className="ihyd-tabs">
@@ -440,12 +440,7 @@ const Admin = () => {
                 >
                     Base de Datos
                 </button>
-                <button
-                    className={`ihyd-tab ${activeTab === 'carrusel' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('carrusel')}
-                >
-                    Carrusel
-                </button>
+
             </div>
 
             {/* Tab: Importar */}
@@ -464,13 +459,7 @@ const Admin = () => {
                 </div>
             )}
 
-            {/* Tab: Carrusel */}
-            {activeTab === 'carrusel' && (
-                <div className="ihyd-admin-card">
-                    <div className="ihyd-admin-card-header">Gestión de Carrusel</div>
-                    <CarouselManager />
-                </div>
-            )}
+
 
             {/* Tab: Productos */}
             {activeTab === 'productos' && (
