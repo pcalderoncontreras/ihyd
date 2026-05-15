@@ -1,0 +1,549 @@
+/* ============================================
+   IHYD THEME — Metal/Underground Dark Design
+   ============================================ */
+
+/* === Variables === */
+:root {
+  --ihyd-bg: #000000;
+  --ihyd-surface: #111111;
+  --ihyd-surface-2: #1a1a1a;
+  --ihyd-border: #222222;
+  --ihyd-border-2: #333333;
+  --ihyd-text: #ffffff;
+  --ihyd-text-muted: #666666;
+  --ihyd-text-label: #888888;
+}
+
+/* ==================
+   PRODUCT CARD
+   ================== */
+
+.ihyd-card {
+  cursor: pointer;
+  border: 1px solid var(--ihyd-border);
+  background: #000;
+  transition: border-color 0.25s ease;
+}
+
+.ihyd-card:hover {
+  border-color: #444;
+}
+
+.ihyd-card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+}
+
+.ihyd-card-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.ihyd-card:hover .ihyd-card-img-wrapper img {
+  transform: scale(1.03);
+}
+
+.ihyd-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.ihyd-card:hover .ihyd-card-overlay {
+  opacity: 1;
+}
+
+.ihyd-card-overlay-price {
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.ihyd-card-overlay-cta {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 6px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
+}
+
+.ihyd-card-overlay-cta:hover {
+  background: #fff;
+  color: #000;
+}
+
+.ihyd-card-band {
+  font-weight: 900;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.ihyd-card-album {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin-bottom: 2px;
+}
+
+.ihyd-card-meta {
+  font-size: 0.75rem;
+  color: var(--ihyd-text-muted);
+  margin-bottom: 4px;
+}
+
+.ihyd-card-price {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+/* ==================
+   PRODUCT MODAL
+   ================== */
+
+.ihyd-modal-content {
+  position: relative;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid var(--ihyd-border);
+  border-radius: 0;
+  color: #fff;
+}
+
+/* Fondo borroso usando la portada del disco */
+.ihyd-modal-content::before {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  background-image: var(--modal-bg-image);
+  background-size: cover;
+  background-position: center;
+  filter: blur(25px) brightness(0.25);
+  z-index: 0;
+}
+
+/* Todo el contenido encima del fondo */
+.ihyd-modal-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ihyd-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.ihyd-modal-close:hover {
+  color: #fff;
+}
+
+.ihyd-modal-title {
+  font-weight: 900;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 24px 52px 0 24px;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.ihyd-modal-body {
+  padding: 20px 24px;
+}
+
+.ihyd-modal-img {
+  width: 100%;
+  object-fit: contain;
+  max-height: 450px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+
+.ihyd-modal-price {
+  font-family: monospace;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.ihyd-modal-meta {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 0;
+}
+
+.ihyd-modal-meta:last-of-type {
+  border-bottom: none;
+}
+
+.ihyd-modal-meta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.ihyd-modal-meta-value {
+  font-size: 0.9rem;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.ihyd-modal-footer {
+  padding: 14px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ihyd-btn-primary {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 8px 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 0;
+}
+
+.ihyd-btn-primary:hover {
+  background: #ddd;
+  color: #000;
+}
+
+.ihyd-btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 8px 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
+}
+
+.ihyd-btn-ghost:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* ==================
+   ADMIN PANEL
+   ================== */
+
+.ihyd-admin {
+  background: var(--ihyd-bg);
+  min-height: 100vh;
+  color: #fff;
+  padding: 2rem 1rem;
+}
+
+.ihyd-admin-title {
+  font-weight: 900;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Tabs */
+.ihyd-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--ihyd-border);
+  margin-bottom: 32px;
+  position: sticky;
+  top: 0;
+  background: var(--ihyd-bg);
+  z-index: 50;
+  padding-top: 8px;
+}
+
+.ihyd-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #444;
+  padding: 10px 22px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  border-radius: 0;
+}
+
+.ihyd-tab:hover {
+  color: #888;
+  border-color: transparent;
+}
+
+.ihyd-tab.active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+/* Admin card/panel */
+.ihyd-admin-card {
+  background: var(--ihyd-surface);
+  border: 1px solid var(--ihyd-border);
+  border-radius: 0;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.ihyd-admin-card-header {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #888;
+  border-bottom: 1px solid var(--ihyd-border);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Form inputs */
+.ihyd-admin .form-control,
+.ihyd-admin .form-select {
+  background: var(--ihyd-surface-2);
+  border: 1px solid var(--ihyd-border-2);
+  color: #fff;
+  border-radius: 0;
+}
+
+.ihyd-admin .form-control:focus,
+.ihyd-admin .form-select:focus {
+  background: var(--ihyd-surface-2);
+  border-color: #555;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+}
+
+.ihyd-admin .form-control::placeholder {
+  color: #444;
+}
+
+.ihyd-admin .form-select option {
+  background: var(--ihyd-surface-2);
+  color: #fff;
+}
+
+.ihyd-admin .form-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.ihyd-admin .form-check-input {
+  background-color: var(--ihyd-surface-2);
+  border-color: #555;
+}
+
+.ihyd-admin .form-check-input:checked {
+  background-color: #fff;
+  border-color: #fff;
+}
+
+/* Table */
+.ihyd-admin .table {
+  color: #fff;
+  border-color: var(--ihyd-border);
+  margin-bottom: 0;
+}
+
+.ihyd-admin .table tbody tr:nth-of-type(odd) {
+  background: #0f0f0f;
+  --bs-table-striped-bg: transparent;
+}
+
+.ihyd-admin .table tbody tr:nth-of-type(even) {
+  background: var(--ihyd-surface);
+  --bs-table-striped-bg: transparent;
+}
+
+.ihyd-admin .table tbody tr:hover {
+  background: var(--ihyd-surface-2) !important;
+}
+
+.ihyd-admin .table thead th {
+  background: var(--ihyd-surface-2);
+  color: var(--ihyd-text-label);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-color: var(--ihyd-border);
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
+.ihyd-admin .table td {
+  border-color: var(--ihyd-border);
+  vertical-align: middle;
+  padding: 8px 12px;
+}
+
+/* Badges */
+.ihyd-badge-active {
+  border: 1px solid #fff;
+  color: #fff;
+  background: transparent;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+.ihyd-badge-inactive {
+  border: 1px solid #444;
+  color: #444;
+  background: transparent;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+/* Action buttons in table rows */
+.ihyd-action-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  transition: color 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0;
+}
+
+.ihyd-action-btn:hover {
+  color: #fff;
+}
+
+.ihyd-action-btn.danger:hover {
+  color: #ff4444;
+}
+
+.ihyd-action-btn + .ihyd-action-btn {
+  border-left: 1px solid #333;
+}
+
+/* Bulk actions toolbar */
+.ihyd-bulk-toolbar {
+  background: var(--ihyd-surface-2);
+  border: 1px solid var(--ihyd-border-2);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  position: sticky;
+  top: 56px;
+  z-index: 40;
+}
+
+.ihyd-bulk-toolbar-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.ihyd-bulk-toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Pagination */
+.ihyd-admin .page-link {
+  background: var(--ihyd-surface-2);
+  border-color: var(--ihyd-border);
+  color: #888;
+  border-radius: 0;
+}
+
+.ihyd-admin .page-link:hover {
+  background: #222;
+  color: #fff;
+  border-color: #444;
+}
+
+.ihyd-admin .page-item.active .page-link {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+
+.ihyd-admin .page-item.disabled .page-link {
+  background: var(--ihyd-surface);
+  border-color: var(--ihyd-border);
+  color: #333;
+}
+
+/* Responsive: stack tabs on small screens */
+@media (max-width: 576px) {
+  .ihyd-tab {
+    padding: 8px 12px;
+    font-size: 0.68rem;
+  }
+}
