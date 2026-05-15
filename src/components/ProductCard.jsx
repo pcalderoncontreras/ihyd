@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
 
     return (
         <>
-            <div className="col-md-3 mb-4">
+            <div className="col-6 col-md-4 col-lg-3 mb-4">
                 <div className="ihyd-card" onClick={() => setShowModal(true)}>
                     <div className="ihyd-card-img-wrapper">
                         <img

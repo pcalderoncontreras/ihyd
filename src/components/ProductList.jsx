@@ -146,7 +146,7 @@ const ProductList = ({ category, globalSearchTerm }) => {
 
             {/* Sort and Product Count */}
             {filteredProducts.length > 0 && (
-                <div className="mb-3 d-flex justify-content-between align-items-center">
+                <div className="mb-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
                     <div>
                         <label className="text-white me-2">Ordenar por:</label>
                         <select

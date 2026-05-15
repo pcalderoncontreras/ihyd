@@ -23,7 +23,7 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
 
     return (
         <header className="bg-black sticky-top" style={{ zIndex: 1000, paddingBottom: '1rem' }}>
-            <div className="container-fluid pe-4 pt-3 position-absolute top-0 end-0 d-flex justify-content-end align-items-center theme-switch-wrapper">
+            <div className="d-flex justify-content-end align-items-center w-100 pt-3 pe-4 theme-switch-wrapper">
                 <span className="fs-4 me-2" style={{ color: theme === 'light' ? '#1a1a1a' : '#666', transition: 'color 0.3s' }}>↯</span>
                 <label className="theme-switch mb-0" htmlFor="themeCheckbox">
                     <input
@@ -37,7 +37,7 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                 <span className="fs-4 ms-2" style={{ color: theme === 'dark' ? '#fff' : '#aaa', transition: 'color 0.3s' }}>⛧</span>
             </div>
 
-            <div className="container d-flex flex-column align-items-center pt-4">
+            <div className="container d-flex flex-column align-items-center pt-2">
                 {/* Logo */}
                 <Link className="navbar-brand mb-4" to="/" onClick={() => setCategory && setCategory('all')}>
                     <img
@@ -46,52 +46,49 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                             : "https://res.cloudinary.com/da8xc0cap/image/upload/v1778869036/LogoOficialHome2_sxwfae_d0gsxt.png"
                         }
                         alt="IHYD :: Distro"
+                        className="ihyd-logo"
                         style={{ height: '140px', width: 'auto', transition: 'all 0.3s ease' }}
                     />
                 </Link>
 
-                {/* Navigation Menu */}
-                <nav className="navbar navbar-expand-lg navbar-dark p-0 mb-3 w-100">
-                    <button className="navbar-toggler mx-auto mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
+                {/* Navigation Menu (Horizontal Scroll on Mobile) */}
+                <nav className="p-0 mb-3 w-100 ihyd-nav-container">
+                    <div className="d-flex justify-content-center ihyd-nav-scroll">
                         {isAdminPage ? (
-                            <div className="d-flex align-items-center gap-3">
+                            <div className="d-flex align-items-center gap-3 flex-nowrap">
                                 {currentUser && (
                                     <>
-                                        <span className="text-white">
+                                        <span className="text-white text-nowrap">
                                             Bienvenido: <strong>{currentUser.email}</strong>
                                         </span>
-                                        <button className="btn btn-outline-danger btn-sm" onClick={handleLogout}>
+                                        <button className="btn btn-outline-danger btn-sm text-nowrap" onClick={handleLogout}>
                                             Cerrar Sesión
                                         </button>
                                     </>
                                 )}
                             </div>
                         ) : (
-                            <ul className="navbar-nav align-items-center gap-3" style={{ fontSize: '0.95rem' }}>
+                            <ul className="nav d-flex flex-row flex-nowrap gap-3 align-items-center m-0 p-0" style={{ fontSize: '0.95rem' }}>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => { navigate('/'); setCategory('all'); }}>Home</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => { navigate('/'); setCategory('all'); }}>Home</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => setCategory('CD')}>CDs</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('CD')}>CDs</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => setCategory('Tape')}>Tapes</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Tape')}>Tapes</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => setCategory('Vinilo')}>Vinyl</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Vinilo')}>Vinyl</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => setCategory('Zine')}>Zines</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Zine')}>Zines</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => setCategory('Polera')}>Poleras</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Polera')}>Poleras</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link" onClick={() => window.open('https://docs.google.com/spreadsheets/d/1FN8jdlpdQsz4ioP0geF9oylUQTyn5-Yk/edit?usp=sharing&ouid=115226895934415359333&rtpof=true&sd=true', '_blank')}>Catálogo</button>
+                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => window.open('https://docs.google.com/spreadsheets/d/1FN8jdlpdQsz4ioP0geF9oylUQTyn5-Yk/edit?usp=sharing&ouid=115226895934415359333&rtpof=true&sd=true', '_blank')}>Catálogo</button>
                                 </li>
                             </ul>
                         )}

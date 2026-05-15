@@ -669,6 +669,28 @@ body.light-mode {
 }
 
 /* ==================
+   MOBILE RESPONSIVENESS
+   ================== */
+.ihyd-nav-scroll {
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  padding-bottom: 5px; /* Prevent cutoff */
+  justify-content: flex-start !important; /* Allow scroll from left on small screens */
+}
+
+.ihyd-nav-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+@media (min-width: 768px) {
+  .ihyd-nav-scroll {
+    justify-content: center !important;
+  }
+}
+
+/* ==================
    FLOATING WHATSAPP
    ================== */
 .floating-whatsapp {
@@ -706,4 +728,14 @@ body.light-mode .floating-whatsapp {
 body.light-mode .floating-whatsapp:hover {
   background-color: #000;
   color: #fff;
+}
+
+@media (max-width: 767px) {
+  .floating-whatsapp {
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+  }
 }
