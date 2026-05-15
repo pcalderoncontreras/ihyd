@@ -14,6 +14,17 @@
   --ihyd-text-label: #888888;
 }
 
+body.light-mode {
+  --ihyd-bg: #f8f9fa;
+  --ihyd-surface: #ffffff;
+  --ihyd-surface-2: #e9ecef;
+  --ihyd-border: #dee2e6;
+  --ihyd-border-2: #ced4da;
+  --ihyd-text: #212529;
+  --ihyd-text-muted: #6c757d;
+  --ihyd-text-label: #495057;
+}
+
 /* ==================
    PRODUCT CARD
    ================== */
@@ -145,7 +156,7 @@
   background-image: var(--modal-bg-image, none);
   background-size: cover;
   background-position: center;
-  filter: blur(25px) brightness(0.25);
+  filter: blur(5px) brightness(0.25);
   z-index: 0;
 }
 
@@ -284,7 +295,7 @@
 .ihyd-admin {
   background: var(--ihyd-bg);
   min-height: 100vh;
-  color: #fff;
+  color: var(--ihyd-text);
   padding: 2rem 1rem;
 }
 
@@ -293,7 +304,7 @@
   font-size: 2.3rem;
   text-transform: none;
   letter-spacing: 0.1em;
-  color: #fff;
+  color: var(--ihyd-text);
   margin-bottom: 24px;
   text-align: center;
 }
@@ -406,24 +417,29 @@
 
 /* Table */
 .ihyd-admin .table {
-  color: #fff;
+  color: var(--ihyd-text);
   border-color: var(--ihyd-border);
   margin-bottom: 0;
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--ihyd-text);
 }
 
 .ihyd-admin .table tbody tr:nth-of-type(odd) {
-  background: #0f0f0f;
+  background: var(--ihyd-bg);
   --bs-table-striped-bg: transparent;
+  --bs-table-bg: var(--ihyd-bg);
 }
 
 .ihyd-admin .table tbody tr:nth-of-type(even) {
   background: var(--ihyd-surface);
   --bs-table-striped-bg: transparent;
+  --bs-table-bg: var(--ihyd-surface);
 }
 
 .ihyd-admin .table tbody tr:hover {
   --bs-table-hover-bg: var(--ihyd-surface-2);
   background-color: var(--ihyd-surface-2);
+  --bs-table-bg: var(--ihyd-surface-2);
 }
 
 .ihyd-admin .table thead th {
@@ -481,7 +497,7 @@
 }
 
 .ihyd-action-btn:hover {
-  color: #fff;
+  color: var(--ihyd-text);
 }
 
 .ihyd-action-btn.danger:hover {
@@ -650,4 +666,44 @@
 .ihyd-admin hr {
   border-color: var(--ihyd-border);
   opacity: 1;
+}
+
+/* ==================
+   FLOATING WHATSAPP
+   ================== */
+.floating-whatsapp {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #000;
+  color: #fff;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  transition: all 0.3s ease;
+  border: 2px solid #fff;
+}
+
+.floating-whatsapp:hover {
+  background-color: #fff;
+  color: #000;
+  transform: scale(1.1);
+}
+
+body.light-mode .floating-whatsapp {
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .floating-whatsapp:hover {
+  background-color: #000;
+  color: #fff;
 }

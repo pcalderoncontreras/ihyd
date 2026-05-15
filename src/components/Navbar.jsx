@@ -99,9 +99,11 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                 </nav>
 
                 {/* Search Bar */}
-                <div className="w-100 px-3" style={{ maxWidth: '600px' }}>
-                    <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-                </div>
+                {!isAdminPage && location.pathname !== '/login' && (
+                    <div className="w-100 px-3" style={{ maxWidth: '600px' }}>
+                        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                    </div>
+                )}
             </div>
 
             <style>{`

@@ -4,11 +4,10 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import ProductCard from './ProductCard';
 import SearchBar from './SearchBar';
 
-const ProductList = ({ category }) => {
+const ProductList = ({ category, globalSearchTerm }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [sortOrder, setSortOrder] = useState('default'); // default, alpha-asc, alpha-desc, price-asc, price-desc, date-desc, date-asc
     const itemsPerPage = 20;
@@ -48,11 +47,11 @@ const ProductList = ({ category }) => {
 
     useEffect(() => {
         setCurrentPage(1); // Reset to first page when search or sort changes
-    }, [searchTerm, sortOrder]);
+    }, [globalSearchTerm, sortOrder]);
 
     const filterProducts = (products) => {
-        if (!searchTerm) return products;
-        const term = searchTerm.toLowerCase();
+        if (!globalSearchTerm) return products;
+        const term = globalSearchTerm.toLowerCase();
         return products.filter(product => {
             const banda = String(product.banda || '').toLowerCase();
             const album = String(product.album || '').toLowerCase();
@@ -174,8 +173,8 @@ const ProductList = ({ category }) => {
             <div className="row">
                 {paginatedProducts.length === 0 ? (
                     <div className="col-12 text-center text-white">
-                        {searchTerm
-                            ? `No se encontraron productos que coincidan con "${searchTerm}".`
+                        {globalSearchTerm
+                            ? `No se encontraron productos que coincidan con "${globalSearchTerm}".`
                             : `No se encontraron productos para ${category === 'all' ? 'ninguna categoría' : category}.`
                         }
                     </div>

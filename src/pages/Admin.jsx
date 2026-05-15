@@ -747,14 +747,16 @@ const Admin = () => {
                                             </span>
                                         </td>
                                         <td>
-                                            <button className="ihyd-action-btn" onClick={() => startEditing(product)}>Edit</button>
-                                            <button
-                                                className="ihyd-action-btn"
-                                                onClick={() => toggleActive(product)}
-                                            >
-                                                {product.active !== false ? 'Off' : 'On'}
-                                            </button>
-                                            <button className="ihyd-action-btn danger" onClick={() => deleteProduct(product.id)}>Del</button>
+                                            <div className="d-flex flex-nowrap align-items-center">
+                                                <button className="ihyd-action-btn" onClick={() => startEditing(product)}>Edit</button>
+                                                <button
+                                                    className="ihyd-action-btn"
+                                                    onClick={() => toggleActive(product)}
+                                                >
+                                                    {product.active !== false ? 'Off' : 'On'}
+                                                </button>
+                                                <button className="ihyd-action-btn danger" onClick={() => deleteProduct(product.id)}>Del</button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

@@ -7,6 +7,7 @@ import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Footer from './components/Footer';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
 import './App.css'
 
 function App() {
@@ -41,12 +42,13 @@ function App() {
             category === 'all' ? (
               <Home setCategory={setCategory} globalSearchTerm={searchTerm} />
             ) : (
-              <ProductList category={category} />
+              <ProductList category={category} globalSearchTerm={searchTerm} />
             )
           } />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login theme={theme} />} />
           <Route path="/admin" element={<Admin searchTerm={searchTerm} />} />
         </Routes>
+        <FloatingWhatsApp />
         <Footer theme={theme} />
       </Router>
     </AuthProvider>
