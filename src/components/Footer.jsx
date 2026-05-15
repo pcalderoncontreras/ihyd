@@ -19,18 +19,18 @@ const Footer = ({ theme }) => {
 
                     {/* Contact */}
                     <div className="col-md-3 mb-2">
-                        <h5 className="fw-bold mb-3">CONTACTO</h5>
+                        <h2 className="fw-bold mb-3">Contacto</h2>
                         <p className="mb-1">
                             <a href="https://wa.me/56998347436" target="_blank" className="text-white text-decoration-none">
                                 +569 9834 7436
                             </a>
                         </p>
-                        <p className="mb-1">
+                        <p className=" small mb-1">
                             <a href="mailto:i.hope.you.die.zine@gmail.com" rel="noopener noreferrer" className="text-white text-decoration-none">
                                 i.hope.you.die.zine@gmail.com
                             </a>
                         </p>
-                        <p className="mb-1">
+                        <p className="small mb-1">
                             <a href="http://ihyd.netlify.app" target="_blank" className="text-white text-decoration-none">
                                 ihyd.netlify.app
                             </a>
@@ -39,15 +39,15 @@ const Footer = ({ theme }) => {
 
                     {/* Payment & Delivery */}
                     <div className="col-md-4 mb-4">
-                        <h5 className="fw-bold mb-3">MEDIOS DE PAGO Y ENTREGAS</h5>
-                        <p className="small mb-1">Pagos en efectivo o Transferencia Bancaria Electrónica. <br />
+                        <h2 className="fw-bold mb-3">Medios de pago y entregas</h2>
+                        <p className="small mb-2">Pagos en efectivo o Transferencia Bancaria Electrónica. <br />
                             Entregas en Metro Plaza de Maipú y Las Rejas en Horario a convenir. <br />
                             Envíos a regiones o dentro de Santiago via starken por pagar previa Transferencia Bancaria.</p>
                     </div>
 
                     {/* Social Media */}
                     <div className="col-md-2 mb-4">
-                        <h5 className="fw-bold mb-3">SÍGUENOS</h5>
+                        <h2 className="fw-bold mb-3">Síguenos</h2>
                         <div className="d-flex gap-5">
                             <a href="https://www.instagram.com/ihyddistro/" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
                                 <i className="bi bi-instagram"></i>
@@ -65,7 +65,7 @@ const Footer = ({ theme }) => {
                 {/* Copyright */}
                 <div className="row mt-4">
                     <div className="col-12 text-center">
-                        <p className="small text-secondary mb-0">© 2025 IHYD Distro. All rights reserved.</p>
+                        <p className="small text-secondary mb-0">© 2026 IHYD Distro. All rights reserved.</p>
                     </div>
                 </div>
             </div>

@@ -213,8 +213,8 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                 <>
                     <div className="py-4">
                         <CategorySection category="CD" title="CD's" setCategory={setCategory} />
-                        <CategorySection category="Tape" title="TAPES" setCategory={setCategory} />
-                        <CategorySection category="Vinilo" title="VINILOS" setCategory={setCategory} />
+                        <CategorySection category="Tape" title="Tapes" setCategory={setCategory} />
+                        <CategorySection category="Vinilo" title="Vinilos" setCategory={setCategory} />
                     </div>
 
                     {/* Social Media Section */}

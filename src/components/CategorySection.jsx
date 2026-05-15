@@ -36,7 +36,7 @@ const CategorySection = ({ category, title, setCategory }) => {
     return (
         <div className="container mb-5">
             <div className="mb-4">
-                <h2 className="text-uppercase fw-bold text-white mb-4" style={{ borderBottom: '1px solid #333', paddingBottom: '10px' }}>{title}</h2>
+                <h1 className="fw-bold text-white mb-4" style={{ borderBottom: '1px solid #333', paddingBottom: '10px' }}>{title}</h1>
                 <div className="row">
                     {products.map((product) => (
                         <ProductCard key={product.id} product={product} />

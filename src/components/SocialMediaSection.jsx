@@ -6,9 +6,9 @@ const SocialMediaSection = () => {
     return (
         <div className="container mb-5">
             <div className="text-center mb-5">
-                <h2 className="text-white text-uppercase fw-bold" style={{ borderBottom: '2px solid #444', paddingBottom: '15px', display: 'inline-block' }}>
+                <h1 className="text-white fw-bold" style={{ borderBottom: '2px solid #444', paddingBottom: '15px', display: 'inline-block' }}>
                     Síguenos en nuestras redes
-                </h2>
+                </h1>
             </div>
 
             <div className="row g-4">
