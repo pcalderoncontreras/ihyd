@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
@@ -11,28 +11,43 @@ import './App.css'
 
 function App() {
   const [category, setCategory] = useState('all');
-  const [adminSearchTerm, setAdminSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <AuthProvider>
       <Router>
         <Navbar
           setCategory={setCategory}
-          searchTerm={adminSearchTerm}
-          setSearchTerm={setAdminSearchTerm}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
         <Routes>
           <Route path="/" element={
             category === 'all' ? (
-              <Home setCategory={setCategory} />
+              <Home setCategory={setCategory} globalSearchTerm={searchTerm} />
             ) : (
               <ProductList category={category} />
             )
           } />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<Admin searchTerm={adminSearchTerm} />} />
+          <Route path="/admin" element={<Admin searchTerm={searchTerm} />} />
         </Routes>
-        <Footer />
+        <Footer theme={theme} />
       </Router>
     </AuthProvider>
   )

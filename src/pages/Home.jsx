@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase_config';
 import { collection, getDocs } from 'firebase/firestore';
-import Carousel from '../components/Carousel';
 import CategorySection from '../components/CategorySection';
-import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
 import SocialMediaSection from '../components/SocialMediaSection';
 
-const Home = ({ setCategory }) => {
-    const [searchTerm, setSearchTerm] = useState('');
+const Home = ({ setCategory, globalSearchTerm }) => {
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -36,7 +33,7 @@ const Home = ({ setCategory }) => {
     }, []);
 
     useEffect(() => {
-        if (searchTerm) {
+        if (globalSearchTerm) {
             const fetchAllProducts = async () => {
                 setLoading(true);
                 try {
@@ -54,11 +51,11 @@ const Home = ({ setCategory }) => {
             fetchAllProducts();
         }
         setCurrentPage(1); // Reset to first page when search or sort changes
-    }, [searchTerm, sortOrder]);
+    }, [globalSearchTerm, sortOrder]);
 
     const filterProducts = (products) => {
-        if (!searchTerm) return products;
-        const term = searchTerm.toLowerCase();
+        if (!globalSearchTerm) return products;
+        const term = globalSearchTerm.toLowerCase();
         return products.filter(product => {
             const banda = String(product.banda || '').toLowerCase();
             const album = String(product.album || '').toLowerCase();
@@ -129,15 +126,8 @@ const Home = ({ setCategory }) => {
 
     return (
         <>
-            <div className="container mt-4">
-                <Carousel />
-            </div>
-            <div className="container mt-4">
-                <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-            </div>
-
-            {searchTerm ? (
-                <div className="container">
+            {globalSearchTerm ? (
+                <div className="container mt-4">
                     {loading ? (
                         <div className="text-center text-white">Buscando productos...</div>
                     ) : (

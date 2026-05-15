@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Footer = () => {
+const Footer = ({ theme }) => {
     return (
         <footer className="bg-black text-white py-4 mt-4 border-top border-secondary">
             <div className="container">
@@ -8,7 +8,9 @@ const Footer = () => {
                     {/* Logo */}
                     <div className="col-md-3 mb-4">
                         <img
-                            src="https://res.cloudinary.com/da8xc0cap/image/upload/v1763770772/ihyd_logo_new_azypuq.png"
+                            src={theme === 'dark'
+                                ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1763770772/ihyd_logo_new_azypuq.png"
+                                : "https://res.cloudinary.com/da8xc0cap/image/upload/v1778870101/ihyd_logo_short2_osw5w4.png"}
                             alt="IHYD :: Distro"
                             style={{ height: '90px', width: 'auto' }}
                             className="me-3"
