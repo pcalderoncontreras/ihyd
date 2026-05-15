@@ -26,10 +26,10 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
             <div className="container-fluid pe-4 pt-3 position-absolute top-0 end-0 d-flex justify-content-end align-items-center theme-switch-wrapper">
                 <span className="fs-4 me-2" style={{ color: theme === 'light' ? '#1a1a1a' : '#666', transition: 'color 0.3s' }}>↯</span>
                 <label className="theme-switch mb-0" htmlFor="themeCheckbox">
-                    <input 
-                        type="checkbox" 
-                        id="themeCheckbox" 
-                        checked={theme === 'dark'} 
+                    <input
+                        type="checkbox"
+                        id="themeCheckbox"
+                        checked={theme === 'dark'}
                         onChange={toggleTheme}
                     />
                     <div className="slider round"></div>
@@ -42,7 +42,7 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                 <Link className="navbar-brand mb-4" to="/" onClick={() => setCategory && setCategory('all')}>
                     <img
                         src={theme === 'dark'
-                            ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1764116670/LogoOficialHome_sxwfae.png"
+                            ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1778882000/logo_blood_drips_corrected_oklrq8.png"
                             : "https://res.cloudinary.com/da8xc0cap/image/upload/v1778869036/LogoOficialHome2_sxwfae_d0gsxt.png"
                         }
                         alt="IHYD :: Distro"
