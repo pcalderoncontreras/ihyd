@@ -4,58 +4,51 @@ import ProductModal from './ProductModal';
 const ProductCard = ({ product }) => {
     const [showModal, setShowModal] = useState(false);
 
-    // Detectar si es un tipo de disco (CD, Tape, Vinilo) - case insensitive
     const isDiscoType = product.tipo_producto &&
         ['cd', 'tape', 'vinilo'].includes(String(product.tipo_producto).toLowerCase());
 
-    // Detectar si es un Zine
     const isZine = product.tipo_producto &&
         String(product.tipo_producto).toLowerCase() === 'zine';
+
+    const getTitle = () => {
+        if (isDiscoType) return `${product.banda} - ${product.album}`;
+        if (isZine) return `${product.nombre_revista} #${product.numero}`;
+        return product.titulo;
+    };
 
     return (
         <>
             <div className="col-md-3 mb-4">
-                <div
-                    className="card h-100 bg-black text-white border-0"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setShowModal(true)}
-                >
-                    <img
-                        src={product.imageUrl}
-                        className="card-img-top"
-                        alt={isDiscoType ? product.album : (isZine ? product.nombre_revista : product.titulo)}
-                        style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '0' }}
-                    />
-                    <div className="card-body px-0">
+                <div className="ihyd-card" onClick={() => setShowModal(true)}>
+                    <div className="ihyd-card-img-wrapper">
+                        <img
+                            src={product.imageUrl}
+                            alt={getTitle()}
+                        />
+                        <div className="ihyd-card-overlay">
+                            <span className="ihyd-card-overlay-price">${product.precio} CLP</span>
+                            <button className="ihyd-card-overlay-cta">VER DETALLE</button>
+                        </div>
+                    </div>
+                    <div className="px-0 pt-2 pb-1">
                         {isDiscoType ? (
                             <>
-                                <h6 className="card-title fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
-                                    {product.banda} - {product.album}
-                                </h6>
-                                <p className="card-text small text-secondary mb-2" style={{ fontSize: '0.8rem' }}>
-                                    {product.sello}
-                                </p>
+                                <p className="ihyd-card-band mb-0">{product.banda}</p>
+                                <p className="ihyd-card-album mb-1">{product.album}</p>
+                                <p className="ihyd-card-meta mb-1">{product.sello}</p>
                             </>
                         ) : isZine ? (
                             <>
-                                <h6 className="card-title fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
-                                    {product.nombre_revista} #{product.numero}
-                                </h6>
-                                <p className="card-text small text-secondary mb-2" style={{ fontSize: '0.8rem' }}>
-                                    {product.año} - {product.pais}
-                                </p>
+                                <p className="ihyd-card-band mb-0">{product.nombre_revista} #{product.numero}</p>
+                                <p className="ihyd-card-meta mb-1">{product.año}{product.pais ? ` — ${product.pais}` : ''}</p>
                             </>
                         ) : (
                             <>
-                                <h6 className="card-title fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
-                                    {product.titulo}
-                                </h6>
-                                <p className="card-text small text-secondary mb-2" style={{ fontSize: '0.8rem' }}>
-                                    {product.tipo}
-                                </p>
+                                <p className="ihyd-card-band mb-0">{product.titulo}</p>
+                                <p className="ihyd-card-meta mb-1">{product.tipo}</p>
                             </>
                         )}
-                        <h5 className="fw-bold mt-2">${product.precio} CLP</h5>
+                        <p className="ihyd-card-price mt-1">${product.precio} CLP</p>
                     </div>
                 </div>
             </div>
