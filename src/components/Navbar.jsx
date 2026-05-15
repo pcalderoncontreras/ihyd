@@ -37,9 +37,9 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                 <span className="fs-4 ms-2" style={{ color: theme === 'dark' ? '#fff' : '#aaa', transition: 'color 0.3s' }}>⛧</span>
             </div>
 
-            <div className="container d-flex flex-column align-items-center pt-2">
+            <div className="container-fluid d-flex flex-column align-items-center pt-2 px-3">
                 {/* Logo */}
-                <Link className="navbar-brand mb-4" to="/" onClick={() => setCategory && setCategory('all')}>
+                <Link className="navbar-brand mb-4 w-100 text-center" to="/" onClick={() => setCategory && setCategory('all')}>
                     <img
                         src={theme === 'dark'
                             ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1778882000/logo_blood_drips_corrected_oklrq8.png"
@@ -47,7 +47,13 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                         }
                         alt="IHYD :: Distro"
                         className="ihyd-logo"
-                        style={{ height: '140px', width: 'auto', transition: 'all 0.3s ease' }}
+                        style={{ 
+                            maxHeight: '140px', 
+                            maxWidth: '100%', 
+                            height: 'auto', 
+                            width: 'auto',
+                            transition: 'all 0.3s ease' 
+                        }}
                     />
                 </Link>
 

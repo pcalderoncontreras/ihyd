@@ -12,8 +12,8 @@ const Footer = ({ theme }) => {
                                 ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1763770772/ihyd_logo_new_azypuq.png"
                                 : "https://res.cloudinary.com/da8xc0cap/image/upload/v1778870101/ihyd_logo_short2_osw5w4.png"}
                             alt="IHYD :: Distro"
-                            style={{ height: '90px', width: 'auto' }}
-                            className="me-3"
+                            style={{ maxHeight: '90px', maxWidth: '100%', height: 'auto', width: 'auto' }}
+                            className="me-3 ihyd-logo-footer"
                         />
                     </div>
 

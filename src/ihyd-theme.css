@@ -738,4 +738,22 @@ body.light-mode .floating-whatsapp:hover {
     height: 45px;
     font-size: 24px;
   }
+  
+  /* Full width adaptation for mobile */
+  .container, .container-sm {
+    max-width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  .ihyd-logo {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* Ensure the navigation scroll takes full width */
+  .ihyd-nav-container {
+    width: 100% !important;
+    padding: 0 !important;
+  }
 }
