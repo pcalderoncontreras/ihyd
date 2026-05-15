@@ -92,7 +92,6 @@ const Admin = () => {
             precio: Number(newProduct.precio),
             imageUrl: newProduct.imageUrl.trim() || DEFAULT_IMAGE,
             tipo_producto: productType,
-            tipo_producto: productType,
             mediaUrl: newProduct.mediaUrl || '',
             active: true,
             createdAt: Timestamp.now()
