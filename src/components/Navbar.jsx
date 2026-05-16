@@ -74,7 +74,7 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                                 )}
                             </div>
                         ) : (
-                            <ul className="nav d-flex flex-row flex-nowrap gap-3 align-items-center m-0 p-0" style={{ fontSize: '0.95rem' }}>
+                            <ul className="navbar-nav d-flex flex-row flex-nowrap gap-3 align-items-center m-0 p-0">
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link text-nowrap" onClick={() => { navigate('/'); setCategory('all'); }}>Home</button>
                                 </li>
