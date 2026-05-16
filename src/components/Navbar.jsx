@@ -6,7 +6,7 @@ import { auth } from '../firebase_config';
 import SearchBar from './SearchBar';
 import { FaUser, FaShoppingCart } from 'react-icons/fa';
 
-const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme, toggleTheme }) => {
+const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme, toggleTheme, onShowAds }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
@@ -110,6 +110,13 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Polera' ? 'active' : ''}`} 
                                         onClick={() => setCategory('Polera')}
                                     >Poleras</button>
+                                </li>
+                                <li className="nav-item">
+                                    <button 
+                                        className="nav-link btn btn-link text-nowrap" 
+                                        onClick={onShowAds}
+                                        style={{ color: '#ff4444' }} // Color especial para resaltar
+                                    >Novedades</button>
                                 </li>
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link text-nowrap" onClick={() => window.open('https://docs.google.com/spreadsheets/d/1FN8jdlpdQsz4ioP0geF9oylUQTyn5-Yk/edit?usp=sharing&ouid=115226895934415359333&rtpof=true&sd=true', '_blank')}>Catálogo</button>

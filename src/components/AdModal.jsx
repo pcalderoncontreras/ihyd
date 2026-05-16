@@ -2,22 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase_config';
 import { doc, getDoc } from 'firebase/firestore';
 
-const AdModal = () => {
+const AdModal = ({ forceShow, onManualClose }) => {
     const [ads, setAds] = useState([]);
     const [show, setShow] = useState(false);
+
+    // Efecto para apertura forzada (Novedades)
+    useEffect(() => {
+        if (forceShow) {
+            setShow(true);
+        }
+    }, [forceShow]);
 
     useEffect(() => {
         const fetchAds = async () => {
             try {
-                // Verificar cooldown (1 hora)
-                const STORAGE_KEY = 'ihyd_last_ad_view';
-                const COOLDOWN = 60 * 60 * 1000; // 1 hora en ms
-                const lastView = localStorage.getItem(STORAGE_KEY);
-                const nowMs = new Date().getTime();
+                // Si es forzado, no revisamos cooldown
+                if (!forceShow) {
+                    const STORAGE_KEY = 'ihyd_last_ad_view';
+                    const COOLDOWN = 60 * 60 * 1000; // 1 hora en ms
+                    const lastView = localStorage.getItem(STORAGE_KEY);
+                    const nowMs = new Date().getTime();
 
-                if (lastView && (nowMs - parseInt(lastView)) < COOLDOWN) {
-                    console.log('AdModal en periodo de cooldown');
-                    return;
+                    if (lastView && (nowMs - parseInt(lastView)) < COOLDOWN) {
+                        return;
+                    }
                 }
 
                 const docRef = doc(db, 'productos', '--ad-posters--');
@@ -41,11 +49,12 @@ const AdModal = () => {
         };
 
         fetchAds();
-    }, []);
+    }, [forceShow]);
 
     const handleClose = () => {
         localStorage.setItem('ihyd_last_ad_view', new Date().getTime().toString());
         setShow(false);
+        if (onManualClose) onManualClose();
     };
 
     const formatUrl = (url) => {

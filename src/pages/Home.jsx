@@ -4,7 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import CategorySection from '../components/CategorySection';
 import ProductCard from '../components/ProductCard';
 import SocialMediaSection from '../components/SocialMediaSection';
-import AdModal from '../components/AdModal';
+
 
 const Home = ({ setCategory, globalSearchTerm }) => {
     const [allProducts, setAllProducts] = useState([]);
@@ -127,7 +127,6 @@ const Home = ({ setCategory, globalSearchTerm }) => {
 
     return (
         <>
-            <AdModal />
             {globalSearchTerm ? (
                 <div className="container mt-4">
                     {loading ? (
