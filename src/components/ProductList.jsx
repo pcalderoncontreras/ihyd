@@ -17,18 +17,32 @@ const ProductList = ({ category, globalSearchTerm }) => {
         const getProducts = async () => {
             setLoading(true);
             try {
-                // Obtener todos los productos
+                // 1. Obtener todos los documentos de la colección
                 const data = await getDocs(productsCollectionRef);
-                const allProducts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+                
+                const allData = data.docs
+                    .map(doc => ({ ...doc.data(), id: doc.id }))
+                    .filter(p => !p.id.startsWith('--'));
 
-                // Filtrar por categoría (case-insensitive) y activos
-                let filtered = allProducts.filter(p => p.active !== false && !p.id.startsWith('--'));
+                let filtered = [];
 
-                if (category && category !== 'all') {
-                    filtered = filtered.filter(p =>
-                        p.tipo_producto &&
-                        String(p.tipo_producto).toLowerCase() === category.toLowerCase()
+                if (category === 'Releases') {
+                    // Para Releases: Mostrar todos (activos e inactivos) del sello I Hope You Die
+                    filtered = allData.filter(p => 
+                        p.sello && String(p.sello).toLowerCase().includes('i hope you die')
                     );
+                } else {
+                    // Para el resto: Solo activos
+                    let baseProducts = allData.filter(p => p.active !== false);
+                    
+                    if (category && category !== 'all') {
+                        filtered = baseProducts.filter(p =>
+                            p.tipo_producto &&
+                            String(p.tipo_producto).toLowerCase() === category.toLowerCase()
+                        );
+                    } else {
+                        filtered = baseProducts;
+                    }
                 }
 
                 setProducts(filtered);
@@ -130,7 +144,8 @@ const ProductList = ({ category, globalSearchTerm }) => {
             'Tape': 'Tapes',
             'Vinilo': 'Vinilos',
             'Zine': 'Zines',
-            'Polera': 'Poleras'
+            'Polera': 'Poleras',
+            'Releases': 'Releases'
         };
         return titles[category] || 'Productos';
     };

@@ -48,7 +48,11 @@ const ProductCard = ({ product }) => {
                                 <p className="ihyd-card-meta mb-auto">{product.tipo}</p>
                             </>
                         )}
-                        <p className="ihyd-card-price mt-2">{product.precio != null ? `$${product.precio} CLP` : '—'}</p>
+                        <p className="ihyd-card-price mt-2">
+                            {product.active === false 
+                                ? <span style={{ color: '#ff4444', fontWeight: '900', letterSpacing: '1px' }}>AGOTADO</span> 
+                                : (product.precio != null ? `$${product.precio} CLP` : '—')}
+                        </p>
                     </div>
                 </div>
             </div>

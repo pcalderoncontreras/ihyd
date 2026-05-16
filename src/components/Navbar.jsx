@@ -74,49 +74,63 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                 )}
                             </div>
                         ) : (
-                            <ul className="navbar-nav d-flex flex-row flex-nowrap gap-3 align-items-center m-0 p-0">
-                                <li className="nav-item">
+                            <ul className="navbar-nav d-flex flex-row flex-nowrap gap-2 align-items-center m-0 p-0">
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'all' ? 'active' : ''}`} 
                                         onClick={() => { navigate('/'); setCategory('all'); }}
                                     >Home</button>
+                                    <span className="divider">|</span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'CD' ? 'active' : ''}`} 
                                         onClick={() => setCategory('CD')}
                                     >CDs</button>
+                                    <span className="divider">|</span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Tape' ? 'active' : ''}`} 
                                         onClick={() => setCategory('Tape')}
                                     >Tapes</button>
+                                    <span className="divider">|</span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Vinilo' ? 'active' : ''}`} 
                                         onClick={() => setCategory('Vinilo')}
                                     >Vinyl</button>
+                                    <span className="divider">|</span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item d-flex align-items-center gap-2">
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Releases' ? 'active' : ''}`} 
+                                        onClick={() => setCategory('Releases')}
+                                    >Releases</button>
+                                    <span className="divider">|</span>
+                                </li>
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Zine' ? 'active' : ''}`} 
                                         onClick={() => setCategory('Zine')}
                                     >Zines</button>
+                                    <span className="divider">|</span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Polera' ? 'active' : ''}`} 
                                         onClick={() => setCategory('Polera')}
                                     >Poleras</button>
+                                    <span className="divider">|</span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item d-flex align-items-center gap-2">
                                     <button 
                                         className="nav-link btn btn-link text-nowrap" 
                                         onClick={onShowAds}
                                         style={{ color: '#ff4444' }} // Color especial para resaltar
                                     >Novedades</button>
+                                    <span className="divider">|</span>
                                 </li>
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link text-nowrap" onClick={() => window.open('https://docs.google.com/spreadsheets/d/1FN8jdlpdQsz4ioP0geF9oylUQTyn5-Yk/edit?usp=sharing&ouid=115226895934415359333&rtpof=true&sd=true', '_blank')}>Catálogo</button>
@@ -149,6 +163,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                 currentCategory === 'CD' ? "Cd's" :
                                 currentCategory === 'Tape' ? "Tapes" :
                                 currentCategory === 'Vinilo' ? "Vinilos" :
+                                currentCategory === 'Releases' ? "Releases" :
                                 currentCategory === 'Zine' ? "Zines" :
                                 currentCategory === 'Polera' ? "Poleras" : 
                                 currentCategory

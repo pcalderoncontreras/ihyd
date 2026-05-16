@@ -12,6 +12,7 @@
   --ihyd-text: #ffffff;
   --ihyd-text-muted: #666666;
   --ihyd-text-label: #888888;
+  --ihyd-divider: #ffffff;
 }
 
 body.light-mode {
@@ -23,6 +24,7 @@ body.light-mode {
   --ihyd-text: #212529;
   --ihyd-text-muted: #6c757d;
   --ihyd-text-label: #495057;
+  --ihyd-divider: #212529;
 }
 
 /* ==================
@@ -791,4 +793,12 @@ body.light-mode .floating-whatsapp:hover {
     width: 100% !important;
     padding: 0 !important;
   }
+}
+
+.divider {
+  color: var(--ihyd-divider);
+  font-size: 0.9rem;
+  font-weight: 100;
+  opacity: 0.9;
+  margin: 0 2px;
 }

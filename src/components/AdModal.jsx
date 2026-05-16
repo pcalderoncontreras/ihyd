@@ -92,12 +92,12 @@ const AdModal = ({ forceShow, onManualClose }) => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '40px'
+                    gap: window.innerWidth < 768 ? '15px' : '30px' // Reducido para que quede más ajustado
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Logo */}
-                <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center', order: 1 }}>
                     <img 
                         src="https://res.cloudinary.com/da8xc0cap/image/upload/v1764116670/LogoOficialHome_sxwfae.png" 
                         alt="Logo" 
@@ -119,7 +119,8 @@ const AdModal = ({ forceShow, onManualClose }) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     gap: '30px',
-                    width: '100%'
+                    width: '100%',
+                    order: window.innerWidth < 768 ? 3 : 2
                 }}>
                     {ads.map((ad, i) => {
                         const url = formatUrl(ad.linkUrl);
@@ -174,7 +175,7 @@ const AdModal = ({ forceShow, onManualClose }) => {
                 </div>
 
                 {/* Close Button */}
-                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                <div style={{ textAlign: 'center', order: window.innerWidth < 768 ? 2 : 3 }}>
                     <button
                         onClick={handleClose}
                         className="ihyd-btn-primary"
