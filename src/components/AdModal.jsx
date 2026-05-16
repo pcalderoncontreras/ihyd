@@ -102,9 +102,10 @@ const AdModal = ({ forceShow, onManualClose }) => {
                         src="https://res.cloudinary.com/da8xc0cap/image/upload/v1764116670/LogoOficialHome_sxwfae.png" 
                         alt="Logo" 
                         style={{ 
-                            maxWidth: '450px', 
-                            width: '90%',
-                            height: 'auto',
+                            maxHeight: '140px', 
+                            maxWidth: '100%', 
+                            height: 'auto', 
+                            width: 'auto',
                             filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.1))'
                         }} 
                     />
