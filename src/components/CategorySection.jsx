@@ -44,9 +44,16 @@ const CategorySection = ({ category, title, setCategory }) => {
                 </div>
                 <div className="text-center mt-4">
                     <button
-                        className="btn btn-dark px-4 py-2"
+                        className="ihyd-btn-primary"
                         onClick={() => setCategory(category)}
-                        style={{ border: '1px solid #444' }}
+                        style={{ 
+                            padding: '10px 40px', 
+                            letterSpacing: '0.15em', 
+                            fontSize: '0.85rem',
+                            backgroundColor: '#222',
+                            color: '#fff',
+                            border: '1px solid #444'
+                        }}
                     >
                         Ver todo
                     </button>

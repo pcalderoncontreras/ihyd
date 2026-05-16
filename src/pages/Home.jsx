@@ -41,7 +41,7 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                     const productsCollectionRef = collection(db, 'productos');
                     const data = await getDocs(productsCollectionRef);
                     const products = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-                    const activeProducts = products.filter(p => p.active !== false);
+                    const activeProducts = products.filter(p => p.active !== false && !p.id.startsWith('--'));
                     setAllProducts(activeProducts);
                 } catch (err) {
                     console.error("Error fetching products:", err);

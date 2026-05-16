@@ -22,7 +22,7 @@ const ProductList = ({ category, globalSearchTerm }) => {
                 const allProducts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
                 // Filtrar por categoría (case-insensitive) y activos
-                let filtered = allProducts.filter(p => p.active !== false);
+                let filtered = allProducts.filter(p => p.active !== false && !p.id.startsWith('--'));
 
                 if (category && category !== 'all') {
                     filtered = filtered.filter(p =>

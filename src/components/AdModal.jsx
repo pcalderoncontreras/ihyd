@@ -9,6 +9,17 @@ const AdModal = () => {
     useEffect(() => {
         const fetchAds = async () => {
             try {
+                // Verificar cooldown (1 hora)
+                const STORAGE_KEY = 'ihyd_last_ad_view';
+                const COOLDOWN = 60 * 60 * 1000; // 1 hora en ms
+                const lastView = localStorage.getItem(STORAGE_KEY);
+                const nowMs = new Date().getTime();
+
+                if (lastView && (nowMs - parseInt(lastView)) < COOLDOWN) {
+                    console.log('AdModal en periodo de cooldown');
+                    return;
+                }
+
                 const docRef = doc(db, 'productos', '--ad-posters--');
                 const docSnap = await getDoc(docRef);
                 
@@ -33,6 +44,7 @@ const AdModal = () => {
     }, []);
 
     const handleClose = () => {
+        localStorage.setItem('ihyd_last_ad_view', new Date().getTime().toString());
         setShow(false);
     };
 
@@ -80,7 +92,12 @@ const AdModal = () => {
                     <img 
                         src="https://res.cloudinary.com/da8xc0cap/image/upload/v1764116670/LogoOficialHome_sxwfae.png" 
                         alt="Logo" 
-                        style={{ maxWidth: '280px', height: 'auto' }} 
+                        style={{ 
+                            maxWidth: '450px', 
+                            width: '90%',
+                            height: 'auto',
+                            filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.1))'
+                        }} 
                     />
                 </div>
 
@@ -150,10 +167,17 @@ const AdModal = () => {
                 <div style={{ textAlign: 'center', marginTop: '20px' }}>
                     <button
                         onClick={handleClose}
-                        className="ihyd-btn-ghost"
-                        style={{ padding: '12px 60px', letterSpacing: '0.2em' }}
+                        className="ihyd-btn-primary"
+                        style={{ 
+                            padding: '14px 60px', 
+                            letterSpacing: '0.15em', 
+                            fontSize: '1rem',
+                            backgroundColor: '#222', // Gris oscuro a tono con el sitio
+                            color: '#fff',           // Texto blanco para contraste
+                            border: '1px solid #444' // Borde sutil
+                        }}
                     >
-                        Cerrar
+                        Entrar a la Distro
                     </button>
                 </div>
             </div>

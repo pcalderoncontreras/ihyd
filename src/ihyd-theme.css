@@ -347,8 +347,8 @@ body.light-mode {
 }
 
 .ihyd-tab.active {
-  color: #fff;
-  border-bottom-color: #fff;
+  color: var(--ihyd-text);
+  border-bottom-color: var(--ihyd-text);
 }
 
 /* Admin card/panel */
@@ -365,7 +365,7 @@ body.light-mode {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #888;
+  color: var(--ihyd-text);
   border-bottom: 1px solid var(--ihyd-border);
   padding-bottom: 12px;
   margin-bottom: 20px;
@@ -379,33 +379,34 @@ body.light-mode {
 .ihyd-admin .form-select {
   background: var(--ihyd-surface-2);
   border: 1px solid var(--ihyd-border-2);
-  color: #fff;
+  color: var(--ihyd-text);
   border-radius: 0;
 }
 
 .ihyd-admin .form-control:focus,
 .ihyd-admin .form-select:focus {
   background: var(--ihyd-surface-2);
-  border-color: #555;
-  color: #fff;
+  border-color: var(--ihyd-text-muted);
+  color: var(--ihyd-text);
   box-shadow: none;
   outline: none;
 }
 
 .ihyd-admin .form-control::placeholder {
-  color: #444;
+  color: var(--ihyd-text-muted);
 }
 
 .ihyd-admin .form-select option {
   background: var(--ihyd-surface-2);
-  color: #fff;
+  color: var(--ihyd-text);
 }
 
 .ihyd-admin .form-label {
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #888;
+  color: var(--ihyd-text);
+  font-weight: bold;
   margin-bottom: 4px;
 }
 
@@ -465,9 +466,9 @@ body.light-mode {
 
 /* Badges */
 .ihyd-badge-active {
-  border: 1px solid #fff;
-  color: #fff;
-  background: transparent;
+  border: 1px solid #28a745;
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.05);
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -476,9 +477,9 @@ body.light-mode {
 }
 
 .ihyd-badge-inactive {
-  border: 1px solid #444;
-  color: #444;
-  background: transparent;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.05);
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -490,7 +491,7 @@ body.light-mode {
 .ihyd-action-btn {
   background: none;
   border: none;
-  color: #666;
+  color: var(--ihyd-text-muted);
   font-size: 0.72rem;
   cursor: pointer;
   padding: 2px 8px;
@@ -694,7 +695,7 @@ body.light-mode {
 /* Muted text inside admin */
 .ihyd-admin small,
 .ihyd-admin .text-muted {
-  color: #555 !important;
+  color: var(--ihyd-text-muted) !important;
 }
 
 .ihyd-admin hr {

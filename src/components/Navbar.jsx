@@ -6,7 +6,7 @@ import { auth } from '../firebase_config';
 import SearchBar from './SearchBar';
 import { FaUser, FaShoppingCart } from 'react-icons/fa';
 
-const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) => {
+const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme, toggleTheme }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
@@ -76,22 +76,40 @@ const Navbar = ({ setCategory, searchTerm, setSearchTerm, theme, toggleTheme }) 
                         ) : (
                             <ul className="navbar-nav d-flex flex-row flex-nowrap gap-3 align-items-center m-0 p-0">
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => { navigate('/'); setCategory('all'); }}>Home</button>
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'all' ? 'active' : ''}`} 
+                                        onClick={() => { navigate('/'); setCategory('all'); }}
+                                    >Home</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('CD')}>CDs</button>
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'CD' ? 'active' : ''}`} 
+                                        onClick={() => setCategory('CD')}
+                                    >CDs</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Tape')}>Tapes</button>
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Tape' ? 'active' : ''}`} 
+                                        onClick={() => setCategory('Tape')}
+                                    >Tapes</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Vinilo')}>Vinyl</button>
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Vinilo' ? 'active' : ''}`} 
+                                        onClick={() => setCategory('Vinilo')}
+                                    >Vinyl</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Zine')}>Zines</button>
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Zine' ? 'active' : ''}`} 
+                                        onClick={() => setCategory('Zine')}
+                                    >Zines</button>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link btn btn-link text-nowrap" onClick={() => setCategory('Polera')}>Poleras</button>
+                                    <button 
+                                        className={`nav-link btn btn-link text-nowrap ${currentCategory === 'Polera' ? 'active' : ''}`} 
+                                        onClick={() => setCategory('Polera')}
+                                    >Poleras</button>
                                 </li>
                                 <li className="nav-item">
                                     <button className="nav-link btn btn-link text-nowrap" onClick={() => window.open('https://docs.google.com/spreadsheets/d/1FN8jdlpdQsz4ioP0geF9oylUQTyn5-Yk/edit?usp=sharing&ouid=115226895934415359333&rtpof=true&sd=true', '_blank')}>Catálogo</button>

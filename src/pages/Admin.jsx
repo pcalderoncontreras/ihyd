@@ -80,7 +80,9 @@ const Admin = () => {
 
     const getProducts = async () => {
         const data = await getDocs(productsCollectionRef);
-        setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        // Filtrar documentos de configuración (que empiezan con --)
+        const allDocs = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        setProducts(allDocs.filter(p => !p.id.startsWith('--')));
     };
 
     const createProduct = async (e) => {
@@ -748,7 +750,7 @@ const Admin = () => {
                                             ${product.precio}
                                         </td>
                                         <td>
-                                            <small style={{ color: '#666', fontSize: '0.75rem' }}>
+                                            <small className="text-muted" style={{ fontSize: '0.75rem' }}>
                                                 {isDiscoType(product.tipo_producto)
                                                     ? [product.estilo, product.pais, product.sello].filter(Boolean).join(' / ')
                                                     : [product.genero, product.talla, product.tipo].filter(Boolean).join(' / ')
@@ -764,7 +766,7 @@ const Admin = () => {
                                             <div className="d-flex flex-nowrap align-items-center">
                                                 <button className="ihyd-action-btn" onClick={() => startEditing(product)}>Edit</button>
                                                 <button
-                                                    className="ihyd-action-btn"
+                                                    className={`ihyd-action-btn ${product.active !== false ? 'text-danger' : 'text-success'}`}
                                                     onClick={() => toggleActive(product)}
                                                 >
                                                     {product.active !== false ? 'Off' : 'On'}
@@ -781,7 +783,7 @@ const Admin = () => {
                     {/* Paginación */}
                     {totalPages > 1 && (
                         <div className="d-flex justify-content-between align-items-center mt-4">
-                            <small style={{ color: '#666', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <small className="text-muted" style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 Página {currentPage} de {totalPages}
                             </small>
                             <nav>
@@ -818,7 +820,7 @@ const Admin = () => {
                                     </li>
                                 </ul>
                             </nav>
-                            <small style={{ color: '#666' }}>
+                            <small className="text-muted">
                                 Ir a:
                                 <input
                                     type="number"

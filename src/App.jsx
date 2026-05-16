@@ -32,6 +32,7 @@ function App() {
       <Router>
         <Navbar
           setCategory={setCategory}
+          currentCategory={category}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           theme={theme}

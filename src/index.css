@@ -46,6 +46,15 @@ h1 {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.navbar-nav .nav-link.active {
+  color: var(--ihyd-text) !important;
+  text-decoration: none !important;
+  border-bottom: 3px solid var(--ihyd-text) !important;
+  padding-bottom: 4px !important;
+  font-weight: 900;
 }
 
 button {
