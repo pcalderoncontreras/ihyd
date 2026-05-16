@@ -128,7 +128,7 @@ const Home = ({ setCategory, globalSearchTerm }) => {
     return (
         <>
             {globalSearchTerm ? (
-                <div className="container mt-4">
+                <div className="container mt-5 pt-3">
                     {loading ? (
                         <div className="text-center text-white">Buscando productos...</div>
                     ) : (

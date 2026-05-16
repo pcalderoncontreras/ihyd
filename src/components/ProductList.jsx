@@ -136,11 +136,8 @@ const ProductList = ({ category, globalSearchTerm }) => {
     };
 
     return (
-        <div className="container">
-            {/* Category Title */}
-            <h1 className="text-white fw-bold mb-4" style={{ borderBottom: '2px solid #444', paddingBottom: '15px' }}>
-                {getCategoryTitle()}
-            </h1>
+        <div className="container mt-5 pt-3">
+            {/* Search Bar is handled in Navbar */}
 
             {/* <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} /> */}
 

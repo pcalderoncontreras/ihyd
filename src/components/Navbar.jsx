@@ -128,8 +128,32 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
 
                 {/* Search Bar */}
                 {!isAdminPage && location.pathname !== '/login' && (
-                    <div className="w-100 px-3" style={{ maxWidth: '600px' }}>
+                    <div className="w-100 px-3 mt-2" style={{ maxWidth: '600px' }}>
                         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                    </div>
+                )}
+
+                {/* Category Indicator (Extreme Left, Below Search) */}
+                {currentCategory && currentCategory !== 'all' && (
+                    <div className="w-100 px-4 mt-1">
+                        <h1 className="m-0 text-start" style={{ 
+                            fontFamily: "'UnifrakturMaguntia', cursive", 
+                            fontSize: '2.8rem',
+                            color: 'var(--ihyd-text)',
+                            letterSpacing: '1px',
+                            lineHeight: '1',
+                            fontWeight: '400'
+                        }}>
+                            <span style={{ fontWeight: '100', marginRight: '5px' }}>↯</span>
+                            {
+                                currentCategory === 'CD' ? "Cd's" :
+                                currentCategory === 'Tape' ? "Tapes" :
+                                currentCategory === 'Vinilo' ? "Vinilos" :
+                                currentCategory === 'Zine' ? "Zines" :
+                                currentCategory === 'Polera' ? "Poleras" : 
+                                currentCategory
+                            }
+                        </h1>
                     </div>
                 )}
             </div>
