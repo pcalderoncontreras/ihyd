@@ -16,6 +16,11 @@ const ProductCard = ({ product }) => {
         return product.titulo;
     };
 
+    const formatPrice = (price) => {
+        if (price == null) return '—';
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+
     return (
         <>
             <div className="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
@@ -26,7 +31,6 @@ const ProductCard = ({ product }) => {
                             alt={getTitle()}
                         />
                         <div className="ihyd-card-overlay">
-                            <span className="ihyd-card-overlay-price">{product.precio != null ? `$${product.precio} CLP` : '—'}</span>
                             <button className="ihyd-card-overlay-cta">VER DETALLE</button>
                         </div>
                     </div>
@@ -51,7 +55,7 @@ const ProductCard = ({ product }) => {
                         <p className="ihyd-card-price mt-2">
                             {product.active === false 
                                 ? <span style={{ color: '#ff4444', fontWeight: '900', letterSpacing: '1px' }}>AGOTADO</span> 
-                                : (product.precio != null ? `$${product.precio} CLP` : '—')}
+                                : (product.precio != null ? `$${formatPrice(product.precio)} CLP` : '—')}
                         </p>
                     </div>
                 </div>

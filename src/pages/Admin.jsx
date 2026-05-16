@@ -419,8 +419,13 @@ const Admin = () => {
         }
     };
 
+    const formatPrice = (price) => {
+        if (price == null) return '—';
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+
     return (
-        <div className="ihyd-admin">
+        <div className="container-fluid ihyd-admin py-4">
             <h1 className="ihyd-admin-title">Admin Panel</h1>
 
             {/* Tabs de navegación */}
@@ -705,10 +710,10 @@ const Admin = () => {
                                         Precio {getSortIcon('precio')}
                                     </th>
                                     <th>Detalles</th>
-                                    <th style={{ cursor: 'pointer' }} onClick={() => handleSort('active')}>
+                                    <th className="text-center" style={{ cursor: 'pointer' }} onClick={() => handleSort('active')}>
                                         Estado {getSortIcon('active')}
                                     </th>
-                                    <th>Acciones</th>
+                                    <th className="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -747,7 +752,7 @@ const Admin = () => {
                                             )}
                                         </td>
                                         <td style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                                            ${product.precio}
+                                            ${formatPrice(product.precio)}
                                         </td>
                                         <td>
                                             <small className="text-muted" style={{ fontSize: '0.75rem' }}>
@@ -757,21 +762,25 @@ const Admin = () => {
                                                 }
                                             </small>
                                         </td>
-                                        <td>
+                                        <td className="text-center">
                                             <span className={product.active !== false ? 'ihyd-badge-active' : 'ihyd-badge-inactive'}>
                                                 {product.active !== false ? 'Active' : 'Inactive'}
                                             </span>
                                         </td>
-                                        <td>
-                                            <div className="d-flex flex-nowrap align-items-center">
-                                                <button className="ihyd-action-btn" onClick={() => startEditing(product)}>Edit</button>
+                                        <td className="text-center">
+                                            <div className="d-flex flex-nowrap align-items-center justify-content-center">
+                                                <button className="ihyd-action-btn" onClick={() => startEditing(product)}>
+                                                    <i className="bi bi-pencil-square"></i>
+                                                </button>
                                                 <button
                                                     className={`ihyd-action-btn ${product.active !== false ? 'text-danger' : 'text-success'}`}
                                                     onClick={() => toggleActive(product)}
                                                 >
                                                     {product.active !== false ? 'Off' : 'On'}
                                                 </button>
-                                                <button className="ihyd-action-btn danger" onClick={() => deleteProduct(product.id)}>Del</button>
+                                                <button className="ihyd-action-btn danger" onClick={() => deleteProduct(product.id)}>
+                                                    <i className="bi bi-trash3"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

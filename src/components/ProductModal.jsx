@@ -106,6 +106,11 @@ const ProductModal = ({ product, show, onClose }) => {
 
     const metaFields = isDiscoType ? discoMeta : isZine ? zineMeta : poleraMeta;
 
+    const formatPrice = (price) => {
+        if (price == null) return '—';
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    };
+
     return (
         <>
             <div
@@ -134,7 +139,7 @@ const ProductModal = ({ product, show, onClose }) => {
 
                                 <div className="col-md-6">
                                     <p className="ihyd-modal-price">
-                                        {product.precio != null ? `$${product.precio} CLP` : '—'}
+                                        {product.precio != null ? `$${formatPrice(product.precio)} CLP` : '—'}
                                     </p>
 
                                     {metaFields.map(([label, value]) => (
