@@ -46,9 +46,9 @@ const Footer = ({ theme }) => {
                     </div>
 
                     {/* Social Media */}
-                    <div className="col-md-3 mb-4">
+                    <div className="col-md-3 mb-4 text-center">
                         <h2 className="fw-bold mb-3">Síguenos</h2>
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex justify-content-center gap-4">
                             <a href="https://www.instagram.com/ihyddistro/" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
                                 <i className="bi bi-instagram"></i>
                             </a>

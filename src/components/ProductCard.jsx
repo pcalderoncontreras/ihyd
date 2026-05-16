@@ -18,8 +18,8 @@ const ProductCard = ({ product }) => {
 
     return (
         <>
-            <div className="col-6 col-md-4 col-lg-3 mb-4">
-                <div className="ihyd-card" onClick={() => setShowModal(true)}>
+            <div className="col-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+                <div className="ihyd-card w-100" onClick={() => setShowModal(true)}>
                     <div className="ihyd-card-img-wrapper">
                         <img
                             src={product.imageUrl}
@@ -30,25 +30,25 @@ const ProductCard = ({ product }) => {
                             <button className="ihyd-card-overlay-cta">VER DETALLE</button>
                         </div>
                     </div>
-                    <div className="px-0 pt-2 pb-1">
+                    <div className="px-3 pt-2 pb-3 d-flex flex-column flex-grow-1">
                         {isDiscoType ? (
                             <>
                                 <p className="ihyd-card-band mb-0">{product.banda}</p>
                                 <p className="ihyd-card-album mb-1">{product.album}</p>
-                                <p className="ihyd-card-meta mb-1">{product.sello}</p>
+                                <p className="ihyd-card-meta mb-auto">{product.sello}</p>
                             </>
                         ) : isZine ? (
                             <>
                                 <p className="ihyd-card-band mb-0">{product.nombre_revista} #{product.numero}</p>
-                                <p className="ihyd-card-meta mb-1">{product.año || ''}{product.pais ? ` — ${product.pais}` : ''}</p>
+                                <p className="ihyd-card-meta mb-auto">{product.año || ''}{product.pais ? ` — ${product.pais}` : ''}</p>
                             </>
                         ) : (
                             <>
                                 <p className="ihyd-card-band mb-0">{product.titulo}</p>
-                                <p className="ihyd-card-meta mb-1">{product.tipo}</p>
+                                <p className="ihyd-card-meta mb-auto">{product.tipo}</p>
                             </>
                         )}
-                        <p className="ihyd-card-price mt-1">{product.precio != null ? `$${product.precio} CLP` : '—'}</p>
+                        <p className="ihyd-card-price mt-2">{product.precio != null ? `$${product.precio} CLP` : '—'}</p>
                     </div>
                 </div>
             </div>

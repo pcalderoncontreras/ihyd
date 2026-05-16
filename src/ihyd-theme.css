@@ -32,8 +32,11 @@ body.light-mode {
 .ihyd-card {
   cursor: pointer;
   border: 1px solid var(--ihyd-border);
-  background: #000;
+  background: var(--ihyd-surface);
   transition: border-color 0.25s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .ihyd-card:hover {
@@ -111,13 +114,14 @@ body.light-mode {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: var(--ihyd-text);
   margin-bottom: 2px;
 }
 
 .ihyd-card-album {
   font-size: 0.85rem;
-  color: #ccc;
+  color: var(--ihyd-text);
+  opacity: 0.8;
   margin-bottom: 2px;
 }
 
@@ -131,7 +135,7 @@ body.light-mode {
   font-family: monospace;
   font-size: 1rem;
   font-weight: bold;
-  color: #fff;
+  color: var(--ihyd-text);
   margin-bottom: 0;
 }
 
@@ -142,10 +146,10 @@ body.light-mode {
 .ihyd-modal-content {
   position: relative;
   overflow: hidden;
-  background: #0a0a0a;
+  background: var(--ihyd-surface);
   border: 1px solid var(--ihyd-border);
   border-radius: 0;
-  color: #fff;
+  color: var(--ihyd-text);
 }
 
 /* Fondo borroso usando la portada del disco */
@@ -559,6 +563,36 @@ body.light-mode {
   background: var(--ihyd-surface);
   border-color: var(--ihyd-border);
   color: #333;
+}
+
+/* Global Pagination (used in Home and Catalog) */
+.ihyd-pagination .page-link {
+  background: #000;
+  border: 1px solid #222;
+  color: #888;
+  padding: 8px 16px;
+  border-radius: 0;
+  transition: all 0.2s ease;
+  font-family: monospace;
+}
+
+.ihyd-pagination .page-link:hover {
+  background: #111;
+  color: #fff;
+  border-color: #444;
+}
+
+.ihyd-pagination .page-item.active .page-link {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+  font-weight: bold;
+}
+
+.ihyd-pagination .page-item.disabled .page-link {
+  background: #000;
+  color: #222;
+  border-color: #111;
 }
 
 /* Responsive: stack tabs on small screens */

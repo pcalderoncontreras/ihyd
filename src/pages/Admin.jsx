@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import BulkImport from '../components/BulkImport';
 import DatabaseCleaner from '../components/DatabaseCleaner';
+import AdManager from '../components/AdManager';
 
 
 const Admin = () => {
@@ -440,6 +441,12 @@ const Admin = () => {
                 >
                     Base de Datos
                 </button>
+                <button
+                    className={`ihyd-tab ${activeTab === 'publicidad' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('publicidad')}
+                >
+                    Publicidad
+                </button>
 
             </div>
 
@@ -459,6 +466,13 @@ const Admin = () => {
                 </div>
             )}
 
+            {/* Tab: Publicidad */}
+            {activeTab === 'publicidad' && (
+                <div className="ihyd-admin-card">
+                    <div className="ihyd-admin-card-header">Gestión de Publicidad</div>
+                    <AdManager />
+                </div>
+            )}
 
 
             {/* Tab: Productos */}

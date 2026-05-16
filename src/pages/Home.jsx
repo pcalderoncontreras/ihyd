@@ -4,6 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import CategorySection from '../components/CategorySection';
 import ProductCard from '../components/ProductCard';
 import SocialMediaSection from '../components/SocialMediaSection';
+import AdModal from '../components/AdModal';
 
 const Home = ({ setCategory, globalSearchTerm }) => {
     const [allProducts, setAllProducts] = useState([]);
@@ -126,6 +127,7 @@ const Home = ({ setCategory, globalSearchTerm }) => {
 
     return (
         <>
+            <AdModal />
             {globalSearchTerm ? (
                 <div className="container mt-4">
                     {loading ? (
@@ -171,10 +173,10 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                             {totalPages > 1 && (
                                 <div className="d-flex justify-content-center align-items-center mt-5 mb-4">
                                     <nav>
-                                        <ul className="pagination">
+                                        <ul className="pagination ihyd-pagination">
                                             <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                                                 <button
-                                                    className="page-link bg-dark text-white border-secondary"
+                                                    className="page-link"
                                                     onClick={() => handlePageChange(currentPage - 1)}
                                                     disabled={currentPage === 1}
                                                 >
@@ -185,7 +187,7 @@ const Home = ({ setCategory, globalSearchTerm }) => {
                                             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                                                 <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
                                                     <button
-                                                        className={`page-link ${currentPage === page ? 'bg-primary' : 'bg-dark text-white'} border-secondary`}
+                                                        className="page-link"
                                                         onClick={() => handlePageChange(page)}
                                                     >
                                                         {page}
@@ -195,7 +197,7 @@ const Home = ({ setCategory, globalSearchTerm }) => {
 
                                             <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                                 <button
-                                                    className="page-link bg-dark text-white border-secondary"
+                                                    className="page-link"
                                                     onClick={() => handlePageChange(currentPage + 1)}
                                                     disabled={currentPage === totalPages}
                                                 >

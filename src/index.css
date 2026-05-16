@@ -43,6 +43,9 @@ h1 {
   font-family: 'UnifrakturMaguntia', cursive;
   font-size: 1.6rem !important;
   letter-spacing: 1px;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 button {
