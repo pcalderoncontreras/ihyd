@@ -40,16 +40,16 @@ const Footer = ({ theme }) => {
                     {/* Payment & Delivery */}
                     <div className="col-md-3 mb-4">
                         <h2 className="fw-bold mb-3">Medios de pago y entregas</h2>
-                        <p className="small mb-2" style={{ textAlign: 'justify' }}>Pagos en efectivo o Transferencia Bancaria Electrónica. <br />
+                        <p className="small mb-2">Pagos en efectivo o Transferencia Bancaria Electrónica. <br />
                             Entregas en Metro Plaza de Maipú y Las Rejas en Horario a convenir. <br />
                             Envíos a regiones o dentro de Santiago via Starken por pagar.</p>
                     </div>
 
                     {/* Social Media */}
-                    <div className="col-md-3 mb-4 text-center">
+                    <div className="col-md-3 mb-4">
                         <h2 className="fw-bold mb-3">Síguenos</h2>
-                        <div className="d-flex gap-3 justify-content-center">
-                            <a href="https://www.instagram.com/ihyddistro/" target="_blank" rel="noopener noreferrer" className="text-white fs-3">
+                        <div className="d-flex justify-content-between">
+                            <a href="https://www.instagram.com/ihyddistro/" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
                                 <i className="bi bi-instagram"></i>
                             </a>
                             <a href="https://soundcloud.com/ihopeyoudiezine" target="_blank" rel="noopener noreferrer" className="text-white fs-4">
@@ -65,7 +65,8 @@ const Footer = ({ theme }) => {
                 {/* Copyright */}
                 <div className="row mt-4">
                     <div className="col-12 text-center">
-                        <p className="small text-secondary mb-0">© 2026 IHYD Distro. All rights reserved.</p>
+                        <p className="small text-secondary mb-0">© {new Date().getFullYear()} IHYD Distro. All rights reserved.</p>
+
                     </div>
                 </div>
             </div>
