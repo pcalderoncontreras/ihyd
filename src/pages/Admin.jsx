@@ -764,7 +764,7 @@ const Admin = () => {
                                         </td>
                                         <td className="text-center">
                                             <span className={product.active !== false ? 'ihyd-badge-active' : 'ihyd-badge-inactive'}>
-                                                {product.active !== false ? 'Active' : 'Inactive'}
+                                                {product.active !== false ? 'Activo' : 'Inactivo'}
                                             </span>
                                         </td>
                                         <td className="text-center">

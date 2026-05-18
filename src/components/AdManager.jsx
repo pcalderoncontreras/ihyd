@@ -61,7 +61,7 @@ const AdManager = () => {
 
         try {
             if (!formData.expiresAt) throw new Error('La fecha es obligatoria');
-            
+
             const expiresDate = new Date(formData.expiresAt + 'T23:59:59');
             const newAd = {
                 imageUrl: formData.imageUrl.trim(),
@@ -122,7 +122,7 @@ const AdManager = () => {
         const targetIndex = index + direction;
         if (targetIndex < 0 || targetIndex >= newList.length) return;
         [newList[index], newList[targetIndex]] = [newList[targetIndex], newList[index]];
-        
+
         try {
             await saveToFirestore(newList);
             setAds(newList);
@@ -150,13 +150,13 @@ const AdManager = () => {
             <div className="ihyd-sub-card">
                 <div className="ihyd-sub-card-header">
                     {isEditing ? 'Editar Afiche' : 'Agregar Afiche'}
-                    {!isEditing && <span style={{ float: 'right' }}>{ads.length}/{MAX_ADS}</span>}
+                    {!isEditing && <span style={{ float: 'right' }}>{ads.length} afiches de {MAX_ADS} disponibles</span>}
                 </div>
                 <div className="ihyd-sub-card-body">
                     <form onSubmit={handleSubmit} className="row g-3">
                         <div className="col-md-5">
                             <label className="form-label">URL Imagen</label>
-                            <input type="url" className="form-control" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} required />
+                            <input type="url" className="form-control" value={formData.imageUrl} onChange={e => setFormData({ ...formData, imageUrl: e.target.value })} required />
                         </div>
                         <div className="col-md-4">
                             <label className="form-label">URL de Link (Opcional)</label>
@@ -170,7 +170,7 @@ const AdManager = () => {
                         </div>
                         <div className="col-md-3">
                             <label className="form-label">Caducidad</label>
-                            <input type="date" className="form-control" value={formData.expiresAt} onChange={e => setFormData({...formData, expiresAt: e.target.value})} required />
+                            <input type="date" className="form-control" value={formData.expiresAt} onChange={e => setFormData({ ...formData, expiresAt: e.target.value })} required />
                         </div>
                         <div className="col-12 d-flex gap-2">
                             <button type="submit" className="ihyd-btn-primary flex-grow-1" disabled={loading || (!isEditing && ads.length >= MAX_ADS)}>
@@ -201,8 +201,8 @@ const AdManager = () => {
                                     <div className="d-flex gap-1">
                                         <button className="ihyd-action-btn" onClick={() => moveAd(i, -1)} disabled={i === 0}>↑</button>
                                         <button className="ihyd-action-btn" onClick={() => moveAd(i, 1)} disabled={i === ads.length - 1}>↓</button>
-                                        <button className="ihyd-action-btn" onClick={() => startEditing(i)}>Edit</button>
-                                        <button className="ihyd-action-btn danger" onClick={() => deleteAd(i)}>Del</button>
+                                        <button className="ihyd-action-btn" onClick={() => startEditing(i)}>Editar</button>
+                                        <button className="ihyd-action-btn danger" onClick={() => deleteAd(i)}>Borrar</button>
                                     </div>
                                 </div>
                             ))}
