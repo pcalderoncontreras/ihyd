@@ -9,7 +9,7 @@ const Footer = ({ theme }) => {
                     <div className="col-md-3 mb-4">
                         <img
                             src={theme === 'dark'
-                                ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1763770772/ihyd_logo_new_azypuq.png"
+                                ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1778876194/ihyd_logo_short_wo21hg.png"
                                 : "https://res.cloudinary.com/da8xc0cap/image/upload/v1778870101/ihyd_logo_short2_osw5w4.png"}
                             alt="IHYD :: Distro"
                             style={{ maxHeight: '90px', maxWidth: '100%', height: 'auto', width: 'auto' }}
