@@ -89,8 +89,6 @@ const AdModal = ({ forceShow, onManualClose }) => {
                 overflowY: 'auto',
                 padding: '20px'
             }}
-            // CORRECCIÓN: Si hay un afiche gigante abierto, hacer clic en el fondo lo minimiza.
-            // Si NO hay ninguno abierto (están los 3 en vista), el clic fuera no hace nada (se queda).
             onClick={() => {
                 if (hasActiveAd && isDesktop) {
                     setActiveAdIndex(null);
@@ -167,8 +165,17 @@ const AdModal = ({ forceShow, onManualClose }) => {
                                 onMouseEnter={() => setHoveredIndex(i)}
                                 onMouseLeave={() => setHoveredIndex(null)}
                                 onClick={() => {
-                                    if (isDesktop && !hasActiveAd) {
-                                        setActiveAdIndex(i);
+                                    if (isDesktop) {
+                                        // Comportamiento PC: Abre la vista ampliada en grande
+                                        if (!hasActiveAd) {
+                                            setActiveAdIndex(i);
+                                        }
+                                    } else {
+                                        // CORRECCIÓN COMPORTAMIENTO MÓVIL: Redirige directamente al link
+                                        const destinationUrl = formatUrl(ad.linkUrl);
+                                        if (destinationUrl) {
+                                            window.open(destinationUrl, '_blank', 'noopener,noreferrer');
+                                        }
                                     }
                                 }}
                             >
@@ -214,7 +221,7 @@ const AdModal = ({ forceShow, onManualClose }) => {
                 </div>
             </div>
 
-            {/* MODAL GIGANTE CAPA SUPERIOR (PC) */}
+            {/* MODAL GIGANTE CAPA SUPERIOR (Solo para Escritorio/PC) */}
             {hasActiveAd && isDesktop && (
                 <div
                     style={{
