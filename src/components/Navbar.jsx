@@ -9,7 +9,11 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
     const location = useLocation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
+
+    // Identificamos las páginas especiales de administración y login
     const isAdminPage = location.pathname === '/admin';
+    const isLoginPage = location.pathname === '/login';
+    const isAuthPage = isAdminPage || isLoginPage; // True si está en /admin o en /login
 
     const [isShrunk, setIsShrunk] = useState(false);
 
@@ -80,7 +84,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                 </div>
 
                 <div className="container-fluid d-flex flex-column align-items-center px-3">
-                    {/* Logo Ajustado a la mitad */}
+                    {/* Logo: Al darle click redirige a "/" y limpia filtros */}
                     <Link
                         className="navbar-brand w-100 text-center"
                         to="/"
@@ -112,7 +116,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                     <nav className={`p-0 w-100 ihyd-nav-container ${isShrunk ? 'shrunk-menu' : ''}`}>
                         <div className="d-flex justify-content-center ihyd-nav-scroll">
                             {isAdminPage ? (
-                                /* CORRECCIÓN: Vista del Administrador autenticado */
+                                /* Vista del Administrador autenticado */
                                 <div
                                     className="d-flex align-items-center gap-3 flex-nowrap admin-panel-header"
                                     style={{
@@ -137,8 +141,11 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                         <span className="text-nowrap text-muted admin-welcome-text">No autenticado</span>
                                     )}
                                 </div>
+                            ) : isLoginPage ? (
+                                /* CORRECCIÓN: Si está en la página de Login, no renderiza ningún menú ni botones aquí */
+                                null
                             ) : (
-                                /* Vista Normal de la Tienda */
+                                /* Vista Normal de la Tienda (Home, categorías, etc.) */
                                 <ul className="navbar-nav d-flex flex-row flex-nowrap gap-2 align-items-center m-0 p-0"
                                     style={{ marginBottom: isShrunk ? '0.6rem' : '1.2rem', transition: 'margin 0.2s ease-out' }}>
                                     <li className="nav-item d-flex align-items-center gap-2">
@@ -181,8 +188,8 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                         </div>
                     </nav>
 
-                    {/* Contenedor de la Barra de Búsqueda y Título Integrado */}
-                    {!isAdminPage && location.pathname !== '/login' && (
+                    {/* Contenedor de la Barra de Búsqueda y Título Integrado (Ocultos en /admin y /login) */}
+                    {!isAuthPage && (
                         <div
                             className="w-100 px-3 d-flex align-items-center justify-content-center gap-3"
                             style={{ maxWidth: '750px' }}
@@ -210,8 +217,8 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                         </div>
                     )}
 
-                    {/* TÍTULO GRANDE ORIGINAL */}
-                    {!isAdminPage && !isShrunk && hasCategory && (
+                    {/* TÍTULO GRANDE ORIGINAL (Oculto en /admin y /login) */}
+                    {!isAuthPage && !isShrunk && hasCategory && (
                         <div className="w-100 px-4 mt-3" style={{ animation: 'fadeInTitle 0.2s ease-out' }}>
                             <h1 className="m-0 text-center" style={{
                                 fontFamily: "'UnifrakturMaguntia', cursive",
@@ -260,7 +267,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
             {/* COLCHÓN INVISIBLE ANTI-PARPADEO RECALCULADO */}
             <div
                 style={{
-                    height: isShrunk ? (hasCategory && !isAdminPage ? '95px' : '65px') : '0px',
+                    height: isShrunk ? (hasCategory && !isAuthPage ? '95px' : '65px') : '0px',
                     transition: 'height 0.2s ease-out',
                     width: '100%',
                     pointerEvents: 'none'
