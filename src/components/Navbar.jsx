@@ -10,14 +10,12 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
     const navigate = useNavigate();
     const { currentUser } = useAuth();
 
-    // Identificamos las páginas especiales de administración y login
     const isAdminPage = location.pathname === '/admin';
     const isLoginPage = location.pathname === '/login';
-    const isAuthPage = isAdminPage || isLoginPage; // True si está en /admin o en /login
+    const isAuthPage = isAdminPage || isLoginPage;
 
     const [isShrunk, setIsShrunk] = useState(false);
 
-    // Mantenemos la histéresis anti-parpadeo intacta
     useEffect(() => {
         const handleScroll = () => {
             const scroll = window.scrollY;
@@ -53,18 +51,26 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
     };
 
     const hasCategory = currentCategory && currentCategory !== 'all';
+    const isDark = theme === 'dark';
 
     return (
         <>
             <header
-                className="bg-black sticky-top w-100"
+                className="sticky-top w-100"
                 style={{
                     zIndex: 1000,
                     height: 'auto',
                     paddingTop: '0px',
                     paddingBottom: isShrunk ? '0.9rem' : '1.5rem',
-                    transition: 'padding 0.2s ease-out',
-                    boxShadow: isShrunk ? '0 10px 30px rgba(0,0,0,0.8)' : 'none'
+                    transition: 'padding 0.2s ease-out, background-color 0.2s ease, box-shadow 0.2s ease',
+                    // CORRECCIÓN RADICAL: Si no hay scroll, es 100% transparente. 
+                    // Si hay scroll, toma el fondo adaptativo del tema (blanco o negro) sin inventar tonos intermedios.
+                    backgroundColor: isShrunk ? (isDark ? '#000000' : '#ffffff') : 'transparent',
+                    boxShadow: 'none',
+                    border: 'none',
+                    outline: 'none',
+                    left: 0,
+                    right: 0
                 }}
             >
                 {/* Contenedor del Switcher */}
@@ -75,18 +81,18 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                         transition: 'padding 0.2s ease-out'
                     }}
                 >
-                    <span className="fs-4 me-2" style={{ color: theme === 'light' ? '#1a1a1a' : '#666' }}>↯</span>
+                    <span className="fs-4 me-2" style={{ color: isDark ? '#666' : '#1a1a1a' }}>↯</span>
                     <label className="theme-switch mb-0">
-                        <input type="checkbox" checked={theme === 'dark'} onChange={toggleTheme} />
+                        <input type="checkbox" checked={isDark} onChange={toggleTheme} />
                         <div className="slider round"></div>
                     </label>
-                    <span className="fs-4 ms-2" style={{ color: theme === 'dark' ? '#fff' : '#aaa' }}>⛧</span>
+                    <span className="fs-4 ms-2" style={{ color: isDark ? '#fff' : '#aaa' }}>⛧</span>
                 </div>
 
-                <div className="container-fluid d-flex flex-column align-items-center px-3">
-                    {/* Logo: Al darle click redirige a "/" y limpia filtros */}
+                <div className="w-100 d-flex flex-column align-items-center px-0 navbar-inner-container">
+                    {/* Logo */}
                     <Link
-                        className="navbar-brand w-100 text-center"
+                        className="navbar-brand w-100 text-center m-0 p-0"
                         to="/"
                         onClick={() => setCategory && setCategory('all')}
                         style={{
@@ -95,11 +101,13 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                             justifyContent: 'center',
                             height: isShrunk ? '75px' : '110px',
                             marginBottom: isShrunk ? '0.4rem' : '0.8rem',
-                            transition: 'height 0.2s ease-out, margin 0.2s ease-out'
+                            transition: 'height 0.2s ease-out, margin 0.2s ease-out',
+                            border: 'none',
+                            background: 'transparent'
                         }}
                     >
                         <img
-                            src={theme === 'dark'
+                            src={isDark
                                 ? "https://res.cloudinary.com/da8xc0cap/image/upload/v1778882000/logo_blood_drips_corrected_oklrq8.png"
                                 : "https://res.cloudinary.com/da8xc0cap/image/upload/v1778869036/LogoOficialHome2_sxwfae_d0gsxt.png"
                             }
@@ -107,22 +115,22 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                             style={{
                                 maxHeight: '100%',
                                 maxWidth: '100%',
-                                objectFit: 'contain'
+                                objectFit: 'contain',
+                                border: 'none'
                             }}
                         />
                     </Link>
 
                     {/* Menú de Navegación / Panel Admin Dinámico */}
-                    <nav className={`p-0 w-100 ihyd-nav-container ${isShrunk ? 'shrunk-menu' : ''}`}>
-                        <div className="d-flex justify-content-center ihyd-nav-scroll">
+                    <nav className={`p-0 w-100 ihyd-nav-container ${isShrunk ? 'shrunk-menu' : ''}`} style={{ border: 'none', background: 'transparent' }}>
+                        <div className="d-flex justify-content-center ihyd-nav-scroll w-100">
                             {isAdminPage ? (
-                                /* Vista del Administrador autenticado */
                                 <div
                                     className="d-flex align-items-center gap-3 flex-nowrap admin-panel-header"
                                     style={{
                                         marginBottom: isShrunk ? '0.6rem' : '1.2rem',
                                         transition: 'margin 0.2s ease-out',
-                                        color: '#fff'
+                                        color: isDark ? '#fff' : '#000'
                                     }}
                                 >
                                     {currentUser ? (
@@ -142,12 +150,10 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                     )}
                                 </div>
                             ) : isLoginPage ? (
-                                /* CORRECCIÓN: Si está en la página de Login, no renderiza ningún menú ni botones aquí */
                                 null
                             ) : (
-                                /* Vista Normal de la Tienda (Home, categorías, etc.) */
                                 <ul className="navbar-nav d-flex flex-row flex-nowrap gap-2 align-items-center m-0 p-0"
-                                    style={{ marginBottom: isShrunk ? '0.6rem' : '1.2rem', transition: 'margin 0.2s ease-out' }}>
+                                    style={{ marginBottom: isShrunk ? '0.6rem' : '1.2rem', transition: 'margin 0.2s ease-out', border: 'none' }}>
                                     <li className="nav-item d-flex align-items-center gap-2">
                                         <button className={`nav-link btn btn-link text-nowrap ${currentCategory === 'all' ? 'active' : ''}`} onClick={() => { navigate('/'); setCategory('all'); }}>Home</button>
                                         <span className="divider">|</span>
@@ -188,11 +194,11 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                         </div>
                     </nav>
 
-                    {/* Contenedor de la Barra de Búsqueda y Título Integrado (Ocultos en /admin y /login) */}
+                    {/* Contenedor de la Barra de Búsqueda y Título Integrado */}
                     {!isAuthPage && (
                         <div
                             className="w-100 px-3 d-flex align-items-center justify-content-center gap-3"
-                            style={{ maxWidth: '750px' }}
+                            style={{ maxWidth: '750px', border: 'none', background: 'transparent' }}
                         >
                             {/* TÍTULO COMPACTO MODERADO */}
                             {isShrunk && hasCategory && (
@@ -211,13 +217,13 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                 </h2>
                             )}
 
-                            <div className={`flex-grow-1 search-bar-container ${isShrunk ? 'shrunk-search' : ''}`}>
+                            <div className={`flex-grow-1 search-bar-container ${isShrunk ? 'shrunk-search' : ''}`} style={{ border: 'none' }}>
                                 <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                             </div>
                         </div>
                     )}
 
-                    {/* TÍTULO GRANDE ORIGINAL (Oculto en /admin y /login) */}
+                    {/* TÍTULO GRANDE ORIGINAL */}
                     {!isAuthPage && !isShrunk && hasCategory && (
                         <div className="w-100 px-4 mt-3" style={{ animation: 'fadeInTitle 0.2s ease-out' }}>
                             <h1 className="m-0 text-center" style={{
@@ -233,20 +239,33 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                 </div>
 
                 <style>{`
-                    .nav-link { color: #bbb !important; text-decoration: none; transition: all 0.2s ease; }
-                    .nav-link:hover, .nav-link.active { color: #fff !important; font-weight: bold; }
+                    /* ELIMINACIÓN DE BORDES Y SOMBRAS GLOBALES DEL HEADER */
+                    header.sticky-top, 
+                    header.sticky-top * {
+                        box-shadow: none !important;
+                        border: none !important;
+                        outline: none !important;
+                    }
                     
-                    /* Menú comprimido intermedio */
+                    /* Evitamos que clases globales de Bootstrap metan bordes a la lista del nav */
+                    .navbar-nav, .nav-item, .navbar-inner-container {
+                        border: 0 !important;
+                        box-shadow: none !important;
+                    }
+
+                    .nav-link { color: ${isDark ? '#bbb' : '#555'} !important; text-decoration: none; transition: all 0.2s ease; }
+                    .nav-link:hover, .nav-link.active { color: ${isDark ? '#fff' : '#000'} !important; font-weight: bold; }
+                    
+                    .divider { color: ${isDark ? '#333' : '#ccc'} !important; }
+
                     .shrunk-menu .nav-link { font-size: 0.92rem !important; }
                     
-                    /* Adaptación del panel de administración al achicarse a la mitad */
                     .admin-welcome-text { font-size: 1rem; transition: font-size 0.2s ease; }
                     .shrunk-menu .admin-welcome-text { font-size: 0.9rem; }
                     
                     .admin-logout-btn { padding: 0.25rem 0.5rem; font-size: 0.875rem; transition: all 0.2s ease; }
                     .shrunk-menu .admin-logout-btn { padding: 0.15rem 0.4rem; font-size: 0.8rem; }
                     
-                    /* Barra de búsqueda reducida a la mitad */
                     .search-bar-container.shrunk-search input { 
                         height: 38px !important; 
                         font-size: 0.92rem !important;
