@@ -58,7 +58,6 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                     zIndex: 1000,
                     height: 'auto',
                     paddingTop: '0px',
-                    // Reducción de padding equilibrada a la mitad (antes era 0.5rem)
                     paddingBottom: isShrunk ? '0.9rem' : '1.5rem',
                     transition: 'padding 0.2s ease-out',
                     boxShadow: isShrunk ? '0 10px 30px rgba(0,0,0,0.8)' : 'none'
@@ -68,7 +67,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                 <div
                     className="d-flex justify-content-end align-items-center w-100 pe-4 theme-switch-wrapper"
                     style={{
-                        paddingTop: isShrunk ? '0.6rem' : '1.2rem', // Punto medio de espaciado superior
+                        paddingTop: isShrunk ? '0.6rem' : '1.2rem',
                         transition: 'padding 0.2s ease-out'
                     }}
                 >
@@ -90,7 +89,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            height: isShrunk ? '75px' : '110px', // PUNTO MEDIO EXACTO: Antes colapsaba a 40px
+                            height: isShrunk ? '75px' : '110px',
                             marginBottom: isShrunk ? '0.4rem' : '0.8rem',
                             transition: 'height 0.2s ease-out, margin 0.2s ease-out'
                         }}
@@ -109,10 +108,37 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                         />
                     </Link>
 
-                    {/* Menú de Navegación Ajustado a la mitad */}
+                    {/* Menú de Navegación / Panel Admin Dinámico */}
                     <nav className={`p-0 w-100 ihyd-nav-container ${isShrunk ? 'shrunk-menu' : ''}`}>
                         <div className="d-flex justify-content-center ihyd-nav-scroll">
-                            {!isAdminPage && (
+                            {isAdminPage ? (
+                                /* CORRECCIÓN: Vista del Administrador autenticado */
+                                <div
+                                    className="d-flex align-items-center gap-3 flex-nowrap admin-panel-header"
+                                    style={{
+                                        marginBottom: isShrunk ? '0.6rem' : '1.2rem',
+                                        transition: 'margin 0.2s ease-out',
+                                        color: '#fff'
+                                    }}
+                                >
+                                    {currentUser ? (
+                                        <>
+                                            <span className="text-nowrap admin-welcome-text">
+                                                Bienvenido: <strong>{currentUser.email}</strong>
+                                            </span>
+                                            <button
+                                                className="btn btn-outline-danger btn-sm text-nowrap admin-logout-btn"
+                                                onClick={handleLogout}
+                                            >
+                                                Cerrar Sesión
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <span className="text-nowrap text-muted admin-welcome-text">No autenticado</span>
+                                    )}
+                                </div>
+                            ) : (
+                                /* Vista Normal de la Tienda */
                                 <ul className="navbar-nav d-flex flex-row flex-nowrap gap-2 align-items-center m-0 p-0"
                                     style={{ marginBottom: isShrunk ? '0.6rem' : '1.2rem', transition: 'margin 0.2s ease-out' }}>
                                     <li className="nav-item d-flex align-items-center gap-2">
@@ -166,7 +192,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                                 <h2
                                     style={{
                                         fontFamily: "'UnifrakturMaguntia', cursive",
-                                        fontSize: '1.9rem', // Antes colapsaba a 1.6rem, ahora es más imponente
+                                        fontSize: '1.9rem',
                                         color: 'var(--ihyd-text)',
                                         margin: 0,
                                         paddingRight: '5px',
@@ -185,7 +211,7 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                     )}
 
                     {/* TÍTULO GRANDE ORIGINAL */}
-                    {!isShrunk && hasCategory && (
+                    {!isAdminPage && !isShrunk && hasCategory && (
                         <div className="w-100 px-4 mt-3" style={{ animation: 'fadeInTitle 0.2s ease-out' }}>
                             <h1 className="m-0 text-center" style={{
                                 fontFamily: "'UnifrakturMaguntia', cursive",
@@ -203,10 +229,17 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                     .nav-link { color: #bbb !important; text-decoration: none; transition: all 0.2s ease; }
                     .nav-link:hover, .nav-link.active { color: #fff !important; font-weight: bold; }
                     
-                    /* Menú comprimido intermedio (Antes bajaba a 0.8rem) */
+                    /* Menú comprimido intermedio */
                     .shrunk-menu .nav-link { font-size: 0.92rem !important; }
                     
-                    /* Barra de búsqueda reducida a la mitad (Antes bajaba a 32px) */
+                    /* Adaptación del panel de administración al achicarse a la mitad */
+                    .admin-welcome-text { font-size: 1rem; transition: font-size 0.2s ease; }
+                    .shrunk-menu .admin-welcome-text { font-size: 0.9rem; }
+                    
+                    .admin-logout-btn { padding: 0.25rem 0.5rem; font-size: 0.875rem; transition: all 0.2s ease; }
+                    .shrunk-menu .admin-logout-btn { padding: 0.15rem 0.4rem; font-size: 0.8rem; }
+                    
+                    /* Barra de búsqueda reducida a la mitad */
                     .search-bar-container.shrunk-search input { 
                         height: 38px !important; 
                         font-size: 0.92rem !important;
@@ -224,12 +257,10 @@ const Navbar = ({ setCategory, currentCategory, searchTerm, setSearchTerm, theme
                 `}</style>
             </header>
 
-            {/* COLCHÓN INVISIBLE ANTI-PARPADEO RECALCULADO 
-                Como el menú ahora no se achica tanto, reducimos el tamaño del colchón 
-                para cuadrar la matemática de scroll exacta y evitar rebotes. */}
+            {/* COLCHÓN INVISIBLE ANTI-PARPADEO RECALCULADO */}
             <div
                 style={{
-                    height: isShrunk ? (hasCategory ? '95px' : '65px') : '0px', // Antes: 160px / 120px
+                    height: isShrunk ? (hasCategory && !isAdminPage ? '95px' : '65px') : '0px',
                     transition: 'height 0.2s ease-out',
                     width: '100%',
                     pointerEvents: 'none'
