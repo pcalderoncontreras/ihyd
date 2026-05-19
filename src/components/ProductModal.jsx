@@ -123,7 +123,7 @@ const ProductModal = ({ product, show, onClose }) => {
                         className="modal-content ihyd-modal-content"
                         style={{ '--modal-bg-image': `url(${product.imageUrl})` }}
                     >
-                        <button className="ihyd-modal-close" onClick={onClose}>×</button>
+                        <button className="ihyd-modal-close" onClick={onClose}></button>
 
                         <p className="ihyd-modal-title">{getTitle()}</p>
 

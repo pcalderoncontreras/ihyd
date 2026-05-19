@@ -177,15 +177,59 @@ body.light-mode {
   position: absolute;
   top: 14px;
   right: 18px;
-  background: none;
+  background: #ffffff;
+  /* Color de fondo del círculo */
   border: none;
-  color: #888;
-  font-size: 1.6rem;
-  line-height: 1;
   cursor: pointer;
   z-index: 2;
   padding: 0;
-  transition: color 0.15s;
+  transition: background-color 0.15s, transform 0.15s;
+
+  /* Estructura circular perfecta */
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+
+  /* Posicionamiento relativo para los vectores de la cruz */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* DIBUJO DE LA CRUZ MATEMÁTICA CON PSEUDO-ELEMENTOS */
+.ihyd-modal-close::before,
+.ihyd-modal-close::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  /* Largo de los brazos de la cruz */
+  height: 2px;
+  /* Grosor de la línea */
+  background-color: #333333;
+  /* Color de la cruz (cámbiar a #fff en modo oscuro si es necesario) */
+  border-radius: 1px;
+  transition: background-color 0.15s;
+}
+
+/* Rotamos las líneas para formar la "X" perfecta */
+.ihyd-modal-close::before {
+  transform: rotate(45deg);
+}
+
+.ihyd-modal-close::after {
+  transform: rotate(-45deg);
+}
+
+/* Efectos Hover */
+.ihyd-modal-close:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.ihyd-modal-close:hover::before,
+.ihyd-modal-close:hover::after {
+  background-color: #ff4444;
+  /* Cambia la cruz a rojo al pasar el mouse */
 }
 
 .ihyd-modal-close:hover {
@@ -332,7 +376,8 @@ body.light-mode {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  color: #999; /* Aumentado para mejor contraste en modo oscuro */
+  color: #999;
+  /* Aumentado para mejor contraste en modo oscuro */
   padding: 10px 22px;
   font-size: 0.75rem;
   font-weight: 700;
@@ -715,13 +760,17 @@ body.light-mode {
   overflow-x: auto;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-  padding-bottom: 5px; /* Prevent cutoff */
-  justify-content: flex-start !important; /* Allow scroll from left on small screens */
+  scrollbar-width: none;
+  /* Firefox */
+  padding-bottom: 5px;
+  /* Prevent cutoff */
+  justify-content: flex-start !important;
+  /* Allow scroll from left on small screens */
 }
 
 .ihyd-nav-scroll::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none;
+  /* Chrome/Safari */
 }
 
 @media (min-width: 768px) {
@@ -778,9 +827,10 @@ body.light-mode .floating-whatsapp:hover {
     height: 45px;
     font-size: 24px;
   }
-  
+
   /* Full width adaptation for mobile */
-  .container, .container-sm {
+  .container,
+  .container-sm {
     max-width: 100% !important;
     padding-left: 15px !important;
     padding-right: 15px !important;
@@ -790,7 +840,7 @@ body.light-mode .floating-whatsapp:hover {
     max-width: 100% !important;
     height: auto !important;
   }
-  
+
   /* Ensure the navigation scroll takes full width */
   .ihyd-nav-container {
     width: 100% !important;
