@@ -7,9 +7,9 @@ const AdModal = ({ forceShow, onManualClose }) => {
     const [show, setShow] = useState(false);
 
     // ESTADOS
-    const [hoveredIndex, setHoveredIndex] = useState(null); // Controla el hover en la vista general
-    const [activeAdIndex, setActiveAdIndex] = useState(null); // Controla el afiche abierto en grande
-    const [isHoveredInMax, setIsHoveredInMax] = useState(false); // Detecta hover en el afiche gigante
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+    const [activeAdIndex, setActiveAdIndex] = useState(null);
+    const [isHoveredInMax, setIsHoveredInMax] = useState(false);
 
     // Efecto para apertura forzada (Novedades)
     useEffect(() => {
@@ -23,7 +23,7 @@ const AdModal = ({ forceShow, onManualClose }) => {
             try {
                 if (!forceShow) {
                     const STORAGE_KEY = 'ihyd_last_ad_view';
-                    const COOLDOWN = 60 * 60 * 1000; // 1 hora en ms
+                    const COOLDOWN = 60 * 60 * 1000;
                     const lastView = localStorage.getItem(STORAGE_KEY);
                     const nowMs = new Date().getTime();
 
@@ -89,7 +89,14 @@ const AdModal = ({ forceShow, onManualClose }) => {
                 overflowY: 'auto',
                 padding: '20px'
             }}
-            onClick={handleClose}
+            // CORRECCIÓN: Si hay un afiche gigante abierto, hacer clic en el fondo lo minimiza.
+            // Si NO hay ninguno abierto (están los 3 en vista), el clic fuera no hace nada (se queda).
+            onClick={() => {
+                if (hasActiveAd && isDesktop) {
+                    setActiveAdIndex(null);
+                    setIsHoveredInMax(false);
+                }
+            }}
         >
             <div
                 style={{
@@ -125,15 +132,13 @@ const AdModal = ({ forceShow, onManualClose }) => {
                     flexDirection: window.innerWidth < 768 ? 'column' : 'row',
                     flexWrap: 'wrap',
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: 'stretch',
                     gap: '30px',
                     width: '100%',
                     order: window.innerWidth < 768 ? 3 : 2
                 }}>
                     {ads.map((ad, i) => {
                         const isCurrentActive = activeAdIndex === i;
-
-                        // DETALLE 1: Lógica de hover en vista normal
                         const isHovered = hoveredIndex === i && isDesktop && !hasActiveAd;
                         const anyoneHovered = hoveredIndex !== null && isDesktop && !hasActiveAd;
 
@@ -144,12 +149,10 @@ const AdModal = ({ forceShow, onManualClose }) => {
                             cursor: 'pointer',
                             transition: isDesktop ? 'transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease' : 'none',
 
-                            // Efecto hover si no hay ningún afiche maximizado
                             transform: isHovered ? 'scale(1.08)' : 'scale(1)',
                             filter: anyoneHovered && !isHovered ? 'blur(6px)' : 'blur(0px)',
                             opacity: anyoneHovered && !isHovered ? 0.4 : 1,
 
-                            // Si ya hay un afiche maximizado en pantalla, los del fondo se vuelven súper difusos
                             ...(hasActiveAd && isDesktop ? {
                                 filter: !isCurrentActive ? 'blur(10px)' : 'blur(0px)',
                                 opacity: !isCurrentActive ? 0.15 : 1,
@@ -174,10 +177,12 @@ const AdModal = ({ forceShow, onManualClose }) => {
                                     alt="Ad"
                                     style={{
                                         width: '100%',
-                                        aspectRatio: '3/4',
+                                        height: isDesktop ? '480px' : 'auto',
+                                        aspectRatio: isDesktop ? 'unset' : '3/4',
                                         objectFit: 'contain',
                                         display: 'block',
-                                        boxShadow: '0 20px 50px rgba(0,0,0,0.9)'
+                                        boxShadow: '0 20px 50px rgba(0,0,0,0.9)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.02)'
                                     }}
                                 />
                             </div>
@@ -222,7 +227,6 @@ const AdModal = ({ forceShow, onManualClose }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    // DETALLE 3: Al hacer clic fuera del afiche, se cierra regresando a los 3 originales
                     onClick={() => {
                         setActiveAdIndex(null);
                         setIsHoveredInMax(false);
@@ -242,22 +246,21 @@ const AdModal = ({ forceShow, onManualClose }) => {
                         onMouseEnter={() => setIsHoveredInMax(true)}
                         onMouseLeave={() => setIsHoveredInMax(false)}
                     >
-                        {/* DETALLE 2: Botón circular perfecto, mitad dentro y mitad fuera de la esquina superior derecha */}
+                        {/* Botón de cerrar "X" */}
                         <button
                             onClick={(e) => {
-                                e.stopPropagation(); // DETALLE 3: Evita problemas de burbujeo al hacer clic directo a la X
+                                e.stopPropagation();
                                 setActiveAdIndex(null);
                                 setIsHoveredInMax(false);
                             }}
                             style={{
                                 position: 'absolute',
-                                // Con un tamaño de 40px, moverlo a -20px lo desplaza exactamente un 50% hacia afuera
                                 top: '-20px',
                                 right: '-20px',
                                 background: '#222',
                                 color: '#fff',
                                 border: '2px solid #fff',
-                                borderRadius: '50%', // Círculo perfecto
+                                borderRadius: '50%',
                                 width: '40px',
                                 height: '40px',
                                 fontSize: '16px',
