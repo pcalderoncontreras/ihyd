@@ -339,6 +339,30 @@ body.light-mode {
   color: #000;
 }
 
+/* Light mode button overrides */
+body.light-mode .ihyd-btn-primary {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+}
+
+body.light-mode .ihyd-btn-primary:hover {
+  background: #222222;
+  color: #ffffff;
+  border-color: #222222;
+}
+
+body.light-mode .ihyd-btn-ghost {
+  background: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+body.light-mode .ihyd-btn-ghost:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
 /* ==================
    ADMIN PANEL
    ================== */
@@ -349,6 +373,8 @@ body.light-mode {
   color: var(--ihyd-text);
   padding: 2rem 1rem;
 }
+
+body.light-mode .ihyd-admin { background: #ffffff; }
 
 .ihyd-admin-title {
   font-weight: 900;

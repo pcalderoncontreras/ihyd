@@ -71,6 +71,7 @@ const AdModal = ({ forceShow, onManualClose }) => {
         return cleanUrl;
     };
 
+    if (window.location.pathname.startsWith('/admin')) return null;
     if (!show || ads.length === 0) return null;
 
     const isDesktop = window.innerWidth >= 768;

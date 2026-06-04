@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase_config';
 import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 
 const MAX_ADS = 3;
 const CONFIG_DOC_ID = '--ad-posters--';
 
+import AdPreviewModal from './AdPreviewModal';
+
 const AdManager = () => {
+  const [previewAd, setPreviewAd] = React.useState(null);
     const [ads, setAds] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
@@ -190,7 +195,7 @@ const AdManager = () => {
                             {ads.map((ad, i) => (
                                 <div key={i} className="p-2 border d-flex align-items-center gap-3" style={{ opacity: isExpired(ad) ? 0.5 : 1, background: 'rgba(255,255,255,0.02)' }}>
                                     <div style={{ width: '40px', height: '50px', background: '#222' }}>
-                                        <img src={ad.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+                                                            <img src={ad.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }} onClick={() => setPreviewAd(ad)} />
                                     </div>
                                     <div className="flex-grow-1" style={{ fontSize: '0.8rem', overflow: 'hidden' }}>
                                         <div className="text-truncate text-muted">{ad.linkUrl}</div>
@@ -210,6 +215,9 @@ const AdManager = () => {
                     )}
                 </div>
             </div>
+            {previewAd && (
+                <AdPreviewModal ad={previewAd} onClose={() => setPreviewAd(null)} />
+            )}
         </div>
     );
 };
